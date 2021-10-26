@@ -14,7 +14,3 @@ a {
 * {
   box-sizing: border-box;
 }
-
-.ReactCrop__crop-selection {
-  border-radius: 100%;
-}
