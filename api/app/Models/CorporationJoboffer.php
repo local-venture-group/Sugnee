@@ -22,7 +22,7 @@ class CorporationJoboffer extends Model
     protected $table = 'corporation_joboffer';
 
     protected $casts = [
-        'is_pickup' => 'boolean',
+
     ];
 
 
@@ -48,10 +48,15 @@ class CorporationJoboffer extends Model
     }
 
 
-    //pickUp求人に絞る
-    public function scopeGetPickUpJobs($query)
+    //OMクローリング求人に絞る
+    public function scopeGetCrowledJobs($query)
     {
-        return $query->where('is_pickup', JobConditionConsts::JOB_TYPE['ピックアップ求人']);
+        return $query->where('is_crowled', JobConditionConsts::TYPE_JOB['OMクローリング求人']);
+    }
+    //OM独自求人求人に絞る
+    public function scopeGetOriginalJobs($query)
+    {
+        return $query->where('is_crowled', JobConditionConsts::TYPE_JOB['OM独自求人']);
     }
     //キーワードで絞る
     public  function scopeWhereKeyword($query, $keyword)

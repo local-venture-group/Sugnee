@@ -17,20 +17,12 @@ class PagesController extends Controller
 {
     public function top()
     {
-        //ダイエット
-        $useCase = new GetPickUpJobLimitUseCase();
-        $pickUpJobs = $useCase->handle(10);
-        $res = JobResource::collection($pickUpJobs);
-        return [
-            'pickUpJobs' => $res,
-        ];
+        //TODO: 2種類のデータを返す
+
+        //     ②注目記事一覧
+        //     ③OM独自求人
+
     }
-    public function allPickUpJobs()
-    {
-        //ダイエット
-        $useCase = new GetAllPickUpJobsUseCase();
-        $pickUpJobs = $useCase->handle();
-        return JobResource::collection($pickUpJobs)->toJson();
-    }
+
 
 }

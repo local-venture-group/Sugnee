@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\User;
 use App\Consts\JobConditionConsts;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\JobResource;
-use App\Job\UseCase\SearchJoboffersUseCase;
-use App\Job\UseCase\ShowPickUpJobUseCase;
+use App\Job\UseCase\SearchJoboffersOmNotOriginalUseCase;
+use App\Job\UseCase\SearchJoboffersOmOriginalUseCase;
 use App\Models\CorporationJoboffer;
 use Illuminate\Http\Request;
 use App\Models\Job;
@@ -29,11 +29,15 @@ class JobsController extends Controller
         if(!(empty($request->query() || empty(Auth::guard('users'))))){
             //ここにユーザーの検索条件を保存する処理を書く(メソッドを作り呼び出す)
         }
-        $useCase = new SearchJoboffersUseCase();
+        //OM求人(独自取得)
+        $useCase = new SearchJoboffersOmOriginalUseCase();
+        $omOriginalJoboffers = $useCase->handle($request, $this->limit);
+        //OM求人(ハロワ、indeed)取得
+        $useCase = new SearchJoboffersOmNotOriginalUseCase();
+        $omNotOriginalJoboffers = $useCase->handle($request, $this->limit);
 
-        $corporationJoboffers = $useCase->handle($request, $this->limit);
-
-        return JobResource::collection($corporationJoboffers)->toJson();
+        return null;
+        // return JobResource::collection($corporationJoboffers)->toJson();
     }
     public function getConditions(JobService $jobService)
     {
