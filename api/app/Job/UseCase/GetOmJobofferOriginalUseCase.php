@@ -7,12 +7,12 @@ use App\Models\CorporationJoboffer;
 final class GetOmJobofferOriginalUseCase
 {
 
-    public function handle($limit)
+    public function handle()
     {
         //OM求人(独自)取得
-        return
-            CorporationJoboffer::find()
-            ->getOriginalJobs()
+        $jobs = CorporationJoboffer::getOriginalJobs()
             ->get();
+        return
+            $jobs;
     }
 }

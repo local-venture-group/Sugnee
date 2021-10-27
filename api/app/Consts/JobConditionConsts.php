@@ -5,8 +5,8 @@ namespace App\Consts;
 class JobConditionConsts
 {
     public const TYPE_JOB = [
-        'OM独自求人' => '0',
-        'OMクローリング求人' => '1'
+        'OM独自求人' => false,
+        'OMクローリング求人' => true
     ];
     public const JOB_TYPE  = [
         '通常求人' => '0',

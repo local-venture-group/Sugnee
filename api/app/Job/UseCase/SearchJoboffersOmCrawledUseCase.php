@@ -5,7 +5,7 @@ namespace App\Job\UseCase;
 use App\Models\CorporationJoboffer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-final class SearchJoboffersOmNotOriginalUseCase
+final class SearchJoboffersCrawledUseCase
 {
 
     public function handle(Request $request, int $limit)
