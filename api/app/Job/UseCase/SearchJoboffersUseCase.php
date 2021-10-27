@@ -18,8 +18,8 @@ final class SearchJoboffersUseCase
             ->searchPeriod($request->period)
             ->searchWorkType($request->work_type)
             ->orderBy('created_at', 'desc')
-            ->take($limit)
-            ->get();
+            ->take($limit);
+
 
         return $corporationJoboffers;
     }

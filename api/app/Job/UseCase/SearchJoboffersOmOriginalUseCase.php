@@ -13,13 +13,13 @@ final class SearchJoboffersOmOriginalUseCase
        //OM独自求人を取得し、返却
 
         $omOriginalJoboffers = CorporationJoboffer::with('favorites')
+            ->getOriginalJobs()
             ->whereKeyword($request->keyword)
             ->searchAddress($request->city)
             ->searchHiringSystem($request->hiring_system)
             ->searchPeriod($request->period)
             ->searchWorkType($request->work_type)
             ->orderBy('created_at', 'desc')
-            ->getOriginalJobs()
             ->take($limit)
             ->get();
 
