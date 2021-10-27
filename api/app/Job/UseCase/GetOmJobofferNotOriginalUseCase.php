@@ -9,6 +9,12 @@ final class GetOmJobofferNotOriginalUseCase
 
     public function handle()
     {
-        //OM求人(ハロワインディード)
+          //OM求人(ハロワインディード)取得,返却
+        return
+            CorporationJoboffer::find()
+            ->scopeGetOriginalJobs()
+            ->get();
+
+
     }
 }
