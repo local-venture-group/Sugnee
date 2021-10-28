@@ -51,12 +51,12 @@ class CorporationJoboffer extends Model
     //OMクローリング求人に絞る
     public function scopeGetCrawledJobs($query)
     {
-        return $query->where('is_crawled', JobConditionConsts::TYPE_JOB['OMクローリング求人']);
+        return $query->where('is_crawled', JobConditionConsts::TYPE_OF_JOB['OMクローリング求人']);
     }
     //OM独自求人求人に絞る
     public function scopeGetOriginalJobs($query)
     {
-        return $query->where('is_crawled', JobConditionConsts::TYPE_JOB['OM独自求人']);
+        return $query->where('is_crawled', JobConditionConsts::TYPE_OF_JOB['OM独自求人']);
     }
     //キーワードで絞る
     public  function scopeWhereKeyword($query, $keyword)
