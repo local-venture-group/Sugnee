@@ -40,7 +40,6 @@ class CorporationJobofferFactory extends Factory
             'item_name' => $this->faker->jobTitle,
             'work_type' => $this->faker->numberBetween(0, 11),
             'hiring_system' => $this->faker->numberBetween(0, 11),
-            'is_pickup' => $this->faker->boolean(40),
             'job_type' => $this->faker->numberBetween(0, 335),
             'job_description' => $this->faker->realText(),
             'work_time' => '',
@@ -75,7 +74,8 @@ class CorporationJobofferFactory extends Factory
             "phone" => "",
             "recruit_number" => "080-5555-9999",
             "recruit_number_description" => "",
-            'is_crawled' => true,
+            //OM独自求人と、ハロワ、インディード求人のテストデータの確率を50%の指定
+            'is_crawled' =>  $this->faker->boolean(50),
             "image1" => $this->faker->imageUrl(),
             "image2" => $this->faker->imageUrl(),
             "image3" => $this->faker->imageUrl(),
