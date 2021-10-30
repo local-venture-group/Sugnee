@@ -32,7 +32,9 @@ class DatabaseSeeder extends Seeder
             MessageRoomsSeeder::class,
             WorkTypesSeeder::class,
             HiringSystemsSeeder::class,
-            JobTypesSeeder::class
+            JobTypesSeeder::class,
+            StaffsSeeder::class,
+            FrikuCompaniesSeeder::class
         ]);
     }
 }

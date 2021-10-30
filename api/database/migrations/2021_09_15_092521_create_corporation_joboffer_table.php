@@ -19,7 +19,6 @@ class CreateCorporationJobofferTable extends Migration
             $table->string('url')->nullable();
             $table->integer('job_offer_status');
             $table->uuid('preview_id');
-            $table->boolean('is_pickup');
             $table->string('company_name');
             $table->string('item_name');
             $table->integer('work_type');

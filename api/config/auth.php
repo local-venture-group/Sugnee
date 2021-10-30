@@ -55,11 +55,11 @@ return [
             'provider' => 'admins',
             'hash' => false,
         ],
-        // 'example' => [
-        //     'driver' => 'session',
-        //     'provider' => 'example',
-        //     'hash' => false,
-        // ]
+        'staffs' => [
+            'driver' => 'session',
+            'provider' => 'staffs',
+            'hash' => false,
+        ]
     ],
 
     /*
@@ -87,6 +87,10 @@ return [
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
+        ],
+        'staffs' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Staff::class
         ],
 
         // 'users' => [
