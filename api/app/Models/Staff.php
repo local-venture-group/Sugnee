@@ -12,6 +12,7 @@ class Staff extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $connection = 'fukuriku';
+    protected $table = 'staffs';
     protected $fillable = [
         'name',
         'email',
