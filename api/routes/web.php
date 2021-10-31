@@ -28,4 +28,4 @@ Route::post('api/admin/logout', [AdminController::class, 'logout'])->middleware(
 
 //企業担当者ログイン、ログアウト
 Route::post('api/staff/login', [StaffController::class, 'login']);
-Route::post('api/staff/logout', [StaffController::class, 'logout'])->middleware('auth:admins');
+Route::post('api/staff/logout', [StaffController::class, 'logout'])->middleware('auth:staffs');
