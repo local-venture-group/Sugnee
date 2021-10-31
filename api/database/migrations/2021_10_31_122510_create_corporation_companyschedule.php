@@ -18,7 +18,6 @@ class CreateCorporationCompanyschedule extends Migration
             $table->foreignId('company_id')->constrained('corporation_company');
             $table->timestamp('start_time');
             $table->timestamp('end_time');
-            $table->timestamps();
 
             $table->index('company_id');
         });
