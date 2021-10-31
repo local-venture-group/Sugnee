@@ -12,7 +12,7 @@ class CorporationApplicant extends Model
 
     protected $connection = 'ats';
     protected $table = 'corporation_applicant';
-
+    public $timestamps = false;
     public function corporationApplicantSchedules()
     {
         return $this->hasMany(CorporationApplicantschedule::class);
