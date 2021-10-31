@@ -24,12 +24,12 @@ class StaffController extends Controller
 
             return response()->json([
                 'admin' =>  auth()->guard('staffs')->user(),
-                'message' => "管理者ログインに成功しました"
+                'message' => "スタッフログインに成功しました"
              ]);
 
          }
          return response()->json([
-            'message' => '管理者ログイン失敗しました'
+            'message' => 'スタッフログイン失敗しました'
         ], 401);
 
 
