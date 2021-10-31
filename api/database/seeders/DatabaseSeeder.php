@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
 
             CompanyUsersSeeder::class,
             CorporationApplicantsSeeder::class,
+            CorporationApplicantSchedulesSeeder::class,
             MessageRoomsSeeder::class,
             WorkTypesSeeder::class,
             HiringSystemsSeeder::class,

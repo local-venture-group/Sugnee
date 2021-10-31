@@ -31,7 +31,7 @@ class CreateCorporationApplicantschedulesTable extends Migration
             $table->timestamp('interview_date')->nullable();
             $table->text('applicant_memo')->nullable();
             $table->timestamp('applied_at');
-            $table->timestamps();
+
 
             $table->index('job_offer_id');
             $table->index('applicant_id');
