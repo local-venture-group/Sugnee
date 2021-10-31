@@ -81,5 +81,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(FrikuJoboffer::class, 'friku_favorites');
     }
+    public function corporationApplicant()
+    {
+        return $this->hasOne(CorporationApplicant::class, 'user_id');
+    }
 
 }

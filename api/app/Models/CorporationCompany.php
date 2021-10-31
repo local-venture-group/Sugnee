@@ -23,4 +23,8 @@ class CorporationCompany extends Model
     {
         return $this->hasMany(CorporationJoboffer::class, 'company_id');
     }
+    public function corporationCompanyschedules()
+    {
+        return $this->hasMany(CorporationCompanyschedule::class, 'company_id');
+    }
 }
