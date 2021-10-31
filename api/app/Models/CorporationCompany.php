@@ -15,7 +15,7 @@ class CorporationCompany extends Model
 
     protected $connection = 'ats';
     protected $table = 'corporation_company';
-    public function companyUser() :BelongsTo
+    public function authUser() :BelongsTo
     {
         return $this->belongsTo(AuthUser::class, 'user_id');
     }
