@@ -9,6 +9,7 @@ use App\Job\UseCase\SearchJoboffersCrawledUseCase;
 use App\Job\UseCase\SearchJoboffersOmNotOriginalUseCase;
 use App\Job\UseCase\SearchJoboffersOmOriginalUseCase;
 use App\Job\UseCase\SearchJoboffersUseCase;
+use App\Models\CorporationApplicant;
 use App\Models\CorporationJoboffer;
 use Illuminate\Http\Request;
 use App\Models\Job;
@@ -39,7 +40,7 @@ class JobsController extends Controller
         //OM求人(ハロワ、indeed)取得
         $useCase = new SearchJoboffersCrawledUseCase();
         $omCrawledJoboffers = $useCase->handle($request, $this->limit);
-        
+
         //返し方はまた、話し合って、どうするか決める。
         return [
             $omOriginalJoboffers,
@@ -53,5 +54,11 @@ class JobsController extends Controller
             'city' => $jobService->getJobConditions(),
             'work_type' => JobConditionConsts::WORK_TYPES,
         ];
+    }
+    //OMオリジナル求人に応募するときのアクション
+    public function applyOMOriginalJobOffer(CorporationApplicant $applicant)
+    {
+        //ここに応募処理を書く
+        $applicant->getApplicant(Auth::guard('users')->id);
     }
 }
