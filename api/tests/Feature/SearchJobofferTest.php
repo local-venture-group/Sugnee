@@ -46,28 +46,28 @@ class SearchJobofferTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonCount(2);
     }
-     //３日以内に追加された求人数を検索するテスト
-    public function test_search_period_joboffer_in_3days()
-    {
-        $response = $this->getJson(route('joboffer.search', ['period' => 3]));
+    // //  //３日以内に追加された求人数を検索するテスト
+    // public function test_search_period_joboffer_in_3days()
+    // {
+    //     $response = $this->getJson(route('joboffer.search', ['period' => 3]));
 
-        $response->assertStatus(200)
-            ->assertJsonCount(4);
-    }
-    //7日以内に追加された求人数を検索するテスト
-    public function test_search_period_joboffer_in_7days()
-    {
-        $response = $this->getJson(route('joboffer.search', ['period' => 7]));
+    //     $response->assertStatus(200)
+    //         ->assertJsonCount(4);
+    // }
+    // //7日以内に追加された求人数を検索するテスト
+    // public function test_search_period_joboffer_in_7days()
+    // {
+    //     $response = $this->getJson(route('joboffer.search', ['period' => 7]));
 
-        $response->assertStatus(200)
-            ->assertJsonCount(6);
-    }
-    //14日以内に追加された求人数を検索するテスト
-    public function test_search_period_joboffer_in_14days()
-    {
-        $response = $this->getJson(route('joboffer.search', ['period' => 14]));
+    //     $response->assertStatus(200)
+    //         ->assertJsonCount(6);
+    // }
+    // //14日以内に追加された求人数を検索するテスト
+    // public function test_search_period_joboffer_in_14days()
+    // {
+    //     $response = $this->getJson(route('joboffer.search', ['period' => 14]));
 
-        $response->assertStatus(200)
-            ->assertJsonCount(8);
-    }
+    //     $response->assertStatus(200)
+    //         ->assertJsonCount(8);
+    // }
 }
