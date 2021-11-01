@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\AdminController;
+use App\Http\Controllers\Api\Staff\StaffController;
 use App\Http\Controllers\Api\User\FavoritesController;
 use App\Http\Controllers\Api\User\UserController;
 use App\Http\Controllers\Api\User\JobsController;
@@ -54,21 +55,25 @@ Route::prefix('user')->group(function () {
             ->name('friku_joboffer.favorites.detach');
     });
 });
-
-
-
-
-
-
-
-//管理者用ルート
-Route::prefix('admin', function () {
-    Route::post('/register', [AdminController::class, 'register']);
-    Route::post('/login', [AdminController::class, 'login']);
-    Route::group(['middleware' => ['auth:admins']], function () {
-        Route::post('/logout', [AdminController::class, 'logout']);
+//企業用ルート
+Route::prefix('staff', function () {
+    Route::post('/register', [StaffController::class, 'register']);
+    Route::group(['middleware' => ['auth:staffs']], function () {
         Route::get('/', function (Request $request) {
             return $request->user();
         });
     });
 });
+
+//管理者用ルート
+Route::prefix('admin')->group(function () {
+    Route::post('/register', [AdminController::class, 'register']);
+    Route::group(['middleware' => ['auth:admins']], function () {
+        Route::get('/', function (Request $request) {
+            return $request->user();
+        });
+        // Route::get('/user/search', [UserSearchController::class, 'search']);
+        // Route::get('/user/offer', [SendOfferController::class, 'sendOffer']);
+    });
+});
+
