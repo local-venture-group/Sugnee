@@ -29,10 +29,15 @@ class DatabaseSeeder extends Seeder
             FrikuJoboffersSeeder::class,
 
             CompanyUsersSeeder::class,
+            CorporationApplicantsSeeder::class,
+            CorporationApplicantSchedulesSeeder::class,
+            CorporationCompanyschedulesSeeder::class,
             MessageRoomsSeeder::class,
             WorkTypesSeeder::class,
             HiringSystemsSeeder::class,
-            JobTypesSeeder::class
+            JobTypesSeeder::class,
+            StaffsSeeder::class,
+            FrikuCompaniesSeeder::class
         ]);
     }
 }

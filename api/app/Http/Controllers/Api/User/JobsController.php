@@ -39,6 +39,7 @@ class JobsController extends Controller
         //OM求人(ハロワ、indeed)取得
         $useCase = new SearchJoboffersCrawledUseCase();
         $omCrawledJoboffers = $useCase->handle($request, $this->limit);
+        
         //返し方はまた、話し合って、どうするか決める。
         return [
             $omOriginalJoboffers,

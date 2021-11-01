@@ -17,7 +17,7 @@ class AuthUser extends Model
     {
         return $this->hasMany(MessageRoom::class);
     }
-    public function userCompany() :HasMany
+    public function authUserCompanies() :HasMany
     {
         return $this->hasMany(CorporationCompany::class, 'user_id');
     }
