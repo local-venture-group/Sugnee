@@ -15,12 +15,16 @@ class CorporationCompany extends Model
 
     protected $connection = 'ats';
     protected $table = 'corporation_company';
-    public function companyUser() :BelongsTo
+    public function authUser() :BelongsTo
     {
         return $this->belongsTo(AuthUser::class, 'user_id');
     }
     public function joboffers() :HasMany
     {
         return $this->hasMany(CorporationJoboffer::class, 'company_id');
+    }
+    public function corporationCompanyschedules()
+    {
+        return $this->hasMany(CorporationCompanyschedule::class, 'company_id');
     }
 }

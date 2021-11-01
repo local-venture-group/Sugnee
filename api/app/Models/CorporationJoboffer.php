@@ -46,6 +46,14 @@ class CorporationJoboffer extends Model
     {
         return $this->hasMany(MessageRoom::class);
     }
+    public function corporationCompany()
+    {
+        return $this->belongsTo(CorporationCompany::class, 'company_id');
+    }
+    public function corporationCompanyschedules()
+    {
+        return $this->hasMany(CorporationCompanyschedule::class, 'joboffer_id');
+    }
 
 
     //OMクローリング求人に絞る
