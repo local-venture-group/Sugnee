@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\JobServiceProvider::class,
         App\Providers\ImageServiceProvider::class,
+        App\Providers\ApplyServiceProvider::class,
     ],
 
     /*
@@ -230,6 +231,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'JobService' => App\Facades\JobService::class,
+        'ApplyService' => \App\Facades\ApplyService::class,
     ],
 
 ];

@@ -13,6 +13,8 @@ use App\Models\CorporationApplicant;
 use App\Models\CorporationJoboffer;
 use Illuminate\Http\Request;
 use App\Models\Job;
+use App\Providers\ApplyServiceProvider;
+use App\Services\applyService;
 use App\Services\JobService;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,9 +58,12 @@ class JobsController extends Controller
         ];
     }
     //OMオリジナル求人に応募するときのアクション
-    public function applyOMOriginalJobOffer(CorporationApplicant $applicant)
+    public function applyOmOriginaljobOffer(CorporationApplicant $applicant, applyService $applyService)
     {
         //ここに応募処理を書く
-        $applicant->getApplicant(Auth::guard('users')->id);
+        $applicant = $applicant->getApplicant(Auth::guard('users')->id);
+
+        //申込日を作成
+        $scheduleArray = $applyService->createScheduleArray($applicant);
     }
 }
