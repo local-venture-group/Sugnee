@@ -45,6 +45,6 @@ class CreateCorporationApplicantschedulesTable extends Migration
      */
     public function down()
     {
-        Schema::connection('ats')->dropIfExists('corporation_applicantschedules');
+        Schema::connection('ats')->dropIfExists('corporation_applicantschedule');
     }
 }
