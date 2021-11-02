@@ -58,12 +58,19 @@ class JobsController extends Controller
         ];
     }
     //OMオリジナル求人に応募するときのアクション
-    public function applyOmOriginaljobOffer(CorporationApplicant $applicant, applyService $applyService)
+    public function applyOmOriginalJoboffer(
+        Request $request,
+        CorporationJoboffer $corporationJoboffer ,
+        CorporationApplicant $applicant,
+        applyService $applyService
+    )
     {
-        //ここに応募処理を書く
+        dd($request->all());
+        //ここから応募処理を書く
+
         $applicant = $applicant->getApplicant(Auth::guard('users')->id);
 
-        //申込日を作成
-        $scheduleArray = $applyService->createScheduleArray($applicant);
+        //ユーザーの面接申込日データを作成
+        $scheduleArray = $applyService->createScheduleArray($request, $corporationJoboffer->id);
     }
 }
