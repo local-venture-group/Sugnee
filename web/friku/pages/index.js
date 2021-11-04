@@ -1,8 +1,11 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
+import { useContext } from "react";
+
+// テスト用
+import { AuthContext } from "../contexts/Auth";
 
 export default function Home() {
+  const { user } = useContext(AuthContext);
+  console.log("test", user);
   return (
     <div className="container mx-auto">
       <main className="w-full h-96 bg-gradient-to-b from-primary to-secondary">
