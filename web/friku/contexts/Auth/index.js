@@ -22,10 +22,51 @@ const AuthProvider = ({ children }) => {
         console.log("[getUser]ログインしてません", err);
       });
   };
+
+  const signUp = (data) => {
+    const {
+      firstName,
+      lastName,
+      birthYear,
+      birthMonth,
+      birthDay,
+      gender,
+      email,
+      password,
+    } = data;
+    const birth = `${birthYear}-${birthMonth}-${birthDay}`;
+
+    const resData = axios
+      .post("/api/user/register", {
+        firstName,
+        lastName,
+        email,
+        birth,
+        gender,
+        password,
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.data) {
+          console.log("[signup]会員登録成功");
+          return res;
+        } else {
+          console.log(res.data.statusText);
+          console.log("[signup]会員登録失敗");
+        }
+      })
+      .catch((err) => {
+        console.log(err.response);
+        console.log("[signup]会員登録失敗");
+      });
+    return resData;
+  };
+
   return (
     <AuthContext.Provider
       value={{
         user,
+        signUp,
       }}
     >
       {children}
