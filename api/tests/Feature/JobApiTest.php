@@ -31,22 +31,5 @@ class JobApiTest extends TestCase
         CorporationJoboffer::factory()->count(30)->create(['is_pickup' => true]);
     }
 
-    public function testGetLimit10()
-    {
-        $response = $this->getJson(route('pages.top'));
-        $response->assertStatus(200);
-        $this->assertSame(10, count($response['pickUpJobs']));
-
-    }
-    public function testGetShowPickUpJobs()
-    {
-        $pickUpJob = CorporationJoboffer::where('is_pickup', true)->first();
-        $response = $this->getJson(route('pickup.show', ['corporationJoboffer' => $pickUpJob->id ]));
-        $response
-            ->assertStatus(200)
-            ->assertJsonFragment(['is_pickup' => true]);
-            $this->assertSame($pickUpJob->id, $response['id']);
-
-    }
 
 }
