@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\MessageRoom;
+use App\Models\CorporationApplicantschedule;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Carbon\Carbon;
@@ -50,9 +51,9 @@ class CorporationJoboffer extends Model
     {
         return $this->belongsTo(CorporationCompany::class, 'company_id');
     }
-    public function corporationCompanyschedules()
+    public function corporationApplicantSchedules()
     {
-        return $this->hasMany(CorporationCompanyschedule::class, 'joboffer_id');
+        return $this->hasMany(CorporationApplicantSchedule::class, 'job_offer_id');
     }
 
 
@@ -124,6 +125,35 @@ class CorporationJoboffer extends Model
         }
         return $query->whereDate('created_at', '>=', Carbon::today()->subDay($period));
 
+    }
+     //このメソッドで、申込済みかどうかを判定する処理を行う。
+    public function isAlreadyApplied(CorporationJoboffer $joboffer, User $user)
+    {
+        //ユーザー変数が空でない場合、処理を続ける。
+        if(empty($user)){
+            return false;
+        }
+        //応募フラグ変数をfalseで初期化。
+        $applied = false;
+
+        //求人に紐づく応募管理データがあるかどうかを判定する。
+        if(!empty($joboffer->corporationApplicantSchedules)){
+            //応募管理データがあれば、更なる判定を行う。
+
+            $eachApplicantLoginUser = collect($joboffer->corporationApplicantSchedules)->each(function($schedule) use ($user){
+
+                if(empty($schedule->corporation_applicant)){
+                    return false;
+                }
+
+                return $schedule->corporation_applicant->user_id == $user->id;
+            });
+            //応募管理データがあれば、応募フラグ変数にtrueを代入する。
+            if($eachApplicantLoginUser){
+                $applied = true;
+            }
+        }
+        return $applied;
     }
 
 

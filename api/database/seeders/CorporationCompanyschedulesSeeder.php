@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\CorporationCompanyschedule;
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CorporationCompanyschedulesSeeder extends Seeder
 {
@@ -14,7 +16,25 @@ class CorporationCompanyschedulesSeeder extends Seeder
      */
     public function run()
     {
-        CorporationCompanyschedule::factory()->count(3)
-            ->create();
+        DB::connection('ats')->table('corporation_companyschedule')->insert([
+            [
+                'id' => 1,
+                'company_id' => 1,
+                'start_time' => Carbon::tomorrow(),
+                'end_time' => Carbon::tomorrow()->addHours(8),
+            ],
+            [
+                'id' => 2,
+                'company_id' => 1,
+                'start_time' => Carbon::tomorrow(),
+                'end_time' => Carbon::tomorrow()->addHours(8),
+            ],
+            [
+                'id' => 3,
+                'company_id' => 1,
+                'start_time' => Carbon::tomorrow(),
+                'end_time' => Carbon::tomorrow()->addHours(8),
+            ]
+            ]);
     }
 }

@@ -35,7 +35,7 @@ class CorporationApplicantFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'applicant_gender' => $this->faker->numberBetween(1,2),
             'applied_at' => now(),
-            'user_id' => User::factory(),
+            'user_id' => 1,
         ];
     }
 }

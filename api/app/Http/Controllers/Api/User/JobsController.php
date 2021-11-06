@@ -10,9 +10,11 @@ use App\Job\UseCase\SearchJoboffersOmNotOriginalUseCase;
 use App\Job\UseCase\SearchJoboffersOmOriginalUseCase;
 use App\Job\UseCase\SearchJoboffersUseCase;
 use App\Models\CorporationApplicant;
+use App\Models\CorporationCompanyschedule;
 use App\Models\CorporationJoboffer;
 use Illuminate\Http\Request;
 use App\Models\Job;
+use App\Models\User;
 use App\Providers\ApplyServiceProvider;
 use App\Services\applyService;
 use App\Services\JobService;
@@ -57,6 +59,33 @@ class JobsController extends Controller
             'work_type' => JobConditionConsts::WORK_TYPES,
         ];
     }
+    public function applyOm(CorporationJoboffer $corporationJoboffer)
+    {
+        //当該求人を取得
+        $corporationJoboffer = CorporationJoboffer::with('corporationApplicantSchedules.corporationApplicant', 'corporationCompany.authUser')
+            ->where('id', $corporationJoboffer->id)
+            ->first();
+        $user = User::findOrFail(1);
+        //申込済みかどうかを判定して返す。
+        $isApplied = $corporationJoboffer->isAlreadyApplied($corporationJoboffer, $user);
+        //申込済みなら、申込済みのメッセージを返す
+
+
+        //企業の面接日時の候補を取得する。
+        $candidateDatetimes = CorporationCompanyschedule::where([
+            [
+                'company_id',  $corporationJoboffer->company_id,
+            ],
+            [
+                'start_time' , '>' , now(),
+            ]
+            ])
+            ->get();
+        //面接日時の候補が存在してなければ、応募完了画面へと遷移する。
+        if(empty($candidateDatetimes)){
+        }
+        //面接日時の候補が存在していれば、面接日時の候補を返す。
+    }
     //OMオリジナル求人に応募するときのアクション
     public function applyOmOriginalJoboffer(
         Request $request,
@@ -65,7 +94,8 @@ class JobsController extends Controller
         applyService $applyService
     )
     {
-        dd($request->all());
+
+
         //ここから応募処理を書く
 
         $applicant = $applicant->getApplicant(Auth::guard('users')->id);
