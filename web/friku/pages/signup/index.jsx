@@ -13,7 +13,7 @@ import { AuthContext } from "../../contexts/Auth/index";
 const signUp = () => {
   const [formData, setFormData] = useState();
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const { user, signUp } = useContext(AuthContext);
+  const { user, signup } = useContext(AuthContext);
   const router = useRouter();
   const {
     control,
@@ -30,15 +30,6 @@ const signUp = () => {
 
   const onClickBack = () => {
     setIsConfirmed(false);
-  };
-
-  const onClickSignup = async (data) => {
-    const res = await signUp(data);
-    if (res) {
-      router.push("/signup/success");
-      return;
-    }
-    alert("会員登録失敗しました");
   };
 
   if (user) router.push("/");
@@ -62,7 +53,7 @@ const signUp = () => {
               <p className="mt-2 text-sm text-gray-500">
                 必要項目入力の上、入力内容確認へ進んでください。
               </p>
-              <Link href="/signin">
+              <Link href="/login">
                 <a className="mt-2 text-sm text-indigo-500 hover:text-gray-500">
                   すでに登録済みの方はこちらからログイン
                 </a>
@@ -72,7 +63,7 @@ const signUp = () => {
               <SignupConfirmation
                 formData={formData}
                 onClickBack={onClickBack}
-                signup={onClickSignup}
+                signup={signup}
               />
             ) : (
               <SignupForm

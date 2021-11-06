@@ -50,14 +50,17 @@ const AuthProvider = ({ children }) => {
         console.log(res);
         if (res.data) {
           console.log("[signup]会員登録成功");
+          Router.push("/signup/success");
         } else {
           console.log(res.data.statusText);
           console.log("[signup]会員登録失敗");
+          alert("会員登録失敗しました");
         }
       })
       .catch((err) => {
         console.log(err.response);
         console.log("[signup]会員登録失敗");
+        alert("会員登録失敗しました");
       });
   };
 

@@ -38,7 +38,7 @@ const signupSuccess = () => {
               <button
                 className="btn btn-primary border-0 hover:shadow px-8 rounded-xl w-full mb-3"
                 type="button"
-                onClick={() => router.push("/signin")}
+                onClick={() => router.push("/login")}
               >
                 ログイン
               </button>
