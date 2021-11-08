@@ -18,6 +18,7 @@ use App\Models\User;
 use App\Providers\ApplyServiceProvider;
 use App\Services\applyService;
 use App\Services\JobService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class JobsController extends Controller
@@ -83,8 +84,43 @@ class JobsController extends Controller
             ->get();
         //面接日時の候補が存在してなければ、応募完了画面へと遷移する。
         if(empty($candidateDatetimes)){
+            //応募完了画面へと遷移させる。
         }
+        //30分ごとに、start_time end_timeを区切る。
+        $result = [];
+        foreach($candidateDatetimes as $candidateDatetime){
+            $start_time = Carbon::parse($candidateDatetime->start_time);
+
+            //終了時刻から１時間を引く。
+            $end_time = Carbon::parse($candidateDatetime->end_time)->subMinute(60);
+            //開始時刻から終了時刻までを30分おきに区切る。
+            while ($start_time->lte($end_time)) {
+                //start_timeとend_timeの間を30分おきに区切る。
+                $result[] = $start_time->toDateTimeString();
+                $start_time = $start_time->addMinute(30);
+            }
+        }
+        dd($result);
+        // $candidateDatetimes->each(function ($candidateDatetime) use ($result) {
+        //     // $result[] = $candidateDatetime->start_time;
+        //     //start_timeとend_timeの間を30分おきに区切る。
+        //     //開始時刻
+        //     $start_time = Carbon::parse($candidateDatetime->start_time);
+
+        //     //終了時刻から１時間を引く。
+        //     $end_time = Carbon::parse($candidateDatetime->end_time)->subMinute(60);
+        //     //開始時刻から終了時刻までを30分おきに区切る。
+        //     while ($start_time->lte($end_time)) {
+        //         //start_timeとend_timeの間を30分おきに区切る。
+        //         $result[] = $start_time->toDateTimeString();
+        //         $start_time = $start_time->addMinute(30);
+        //     }
+
+        // });
+
+
         //面接日時の候補が存在していれば、面接日時の候補を返す。
+
     }
     //OMオリジナル求人に応募するときのアクション
     public function applyOmOriginalJoboffer(
