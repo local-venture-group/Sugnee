@@ -3,11 +3,14 @@ import "tailwindcss/tailwind.css";
 
 // Context
 import { AuthProvider } from "../contexts/Auth";
+import { AdminProvider } from "../contexts/Admin";
 
 function MyApp({ Component, pageProps }) {
   return (
     <AuthProvider>
-      <Component {...pageProps} />
+      <AdminProvider>
+        <Component {...pageProps} />
+      </AdminProvider>
     </AuthProvider>
   );
 }
