@@ -10,6 +10,7 @@ use App\Job\UseCase\SearchJoboffersOmNotOriginalUseCase;
 use App\Job\UseCase\SearchJoboffersOmOriginalUseCase;
 use App\Job\UseCase\SearchJoboffersUseCase;
 use App\Models\CorporationApplicant;
+use App\Models\CorporationApplicantschedule;
 use App\Models\CorporationCompanyschedule;
 use App\Models\CorporationJoboffer;
 use Illuminate\Http\Request;
@@ -94,6 +95,7 @@ class JobsController extends Controller
             //終了時刻から１時間を引く。
             $end_time = Carbon::parse($candidateDatetime->end_time)->subMinute(60);
             //開始時刻から終了時刻までを30分おきに区切る。
+            //↓の$start_time->lte($end_time)は、$start_time <= $end_timeと同じ。
             while ($start_time->lte($end_time)) {
                 //start_timeとend_timeの間を30分おきに区切る。
                 $result[] = $start_time->toDateTimeString();
@@ -102,7 +104,7 @@ class JobsController extends Controller
         }
         //面接日時の候補は$resultに格納されている。
         if(empty($candidateDatetimes)){
-            //企業が面接日程を入力していない場合は、応募完了画面へと遷移する・
+            //企業が面接日程を入力していない場合は、応募完了画面へと遷移する
         }
 
 
@@ -114,16 +116,21 @@ class JobsController extends Controller
         Request $request,
         CorporationJoboffer $corporationJoboffer ,
         CorporationApplicant $applicant,
+        CorporationApplicantschedule $applicantschedule,
         applyService $applyService
     )
     {
-
-
+        // $request->preferred_first_date =
         //ここから応募処理を書く
-
-        $applicant = $applicant->getApplicant(Auth::guard('users')->id);
+        $user = User::findOrFail(1);
+        //応募者 Auth::guard('users')->id
+        $applicant = $applicant->getApplicant($user)->first();
 
         //ユーザーの面接申込日データを作成
         $scheduleArray = $applyService->createScheduleArray($request, $corporationJoboffer->id);
+        dd($scheduleArray);
+        $applicantschedule->create($scheduleArray);
+
+
     }
 }

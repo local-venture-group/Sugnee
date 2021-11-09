@@ -17,7 +17,7 @@ class CorporationApplicant extends Model
     public $timestamps = false;
     public function corporationApplicantSchedules()
     {
-        return $this->hasMany(CorporationApplicantschedule::class);
+        return $this->hasMany(CorporationApplicantschedule::class, 'applicant_id');
     }
     public function user()
     {
@@ -42,6 +42,7 @@ class CorporationApplicant extends Model
             $applicant = $this::create($applicantCollection->toArray());
         }
         return $applicant;
+
 
     }
 }
