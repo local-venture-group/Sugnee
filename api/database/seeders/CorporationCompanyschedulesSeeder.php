@@ -26,14 +26,14 @@ class CorporationCompanyschedulesSeeder extends Seeder
             [
                 'id' => 2,
                 'company_id' => 1,
-                'start_time' => Carbon::tomorrow(),
-                'end_time' => Carbon::tomorrow()->addHours(8),
+                'start_time' => Carbon::now()->addDays(2),
+                'end_time' => Carbon::now()->addDays(2)->addHours(8),
             ],
             [
                 'id' => 3,
                 'company_id' => 1,
-                'start_time' => Carbon::tomorrow(),
-                'end_time' => Carbon::tomorrow()->addHours(8),
+                'start_time' => Carbon::now()->addDays(3),
+                'end_time' => Carbon::now()->addDays(3)->addHours(8),
             ]
             ]);
     }
