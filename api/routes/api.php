@@ -60,7 +60,8 @@ Route::prefix('user')->group(function () {
 });
 //企業用ルート
 Route::prefix('staff')->group(function () {
-    Route::post('/register', [AdminController::class, 'register']);
+
+    Route::post('/register', [StaffController::class, 'register']);
     Route::group(['middleware' => ['auth:staffs']], function () {
         Route::get('/', function (Request $request) {
             return $request->user();
@@ -69,7 +70,6 @@ Route::prefix('staff')->group(function () {
         // Route::get('/user/offer', [SendOfferController::class, 'sendOffer']);
     });
 });
-
 //管理者用ルート
 Route::prefix('admin')->group(function () {
     Route::post('/register', [AdminController::class, 'register']);
