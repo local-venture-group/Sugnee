@@ -13,7 +13,7 @@ class StaffRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,12 @@ class StaffRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'username' => 'required|unique:staffs,username',
+            'password' => 'required|max:128',
+            'first_name' => 'required|max:30',
+            'last_name' => 'required|max:150',
+            'email' => 'required|email',
+
         ];
     }
 }

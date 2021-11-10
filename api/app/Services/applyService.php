@@ -12,6 +12,8 @@ class applyService {
         //$jobofferIdには求人IDが入っている。
         $scheduleArray = [];
         $schedulePreferred = collect(['preferred_first', 'preferred_second', 'preferred_third']);
+        #TODO: collectionを使っているので、ここではforeachで回しているが、できればmapやeachを使いたい。//配列がeachの終わりで死ぬので、
+        //暫定的にforeachを使用している。
         foreach ($schedulePreferred as $preferred){
             $scheduleArray[$preferred] = '';
 
@@ -27,6 +29,7 @@ class applyService {
         //初期ステータスは未対応
         $scheduleArray['status'] = 0;
         $scheduleArray['joboffer_id'] = $jobofferId;
+        //TODO: ここのカラムは少し疑問な部分ではあるので、応募機能完成後、添田さんに質問。
         $scheduleArray['route'] = '/';
         return $scheduleArray;
     }

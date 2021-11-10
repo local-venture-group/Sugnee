@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api\Staff;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StaffRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Staff;
+use Carbon\Carbon;
 
 class StaffController extends Controller
 {
@@ -21,6 +23,7 @@ class StaffController extends Controller
 
         if (Auth::guard('staffs')->attempt($credentials)) {
             $request->session()->regenerate();
+
 
             return response()->json([
                 'admin' =>  auth()->guard('staffs')->user(),
@@ -43,32 +46,11 @@ class StaffController extends Controller
 
         return response()->json(true);
     }
-    public function register(Request $request)
+    public function register(StaffRequest $request, Staff $staff)
     {
-        $data = $request->validate([
-            'username' => 'required|string|max:191',
-            'email' => 'required|string|max:191|unique:staffs,email',
-            'password' => 'required|string'
-        ]);
+        $staff->create($request->validated() + ['date_joined' => Carbon::now()]);
 
-        $user = Staff::create([
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password'])
-        ]);
-
-        $token = $user->createToken('foundProjectToken')->plainTextToken;
-
-        // ユーザー登録テスト用
-        // return response($user, 201);
-
-
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-
-        return response($response, 201);
+        return response($staff , 201);
     }
     public function index()
     {
