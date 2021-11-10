@@ -27,7 +27,7 @@ const StaffProvider = ({ children }) => {
     console.log(data);
     axios
       .post("/api/staff/register", {
-        username: data.companyName,
+        name: data.companyName,
         email: data.email,
         password: data.password,
       })
