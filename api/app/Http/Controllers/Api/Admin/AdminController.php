@@ -58,18 +58,13 @@ class AdminController extends Controller
             'password' => Hash::make($data['password'])
         ]);
 
-        $token = $user->createToken('foundProjectToken')->plainTextToken;
 
         // ユーザー登録テスト用
         // return response($user, 201);
 
 
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
 
-        return response($response, 201);
+        return response($user, 201);
     }
     public function index()
     {
