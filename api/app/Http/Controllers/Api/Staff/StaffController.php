@@ -46,13 +46,13 @@ class StaffController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:191',
+            'username' => 'required|string|max:191',
             'email' => 'required|string|max:191|unique:staffs,email',
             'password' => 'required|string'
         ]);
 
         $user = Staff::create([
-            'name' => $data['name'],
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password'])
         ]);
