@@ -112,6 +112,59 @@ const AuthProvider = ({ children }) => {
       });
   };
 
+  const addOmBookmark = async (e, user, jobId) => {
+    e.preventDefault();
+    if (!user) {
+      alert("お気に入り追加はログインが必要です");
+      return;
+    }
+
+    await axios.get("/sanctum/csrf-cookie").then((response) => {
+      axios
+        .put("/api/user/joboffer/favorites", {
+          user_id: user.id,
+          corporation_joboffer_id: jobId,
+        })
+        .then((res) => {
+          if (res.status === 201) {
+            console.log("[addFavorite]追加成功", res);
+            setUser({ ...user, favorites: res.data });
+          } else {
+            console.log("[addFavorite]お気に入り追加失敗", res.data);
+          }
+        })
+        .catch((err) => {
+          console.log("[addFavorite]お気に入り追加失敗", err.response);
+        });
+    });
+  };
+
+  const deleteOmBookmark = async (e, user, jobId) => {
+    e.preventDefault();
+
+    await axios.get("/sanctum/csrf-cookie").then((response) => {
+      axios
+        .delete("/api/user/joboffer/favorites", {
+          data: {
+            user_id: user.id,
+            corporation_joboffer_id: jobId,
+          },
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            console.log("[deleteFavorite]削除成功", res);
+            setUser({ ...user, favorites: res.data });
+          } else {
+            console.log("[deleteFavorite]お気に入り削除失敗", res.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err.response);
+          console.log("[deleteFavorite]お気に入り削除失敗");
+        });
+    });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -119,6 +172,8 @@ const AuthProvider = ({ children }) => {
         signup,
         login,
         logout,
+        addOmBookmark,
+        deleteOmBookmark,
       }}
     >
       {children}
