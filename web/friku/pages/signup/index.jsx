@@ -47,7 +47,7 @@ const signUp = () => {
               backgroundRepeat: "no-repeat",
             }}
           ></div>
-          <div className="w-full lg:w-1/2 bg-white p-20 rounded-lg lg:rounded-l-none">
+          <div className="w-full lg:w-1/2 bg-white p-5 rounded-lg lg:rounded-l-none">
             <div className="text-center mb-12">
               <h1 className="mt-6 text-5xl font-bold text-gray-900">SIGN UP</h1>
               <p className="mt-2 text-sm text-gray-500">
