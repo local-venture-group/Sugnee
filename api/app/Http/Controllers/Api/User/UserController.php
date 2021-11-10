@@ -58,7 +58,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
+        dd($user);
         Mail::to($user)->queue(new UserRegistered($user));
         return response($user, 201);
     }

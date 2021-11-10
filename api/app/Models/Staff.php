@@ -14,9 +14,15 @@ class Staff extends Authenticatable
     protected $connection = 'fukuriku';
     protected $table = 'staffs';
     protected $fillable = [
-        'name',
-        'email',
+        'username',
         'password',
+        'first_name',
+        'last_name',
+        'email',
+        'is_superuser',
+        'is_staff',
+        'is_active',
+        'date_joined'
     ];
     protected $hidden = [
         'password',
