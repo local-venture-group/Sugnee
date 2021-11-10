@@ -2,6 +2,12 @@ import { useContext } from "react";
 import Link from "next/link";
 import { handleDate, isFavorite } from "../../../utils";
 
+// Contexts
+import { AuthContext } from "../../../contexts/Auth";
+
+// Components
+import BookmarkButton from "../../BookmarkButton";
+
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,17 +17,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faClock } from "@fortawesome/free-regular-svg-icons";
 
-// Contexts
-import { AuthContext } from "../../../contexts/Auth";
-
-// Components
-import BookmarkButton from "../../BookmarkButton";
-
 export default function OmJobCard({ job, user, userFavorites }) {
   const { addOmBookmark, deleteOmBookmark } = useContext(AuthContext);
 
   return (
-    <Link href={`/jobOffer/job/${job.id}`}>
+    <Link href={`/job/${job.id}`}>
       <div className="card shadow-lg lg:card-side w-full bg-white hover:shadow cursor-pointer">
         <div className="card-body">
           <div className="card-title flex justify-between">
