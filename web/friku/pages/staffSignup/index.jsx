@@ -1,30 +1,29 @@
 import Link from "next/link";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 
 // Components
-import SignupForm from "../../components/SignupForm/user";
-import SignupConfirmation from "../../components/SignupConfirmation/user";
+import StaffSignupForm from "../../components/SignupForm/staff";
+import StaffSignupConfirmation from "../../components/SignupConfirmation/staff";
 
 // Contexts
-import { AuthContext } from "../../contexts/Auth/index";
+import { StaffContext } from "../../contexts/Staff";
 
 const signUp = () => {
   const [formData, setFormData] = useState();
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const { user, signup } = useContext(AuthContext);
+  const { staff, staffSignup } = useContext(StaffContext);
   const router = useRouter();
   const {
-    control,
     register,
     formState: { errors },
     handleSubmit,
     watch,
   } = useForm();
 
-  const onSubmit = async (data) => {
-    setFormData({ ...data, gender: parseInt(data.gender) });
+  const onSubmit = (data) => {
+    setFormData(data);
     setIsConfirmed(true);
   };
 
@@ -32,7 +31,8 @@ const signUp = () => {
     setIsConfirmed(false);
   };
 
-  if (user) router.push("/");
+  // userやadminだった場合も追加予定
+  if (staff) router.push("/staff");
 
   return (
     <div className="bg-gradient-to-b from-primary to-secondary">
@@ -49,7 +49,9 @@ const signUp = () => {
           ></div>
           <div className="w-full lg:w-1/2 bg-white p-20 rounded-lg lg:rounded-l-none">
             <div className="text-center mb-12">
-              <h1 className="mt-6 text-5xl font-bold text-gray-900">SIGN UP</h1>
+              <h1 className="mt-6 text-5xl font-bold text-gray-900">
+                COMPANY SIGN UP
+              </h1>
               <p className="mt-2 text-sm text-gray-500">
                 必要項目入力の上、入力内容確認へ進んでください。
               </p>
@@ -60,15 +62,13 @@ const signUp = () => {
               </Link>
             </div>
             {isConfirmed ? (
-              <SignupConfirmation
+              <StaffSignupConfirmation
                 formData={formData}
                 onClickBack={onClickBack}
-                signup={signup}
+                staffSignup={staffSignup}
               />
             ) : (
-              <SignupForm
-                Controller={Controller}
-                control={control}
+              <StaffSignupForm
                 handleSubmit={handleSubmit}
                 onSubmit={onSubmit}
                 register={register}
