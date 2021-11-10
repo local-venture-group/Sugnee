@@ -67,7 +67,7 @@ const StaffProvider = ({ children }) => {
 
   const staffLogout = () => {
     axios
-      .post("/api/Staff/logout")
+      .post("/api/staff/logout")
       .then((res) => {
         if (res.status === 200) {
           setStaff(null);
