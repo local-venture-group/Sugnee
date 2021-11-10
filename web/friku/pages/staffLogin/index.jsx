@@ -105,19 +105,20 @@ const staffLogin = () => {
                 </div>
               </form>
               <p>
-                <Link href="/signup">
+                <Link href="/staffSignup">
                   <a className="mt-2 text-sm text-primary hover:text-gray-500">
                     会員登録がまだの方はこちらから新規登録
                   </a>
                 </Link>
               </p>
-              <p>
+              {/* 後に設定予定 */}
+              {/* <p>
                 <Link href="/login/forget">
                   <a className="mt-2 text-sm text-primary hover:text-gray-500">
                     パスワードを忘れた方はこちら
                   </a>
                 </Link>
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
