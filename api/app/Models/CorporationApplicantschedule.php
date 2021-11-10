@@ -21,7 +21,7 @@ class CorporationApplicantschedule extends Model
     {
         return $this->belongsTo(CorporationApplicant::class, 'applicant_id');
     }
-    public function corporationJoboffers()
+    public function corporationJoboffer()
     {
         return $this->belongsTo(CorporationJoboffer::class, 'joboffer_id');
     }

@@ -45,18 +45,22 @@ Route::prefix('user')->group(function () {
     Route::group(['middleware' => ['auth:users']], function () {
         Route::get('/', [UserController::class, 'getAuthUser']);
         Route::put('/joboffer/favorites', [FavoritesController::class, 'omFavorites'])
-            ->name('joboffer.favorites.attach');
+            ->name('/joboffer.favorites.attach');
         Route::delete('/joboffer/favorites', [FavoritesController::class, 'omUnfavorites'])
-            ->name('joboffer.favorites.detach');
+            ->name('/joboffer.favorites.detach');
 
         Route::put('/frikuJoboffer/{frikuJoboffer}/favorites/', [FavoritesController::class, 'frikuFavorites'])
             ->name('friku_joboffer.favorites.attach');
         Route::delete('/frikuJoboffer/{frikuJoboffer}/favorites/', [FavoritesController::class, 'frikuUnfavorite'])
             ->name('friku_joboffer.favorites.detach');
+
     });
+    Route::get('joboffer/om/apply/{corporationJoboffer}', [JobsController::class, 'applyOm'])->name('joboffer.om.apply');
+    Route::post('joboffer/om/apply/{corporationJoboffer}', [JobsController::class, 'applyOmOriginalJoboffer'])->name('joboffer.omOriginal.apply');
 });
 //企業用ルート
 Route::prefix('staff')->group(function () {
+
     Route::post('/register', [StaffController::class, 'register']);
     Route::group(['middleware' => ['auth:staffs']], function () {
         Route::get('/', function (Request $request) {
@@ -77,4 +81,3 @@ Route::prefix('admin')->group(function () {
         // Route::get('/user/offer', [SendOfferController::class, 'sendOffer']);
     });
 });
-
