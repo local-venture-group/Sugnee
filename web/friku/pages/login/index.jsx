@@ -24,7 +24,7 @@ const logIn = () => {
   return (
     <div className="h-screen bg-gradient-to-b from-primary to-secondary">
       <div className="container mx-auto">
-        <div className="flex justify-center px-6 py-24">
+        <div className="flex justify-center px-6 py-14">
           <div
             className="w-full hidden bg-white lg:block lg:w-1/2 rounded-l-lg"
             style={{
