@@ -9,10 +9,17 @@ use App\Job\UseCase\SearchJoboffersCrawledUseCase;
 use App\Job\UseCase\SearchJoboffersOmNotOriginalUseCase;
 use App\Job\UseCase\SearchJoboffersOmOriginalUseCase;
 use App\Job\UseCase\SearchJoboffersUseCase;
+use App\Models\CorporationApplicant;
+use App\Models\CorporationApplicantschedule;
+use App\Models\CorporationCompanyschedule;
 use App\Models\CorporationJoboffer;
 use Illuminate\Http\Request;
 use App\Models\Job;
+use App\Models\User;
+use App\Providers\ApplyServiceProvider;
+use App\Services\applyService;
 use App\Services\JobService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class JobsController extends Controller
@@ -39,7 +46,7 @@ class JobsController extends Controller
         //OM求人(ハロワ、indeed)取得
         $useCase = new SearchJoboffersCrawledUseCase();
         $omCrawledJoboffers = $useCase->handle($request, $this->limit);
-        
+
         //返し方はまた、話し合って、どうするか決める。
         return [
             $omOriginalJoboffers,
@@ -53,5 +60,77 @@ class JobsController extends Controller
             'city' => $jobService->getJobConditions(),
             'work_type' => JobConditionConsts::WORK_TYPES,
         ];
+    }
+    public function applyOm(CorporationJoboffer $corporationJoboffer)
+    {
+        //当該求人を取得
+        $corporationJoboffer = CorporationJoboffer::with('corporationApplicantSchedules.corporationApplicant', 'corporationCompany.authUser')
+            ->where('id', $corporationJoboffer->id)
+            ->first();
+        $user = User::findOrFail(1);
+        //申込済みかどうかを判定して返す。
+        $isApplied = $corporationJoboffer->isAlreadyApplied($corporationJoboffer, $user);
+        //申込済みなら、申込済みのメッセージを返す
+
+
+        //企業の面接日時の候補を取得する。
+        $candidateDatetimes = CorporationCompanyschedule::where([
+            [
+                'company_id',  $corporationJoboffer->company_id,
+            ],
+            [
+                'start_time' , '>' , now(),
+            ]
+            ])
+            ->get();
+        //面接日時の候補が存在してなければ、応募完了画面へと遷移する。
+        if(empty($candidateDatetimes)){
+            //応募完了画面へと遷移させる。
+        }
+        //30分ごとに、start_time end_timeを区切る。
+        $result = [];
+        foreach($candidateDatetimes as $candidateDatetime){
+            $start_time = Carbon::parse($candidateDatetime->start_time);
+
+            //終了時刻から１時間を引く。
+            $end_time = Carbon::parse($candidateDatetime->end_time)->subMinute(60);
+            //開始時刻から終了時刻までを30分おきに区切る。
+            //↓の$start_time->lte($end_time)は、$start_time <= $end_timeと同じ。
+            while ($start_time->lte($end_time)) {
+                //start_timeとend_timeの間を30分おきに区切る。
+                $result[] = $start_time->toDateTimeString();
+                $start_time = $start_time->addMinute(30);
+            }
+        }
+        //面接日時の候補は$resultに格納されている。
+        if(empty($candidateDatetimes)){
+            //企業が面接日程を入力していない場合は、応募完了画面へと遷移する
+        }
+
+
+        //面接日時の候補が存在していれば、面接日時の候補を返す。
+
+    }
+    //OMオリジナル求人に応募するときのアクション
+    public function applyOmOriginalJoboffer(
+        Request $request,
+        CorporationJoboffer $corporationJoboffer ,
+        CorporationApplicant $applicant,
+        CorporationApplicantschedule $applicantschedule,
+        applyService $applyService
+    )
+    {
+        // $request->preferred_first_date =
+        //ここから応募処理を書く
+        $user = User::findOrFail(1);
+        //応募者 Auth::guard('users')->id
+        $applicant = $applicant->getApplicant($user)->first();
+
+        //ユーザーの面接申込日データを作成
+        $scheduleArray = $applyService->createScheduleArray($request, $corporationJoboffer->id);
+        dd($scheduleArray);
+        $applicantschedule->create($scheduleArray);
+
+
     }
 }
