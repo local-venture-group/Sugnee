@@ -8,6 +8,7 @@ import { AuthContext } from "../contexts/Auth";
 
 // Components
 import OmJobCard from "../components/Card/OmJobCard";
+import SearchTypeCard from "../components/Card/SearchTypeCard";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -49,6 +50,19 @@ export default function Home({ omJobs }) {
             <div className="carousel-item md:w-1/3 w-full" key={job.id}>
               <OmJobCard job={job} user={user} userFavorites={userFavorites} />
             </div>
+          ))}
+        </div>
+      </section>
+      <section className="flex flex-col justify-center items-center w-full px-4 pt-10 bg-gradient-to-b from-primary to-secondary">
+        <FontAwesomeIcon
+          icon={faSearch}
+          className="text-accent mb-2"
+          size="3x"
+        />
+        <h1 className="text-3xl text-white">求人をさがす</h1>
+        <div className="flex justify-center items-center w-full px-4 pt-10">
+          {["勤務地", "職種"].map((text, i) => (
+            <SearchTypeCard text={text} key={i} />
           ))}
         </div>
       </section>
