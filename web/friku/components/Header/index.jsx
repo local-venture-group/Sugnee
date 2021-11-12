@@ -2,7 +2,11 @@ import Link from "next/link";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/Auth";
 
-// icons
+// Components
+import JobSearchModal from "../Modal/JobSearchModal";
+import MobileSearchModal from "../Modal/MobileSearchModal";
+
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSignInAlt,
@@ -65,13 +69,12 @@ export default function Header() {
             >
               求人をさがす
             </label>
-            {/* <input
+            <input
               type="checkbox"
               id="jobSearchModal"
               className="modal-toggle"
             />
-            <JobSearchModal current={"location"} /> */}
-
+            <JobSearchModal current={"location"} />
             {user ? (
               <ul className="flex items-center">
                 <Link href="/mypage">
@@ -166,17 +169,17 @@ export default function Header() {
               </ul>
             )}
             <label
-              htmlFor="jobSearchModal"
+              htmlFor="mobileSearchModal"
               className="btn rounded-full border-0 hover:shadow h-12 w-12 bg-accent"
             >
               <FontAwesomeIcon icon={faSearch} />
             </label>
-            {/* <input
+            <input
               type="checkbox"
-              id="jobSearchModal"
+              id="mobileSearchModal"
               className="modal-toggle"
             />
-            <JobSearchModal current={"location"} /> */}
+            <MobileSearchModal />
           </div>
         </div>
       </div>

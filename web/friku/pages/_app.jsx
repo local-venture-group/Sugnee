@@ -5,6 +5,7 @@ import "tailwindcss/tailwind.css";
 import { AuthProvider } from "../contexts/Auth";
 import { AdminProvider } from "../contexts/Admin";
 import { StaffProvider } from "../contexts/Staff";
+import { SearchConditionProvider } from "../contexts/SearchCondition";
 
 // Components
 import Layout from "../components/Layout";
@@ -14,9 +15,11 @@ function MyApp({ Component, pageProps }) {
     <AuthProvider>
       <AdminProvider>
         <StaffProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <SearchConditionProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </SearchConditionProvider>
         </StaffProvider>
       </AdminProvider>
     </AuthProvider>
