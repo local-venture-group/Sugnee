@@ -7,7 +7,7 @@ import { SearchConditionContext } from "../../contexts/SearchCondition";
 
 // Components
 import JobSearchSidebar from "../../components/JobSearchSidebar";
-import JobCard from "../../components/Card/OmJobCard";
+import OmJobCard from "../../components/Card/OmJobCard";
 
 export default function Job() {
   const [jobOffers, setJobOffers] = useState();
@@ -19,19 +19,19 @@ export default function Job() {
     (favoriteJob) => favoriteJob.corporation_joboffer_id
   );
 
-  // useEffect(async () => {
-  //   const jobData = await searchJobOffers(searchCondition);
-  //   setJobOffers(jobData);
-  // }, []);
+  useEffect(async () => {
+    const jobData = await searchJobOffers(searchCondition);
+    setJobOffers(jobData.flat());
+  }, []);
 
   console.log("検索条件", searchCondition);
   console.log("検索結果", jobOffers);
 
-  // if (!jobOffers) {
-  //   return null;
-  // } else if (!jobOffers.length) {
-  //   return <p>検索条件に一致する求人はありません</p>;
-  // }
+  if (!jobOffers) {
+    return null;
+  } else if (jobOffers.length === 0) {
+    return <p>検索条件に一致する求人はありません</p>;
+  }
 
   return (
     <div className="container mx-auto">
@@ -41,16 +41,16 @@ export default function Job() {
         <span className="ml-2">
           勤務地：
           {searchCondition.cities.length
-            ? searchCondition.cities.map((city) => (
-                <span key={city.index}>{city}</span>
+            ? searchCondition.cities.map((city, index) => (
+                <span key={index}>{city}</span>
               ))
             : "なし"}
         </span>
         <span className="ml-2">
           職種：
           {searchCondition.workTypes.length
-            ? searchCondition.workTypes.map((type) => (
-                <span key={type.index}>{workTypes[type]}</span>
+            ? searchCondition.workTypes.map((type, index) => (
+                <span key={index}>{workTypes[type]}</span>
               ))
             : "なし"}
         </span>
@@ -65,13 +65,16 @@ export default function Job() {
         </div>
         <div className="w-full lg:w-3/4 p-5">
           <p>検索結果一覧</p>
-
-          {/* {jobOffers &&
-        jobOffers.map((job) => (
-          <div className="md:w-1/2 w-full mb-3" key={job.id}>
-            <JobCard job={job} user={user} userFavorites={userFavorites} />
-          </div>
-        ))} */}
+          {jobOffers.length &&
+            jobOffers.map((job) => (
+              <div className="w-full mb-3" key={job.id}>
+                <OmJobCard
+                  job={job}
+                  user={user}
+                  userFavorites={userFavorites}
+                />
+              </div>
+            ))}
         </div>
       </div>
     </div>
