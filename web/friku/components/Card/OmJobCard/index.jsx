@@ -62,9 +62,12 @@ export default function OmJobCard({ job, user, userFavorites }) {
               </span>
             </li>
           </ul>
-          <p className="mt-3 text-sm text-gray-500">
-            {job.job_description.substring(0, 45)}・・・
-          </p>
+          {!job.is_crawled && (
+            <p className="mt-3 text-sm text-gray-500">
+              {job.job_description.substring(0, 45) + "・・・"}
+            </p>
+          )}
+
           {/* <div className="justify-end card-actions">
             {userFavorites && isFavorite(userFavorites, job.id) ? (
               <BookmarkButton text={<FontAwesomeIcon icon={faBookmarked} />} />
@@ -72,12 +75,22 @@ export default function OmJobCard({ job, user, userFavorites }) {
               <BookmarkButton text={<FontAwesomeIcon icon={faBookmark} />} />
             )}
           </div> */}
-          <div className="justify-end card-actions text-xs text-gray-400">
-            <p>
-              <FontAwesomeIcon icon={faClock} />
-              <span className="ml-1">{handleDate(job.created_at)}</span>
-            </p>
-          </div>
+          {job.is_crawled ? (
+            <div className="justify-end card-actions text-xs text-gray-400">
+              <p>
+                <FontAwesomeIcon icon={faClock} />
+                <span className="ml-1">{handleDate(job.created_at)}</span>
+              </p>
+            </div>
+          ) : (
+            <div className="justify-between card-actions text-xs text-gray-400">
+              <div className="text-primary">スポンサー</div>
+              <div>
+                <FontAwesomeIcon icon={faClock} />
+                <span className="ml-1">{handleDate(job.created_at)}</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </Link>
