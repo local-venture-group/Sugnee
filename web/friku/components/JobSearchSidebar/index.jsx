@@ -7,7 +7,7 @@ import { SearchConditionContext } from "../../contexts/SearchCondition";
 // Components
 import WorkLocationTab from "../Modal/JobSearchModal/WorkLocationTab";
 import WorkTypeTab from "../Modal/JobSearchModal/WorkTypeTab";
-import KeywordTab from "../Modal/JobSearchModal/KeywordTab";
+import KeyWordTab from "../Modal/JobSearchModal/KeyWordTab";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -70,7 +70,7 @@ export default function JobSearchSidebar() {
             キーワード
           </h6>
           <p className="text-gray-600 font-semibold text-sm mb-6">からさがす</p>
-          <KeywordTab register={register} />
+          <KeyWordTab register={register} />
         </div>
         <button type="submit" className="w-full btn btn-primary mt-8">
           さがす
