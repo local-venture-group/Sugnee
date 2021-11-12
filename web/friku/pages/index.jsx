@@ -5,6 +5,7 @@ import axios from "axios";
 
 // Contexts
 import { AuthContext } from "../contexts/Auth";
+import { SearchConditionContext } from "../contexts/SearchCondition";
 
 // Components
 import OmJobCard from "../components/Card/OmJobCard";
@@ -21,6 +22,33 @@ export default function Home({ omJobs }) {
   const userFavorites = user?.favorites.map(
     (favoriteJob) => favoriteJob.corporation_joboffer_id
   );
+  const { addSearchCondition, searchCondition } = useContext(
+    SearchConditionContext
+  );
+  const searchWordsInputRef = useRef();
+
+  const searchJobByWord = async (e) => {
+    e.preventDefault();
+    const keyword = searchWordsInputRef.current.value
+      .replaceAll(/　/g, " ")
+      .split(" ");
+    addSearchCondition({
+      cities: [],
+      keyWords: keyword,
+      workTypes: [],
+    });
+    router.push("/job");
+  };
+
+  const onClickKeyword = async (e) => {
+    e.preventDefault();
+    addSearchCondition({
+      cities: [],
+      keyWords: [e.target.value],
+      workTypes: [],
+    });
+    router.push("/job");
+  };
   return (
     <div>
       <section className="w-full h-96 bg-gradient-to-b from-primary to-secondary"></section>
@@ -60,10 +88,44 @@ export default function Home({ omJobs }) {
           size="3x"
         />
         <h1 className="text-3xl text-white">求人をさがす</h1>
-        <div className="flex justify-center items-center w-full px-4 pt-10">
+        <div className="flex justify-center items-center w-10/12 pt-10">
           {["勤務地", "職種"].map((text, i) => (
             <SearchTypeCard text={text} key={i} />
           ))}
+        </div>
+        <form className="w-full flex flex-col items-center mt-10">
+          <div className="relative w-10/12">
+            <input
+              type="text"
+              className="w-full rounded-3xl shadow h-16 p-6 focus:border-0 focus:bg-gray-100"
+              placeholder="フリーワードで検索"
+              ref={searchWordsInputRef}
+            />
+            <span className="absolute inset-y-2 right-3">
+              <button
+                type="submit"
+                className="btn-circle btn-accent btn-md"
+                onClick={searchJobByWord}
+              >
+                <FontAwesomeIcon icon={faSearch} className="hover:text-white" />
+              </button>
+            </span>
+          </div>
+        </form>
+        <div className="container w-10/12 mx-auto mt-3">
+          <p>
+            <FontAwesomeIcon icon={faKey} size="lg" className="text-accent" />
+            人気の検索ワード
+          </p>
+
+          <button
+            type="button"
+            value="フレックス"
+            className="text-sm bg-white px-6 py-2 m-3 rounded-full hover:bg-blue-200"
+            onClick={onClickKeyword}
+          >
+            フレックス
+          </button>
         </div>
       </section>
     </div>
