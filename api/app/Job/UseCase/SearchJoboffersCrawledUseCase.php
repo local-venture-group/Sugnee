@@ -2,6 +2,7 @@
 
 namespace App\Job\UseCase;
 
+use App\Consts\JobConditionConsts;
 use App\Models\CorporationJoboffer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,11 @@ final class SearchJoboffersCrawledUseCase
             ->orderBy('created_at', 'desc')
             ->take($limit)
             ->get();
-
+            $corporationJoboffers['type_of_job'] = array_keys(JobConditionConsts::TYPE_OF_JOB, 'OMクローリング求人');
+        // $corporationJoboffers->append('type_of_job')->toArray();
+        // $corporationJoboffers = $corporationJoboffers->each(function($corporationJoboffer){
+        //     return $corporationJoboffer['type_of_job'] = $corporationJoboffer['type_of_job'][0];
+        // });
         return $corporationJoboffers;
     }
 }
