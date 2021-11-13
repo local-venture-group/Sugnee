@@ -22,10 +22,7 @@ final class SearchJoboffersOmOriginalUseCase
             ->orderBy('created_at', 'desc')
             ->take($limit)
             ->get();
-            $omOriginalJoboffers->append('type_of_job')->toArray();
-            $omOriginalJoboffers = $omOriginalJoboffers->each(function($omOriginalJoboffer){
-                return $omOriginalJoboffer['type_of_job'] = $omOriginalJoboffer['type_of_job'][0];
-            });
+
 
         return $omOriginalJoboffers;
     }

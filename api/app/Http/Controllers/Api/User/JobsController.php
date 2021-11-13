@@ -28,7 +28,6 @@ class JobsController extends Controller
 
     public function showJoboffer(CorporationJoboffer $corporationJoboffer)
     {
-
         return collect(new JobResource($corporationJoboffer));
     }
     public function searchJobOffers(Request $request)
@@ -39,17 +38,26 @@ class JobsController extends Controller
             //ここにユーザーの検索条件を保存する処理を書く(メソッドを作り呼び出す)
         }
 
-        //OM求人(独自取得)
+        //OM求人(独自)取得
         $useCase = new SearchJoboffersOmOriginalUseCase();
         $omOriginalJoboffers = $useCase->handle($request, $this->limit);
 
         //OM求人(ハロワ、indeed)取得
         $useCase = new SearchJoboffersCrawledUseCase();
         $omCrawledJoboffers = $useCase->handle($request, $this->limit);
-        //返し方はまた、話し合って、どうするか決める。
+
+        //type_of_jobは今のところindexにしてるけど、type名でも返せるし、これはどちらでもいいのでフロントでやりやすいようによしなに
+        $omOriginalJoboffers = $omOriginalJoboffers->append('type_of_job');
+        $omCrawledJoboffers = $omCrawledJoboffers->append('type_of_job');
+
+        $mergeOmJoboffers = $omOriginalJoboffers->merge($omCrawledJoboffers)->toArray();
+        //type_of_jobがlength1の配列になってしまうので、取り出して数値に変換。
+        foreach($mergeOmJoboffers as $index => $joboffer){
+            $mergeOmJoboffers[$index]['type_of_job'] = $joboffer['type_of_job'][0];
+        }
+
         return [
-            $omOriginalJoboffers,
-            $omCrawledJoboffers
+            $mergeOmJoboffers
         ];
         // return JobResource::collection($corporationJoboffers)->toJson();
     }
