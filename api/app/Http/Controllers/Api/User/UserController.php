@@ -69,11 +69,12 @@ class UserController extends Controller
     }
     public function update(Request $request, User $user, ImageService $imageService)
     {
+        $folderName = 'users';
         if($request->has('imageBase64')){
             $request->validate([
                 'image' => 'nullable|string',
             ]);
-            $folderName = 'users';
+
             $imageFile = $request->imageBase64;
 
             if(!is_null($imageFile)){

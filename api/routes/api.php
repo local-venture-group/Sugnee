@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\User\JobsController;
 use App\Http\Controllers\Api\User\PagesController;
 use App\Http\Controllers\Api\User\ForgotPasswordController;
 use App\Http\Controllers\Api\User\ResetPasswordController;
+use App\Http\Controllers\Api\Staff\SendOfferController;
+use App\Http\Controllers\Api\Staff\UserSearchController;
 
 
 /*
@@ -66,8 +68,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/', function (Request $request) {
             return $request->user();
         });
-        // Route::get('/user/search', [UserSearchController::class, 'search']);
-        // Route::get('/user/offer', [SendOfferController::class, 'sendOffer']);
+        Route::get('/user/search', [UserSearchController::class, 'search']);
+        Route::get('/user/offer', [SendOfferController::class, 'sendOffer']);
     });
 });
 //管理者用ルート
@@ -77,7 +79,6 @@ Route::prefix('admin')->group(function () {
         Route::get('/', function (Request $request) {
             return $request->user();
         });
-        // Route::get('/user/search', [UserSearchController::class, 'search']);
-        // Route::get('/user/offer', [SendOfferController::class, 'sendOffer']);
+
     });
 });
