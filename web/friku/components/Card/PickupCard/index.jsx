@@ -1,3 +1,5 @@
+import { useRouter } from "next/router";
+
 import { handleDate } from "../../../utils";
 
 // Icons
@@ -5,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
 
 export default function PickupCard({ article }) {
+  const router = useRouter();
+
   return (
     <div className="card">
       <figure>
@@ -29,7 +33,12 @@ export default function PickupCard({ article }) {
             <FontAwesomeIcon icon={faClock} />
             <span className="ml-1">{handleDate(article.publishedAt)}</span>
           </div>
-          <button className="btn btn-primary">More info</button>
+          <button
+            className="btn btn-primary"
+            onClick={() => router.push(`/pickup/${article.id}`)}
+          >
+            More info
+          </button>
         </div>
       </div>
     </div>
