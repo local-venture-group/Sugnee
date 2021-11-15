@@ -19,7 +19,9 @@ class JobResource extends JsonResource
         $this->resource->hiring_system = array_key_exists($this->resource->hiring_system, JobConditionConsts::HIRING_SYSTEMS)
         ? JobConditionConsts::HIRING_SYSTEMS[$this->resource->hiring_system]
         : "" ;
-
+        $this->resource->type_of_job = $this->resource->is_crawled
+            ? array_keys(JobConditionConsts::TYPE_OF_JOB, 'OMクローリング求人')
+            : array_keys(JobConditionConsts::TYPE_OF_JOB, 'OM独自求人');
         return [
              'id' => $this->id,
             'company_id' => $this->resource->company_id,
@@ -70,6 +72,7 @@ class JobResource extends JsonResource
             "image2" => $this->resource->image2,
             "image3" => $this->resource->image3,
             "image4" => $this->resource->image4,
+            'type_of_job' => $this->resource->type_of_job,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
         ];

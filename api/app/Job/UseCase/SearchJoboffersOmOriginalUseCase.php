@@ -23,6 +23,7 @@ final class SearchJoboffersOmOriginalUseCase
             ->take($limit)
             ->get();
 
+
         return $omOriginalJoboffers;
     }
 }

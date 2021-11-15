@@ -2,6 +2,7 @@
 
 namespace App\Job\UseCase;
 
+use App\Consts\JobConditionConsts;
 use App\Models\CorporationJoboffer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
