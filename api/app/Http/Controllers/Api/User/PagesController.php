@@ -25,6 +25,7 @@ class PagesController extends Controller
         // $omCrawledUseCase = new GetOmJobofferCrawledUseCase();
         // $omCrawledJoboffers = $omCrawledUseCase->handle();
 
+        //TODO: ここも、配列はそのうち一つにまとめる？　typeもつける？
         $omOriginalUseCase = new GetOmJobofferOriginalUseCase();
         $omOriginalJoboffers = $omOriginalUseCase->handle();
         return $omOriginalJoboffers;

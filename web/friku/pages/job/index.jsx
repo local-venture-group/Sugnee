@@ -21,7 +21,7 @@ export default function Job() {
 
   useEffect(async () => {
     const jobData = await searchJobOffers(searchCondition);
-    setJobOffers(jobData.flat());
+    setJobOffers(jobData);
   }, []);
 
   console.log("検索条件", searchCondition);

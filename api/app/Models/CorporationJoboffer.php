@@ -22,11 +22,17 @@ class CorporationJoboffer extends Model
 
     protected $table = 'corporation_joboffer';
 
+    protected $appends = ['type_of_job'];
     protected $casts = [
 
     ];
 
-
+    public function getTypeOfJobAttribute()
+    {
+       return  $this->is_crawled
+            ? array_keys(JobConditionConsts::TYPE_OF_JOB, 'OMクローリング求人')
+            : array_keys(JobConditionConsts::TYPE_OF_JOB, 'OM独自求人');
+    }
     public function favorites() :HasMany
     {
         return $this->hasMany(Favorite::class, 'corporation_joboffer_id');
@@ -60,12 +66,12 @@ class CorporationJoboffer extends Model
     //OMクローリング求人に絞る
     public function scopeGetCrawledJobs($query)
     {
-        return $query->where('is_crawled', JobConditionConsts::TYPE_OF_JOB['OMクローリング求人']);
+        return $query->where('is_crawled', JobConditionConsts::CRAWLED_OR_NOT['OMクローリング求人']);
     }
     //OM独自求人求人に絞る
     public function scopeGetOriginalJobs($query)
     {
-        return $query->where('is_crawled', JobConditionConsts::TYPE_OF_JOB['OM独自求人']);
+        return $query->where('is_crawled', JobConditionConsts::CRAWLED_OR_NOT['OM独自求人']);
     }
     //キーワードで絞る
     public  function scopeWhereKeyword($query, $keyword)

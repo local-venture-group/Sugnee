@@ -4,11 +4,16 @@ namespace App\Consts;
 
 class JobConditionConsts
 {
-    public const TYPE_OF_JOB = [
+    public const CRAWLED_OR_NOT = [
         'OM独自求人' => false,
-        'OMクローリング求人' => true
+        'OMクローリング求人' => true,
     ];
-
+    public const TYPE_OF_JOB = [
+        0 => 'ピックアップ求人',
+        1 => '注目企業求人',
+        2 => 'OM独自求人',
+        3 => 'OMクローリング求人'
+    ];
     public const WORK_TYPES = [
         0 => '営業系',
         1 => '企画・事務・管理系',
