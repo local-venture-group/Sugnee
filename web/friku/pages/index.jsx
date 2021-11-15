@@ -2,6 +2,7 @@ import { useContext, useRef } from "react";
 import { useRouter } from "next/router";
 
 import axios from "axios";
+import { client } from "../libs/client";
 
 // Contexts
 import { AuthContext } from "../contexts/Auth";
@@ -9,6 +10,7 @@ import { SearchConditionContext } from "../contexts/SearchCondition";
 
 // Components
 import OmJobCard from "../components/Card/OmJobCard";
+import PickupCard from "../components/Card/PickupCard";
 import SearchTypeCard from "../components/Card/SearchTypeCard";
 
 // Icons
@@ -16,7 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faKey, faStar } from "@fortawesome/free-solid-svg-icons";
 import { faLightbulb } from "@fortawesome/free-regular-svg-icons";
 
-export default function Home({ omJobs }) {
+export default function Home({ omJobs, pickupArticles }) {
   const router = useRouter();
   const { user } = useContext(AuthContext);
   const userFavorites = user?.favorites.map(
@@ -49,6 +51,8 @@ export default function Home({ omJobs }) {
     });
     router.push("/job");
   };
+
+  console.log("記事", pickupArticles);
   return (
     <div>
       <section className="w-full h-96 bg-gradient-to-b from-primary to-secondary"></section>
@@ -60,6 +64,13 @@ export default function Home({ omJobs }) {
           size="3x"
         />
         <h1 className="text-3xl">PickUp求人</h1>
+        <div className="w-full my-10 p-4 space-x-4 carousel carousel-center rounded-box">
+          {pickupArticles.map((article) => (
+            <div className="carousel-item md:w-1/3 w-full" key={article.id}>
+              <PickupCard article={article} />
+            </div>
+          ))}
+        </div>
       </section>
       <section className="flex flex-col justify-center items-center w-full px-4 pt-10">
         <FontAwesomeIcon icon={faStar} className="text-accent mb-2" size="3x" />
@@ -138,7 +149,11 @@ export async function getStaticProps() {
     .then((res) => res.data)
     .catch((err) => console.log(err));
 
+  const pickupArticleData = await client.get({
+    endpoint: "articles",
+  });
+
   return {
-    props: { omJobs },
+    props: { omJobs, pickupArticles: pickupArticleData.contents },
   };
 }
