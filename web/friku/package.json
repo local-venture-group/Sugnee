@@ -14,6 +14,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
+    "@tailwindcss/typography": "^0.4.1",
     "axios": "^0.21.1",
     "daisyui": "^1.14.1",
     "microcms-js-sdk": "^2.0.0",
