@@ -21,8 +21,8 @@ export default function PickupCard({ article }) {
         </h2>
 
         <div className="flex items-center">
-          <div class="avatar">
-            <div class="rounded-full w-10 h-10">
+          <div className="avatar">
+            <div className="rounded-full w-10 h-10">
               <img src={article.companyLogo.url} />
             </div>
           </div>
