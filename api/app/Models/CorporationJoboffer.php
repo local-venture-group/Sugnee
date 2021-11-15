@@ -29,7 +29,7 @@ class CorporationJoboffer extends Model
 
     public function getTypeOfJobAttribute()
     {
-       return  $this->is_crawled
+       return  $this->is_crawled === true
             ? array_keys(JobConditionConsts::TYPE_OF_JOB, 'OMクローリング求人')
             : array_keys(JobConditionConsts::TYPE_OF_JOB, 'OM独自求人');
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\User;
+namespace App\Http\Controllers\Api\User\OwnedMaker;
 
 use App\Http\Controllers\Controller;
 use App\Models\CorporationJoboffer;
