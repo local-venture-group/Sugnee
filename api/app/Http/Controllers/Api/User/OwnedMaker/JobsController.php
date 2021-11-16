@@ -47,6 +47,8 @@ class JobsController extends Controller
         $useCase = new SearchJoboffersCrawledUseCase();
         $omCrawledJoboffers = $useCase->handle($request, $this->limit);
 
+        //TODO: 無事mergeしたら、下のコメントは消す。
+
         //type_of_jobは今のところindexにしてるけど、type名でも返せるし、これはどちらでもいいのでフロントでやりやすいようによしなに
         // $omOriginalJoboffers = $omOriginalJoboffers->append('type_of_job');
         // $omCrawledJoboffers = $omCrawledJoboffers->append('type_of_job');
@@ -57,8 +59,8 @@ class JobsController extends Controller
         //     $mergeOmJoboffers[$index]['type_of_job'] = $joboffer['type_of_job'][0];
         // }
 
-        return $mergeOmJoboffers;
-        // return JobResource::collection($mergeOmJoboffers)->toJson();
+        // return $mergeOmJoboffers;
+        return JobResource::collection($mergeOmJoboffers)->toJson();
     }
     public function getConditions(JobService $jobService)
     {
