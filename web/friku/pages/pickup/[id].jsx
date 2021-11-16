@@ -2,14 +2,27 @@ import Link from "next/link";
 import { client } from "../../libs/client";
 import { handleDate } from "../../utils";
 
+// Components
+import Seo from "../../components/Seo";
+
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
-import { faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import {
+  faFacebook,
+  faTwitter,
+  faLine,
+} from "@fortawesome/free-brands-svg-icons";
 
 export default function pickUpArticle({ article }) {
   return (
     <>
+      <Seo
+        pageTitle={article.title}
+        pageDescription={article.description}
+        pagePath={`${process.env.NEXT_PUBLIC_APP_URL}/pickup/${article.id}`}
+        pageImg={article.thumbnail.url}
+      />
       <section id="hero">
         <p className="my-10 ml-10 text-xs text-gray-500">
           <Link href="/">TOP</Link>
@@ -24,22 +37,53 @@ export default function pickUpArticle({ article }) {
         ></div>
       </section>
       <section id="body" className="container mx-auto mt-10 px-8 md:px-28">
-        <div className="w-full flex">
-          <div className="w-full">
-            <h1 className="text-4xl font-bold mb-10">{article.title}</h1>
-            <h2 className="text-2xl text-primary font-bold mb-6">
-              {article.companyName}
-            </h2>
-            <p className="text-sm">
-              <FontAwesomeIcon
-                icon={faClock}
-                size="sm"
-                className="text-gray-500"
-              />
-              <span className="text-gray-400 ml-3">
-                {handleDate(article.publishedAt)}
-              </span>
-            </p>
+        <div className="w-full">
+          <h1 className="text-4xl font-bold mb-10">{article.title}</h1>
+          <h2 className="text-2xl text-primary font-bold mb-6">
+            {article.companyName}
+          </h2>
+          <p className="text-sm">
+            <FontAwesomeIcon
+              icon={faClock}
+              size="sm"
+              className="text-gray-500"
+            />
+            <span className="text-gray-400 ml-3">
+              {handleDate(article.publishedAt)}
+            </span>
+          </p>
+          <div className="mt-6">
+            {/* URLとタグは決定後差し替え */}
+            <a
+              href={`https://twitter.com/share?text=${article.title}&hashtags=F%E3%83%AA%E3%82%AF&url=${process.env.NEXT_PUBLIC_APP_URL}/pickup/${article.id}&related=not_you_die`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn border-0 mr-3 hover:shadow"
+              style={{ backgroundColor: "#1c9cef" }}
+            >
+              <FontAwesomeIcon icon={faTwitter} />
+              シェア
+            </a>
+            <a
+              href={`https://www.facebook.com/share.php?u=${process.env.NEXT_PUBLIC_APP_URL}/pickup/${article.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn border-0 mr-3 hover:shadow"
+              style={{ backgroundColor: "#3b5997" }}
+            >
+              <FontAwesomeIcon icon={faFacebook} />
+              シェア
+            </a>
+            <a
+              href={`https://social-plugins.line.me/lineit/share?url=${process.env.NEXT_PUBLIC_APP_URL}/pickup/${article.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn border-0 mr-3 hover:shadow"
+              style={{ backgroundColor: "#04c655" }}
+            >
+              <FontAwesomeIcon icon={faLine} />
+              シェア
+            </a>
           </div>
         </div>
         <div className="flex flex-col lg:flex-row lg:space-x-12 mt-20">
@@ -64,24 +108,22 @@ export default function pickUpArticle({ article }) {
               <p className="text-gray-500 py-3 text-sm">会社情報</p>
               <div className="text-center">
                 {/* 会社のTwitterなど入れるならmicroCMSにコンテンツ追加 */}
-                <button className="btn btn-primary mr-3">
-                  <a
-                    href="https://www.facebook.com/localventuregroup/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <FontAwesomeIcon icon={faFacebook} />
-                  </a>
-                </button>
-                <button className="btn btn-info mr-3">
-                  <a
-                    href="https://twitter.com/localventure_jps"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <FontAwesomeIcon icon={faTwitter} />
-                  </a>
-                </button>
+                <a
+                  href="https://www.facebook.com/localventuregroup/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary mr-3"
+                >
+                  <FontAwesomeIcon icon={faFacebook} />
+                </a>
+                <a
+                  href="https://twitter.com/localventure_jps"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-info mr-3"
+                >
+                  <FontAwesomeIcon icon={faTwitter} />
+                </a>
               </div>
             </div>
           </div>
