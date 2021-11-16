@@ -107,23 +107,26 @@ export default function pickUpArticle({ article }) {
               </div>
               <p className="text-gray-500 py-3 text-sm">会社情報</p>
               <div className="text-center">
-                {/* 会社のTwitterなど入れるならmicroCMSにコンテンツ追加 */}
-                <a
-                  href="https://www.facebook.com/localventuregroup/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary mr-3"
-                >
-                  <FontAwesomeIcon icon={faFacebook} />
-                </a>
-                <a
-                  href="https://twitter.com/localventure_jps"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-info mr-3"
-                >
-                  <FontAwesomeIcon icon={faTwitter} />
-                </a>
+                {article.twitterUrl && (
+                  <a
+                    href={article.twitterUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-info mr-3"
+                  >
+                    <FontAwesomeIcon icon={faTwitter} />
+                  </a>
+                )}
+                {article.facebookUrl && (
+                  <a
+                    href={article.facebookUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary mr-3"
+                  >
+                    <FontAwesomeIcon icon={faFacebook} />
+                  </a>
+                )}
               </div>
             </div>
           </div>
