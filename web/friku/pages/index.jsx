@@ -9,6 +9,7 @@ import { AuthContext } from "../contexts/Auth";
 import { SearchConditionContext } from "../contexts/SearchCondition";
 
 // Components
+import Seo from "../components/Seo";
 import OmJobCard from "../components/Card/OmJobCard";
 import PickupCard from "../components/Card/PickupCard";
 import SearchTypeCard from "../components/Card/SearchTypeCard";
@@ -54,92 +55,106 @@ export default function Home({ omJobs, pickupArticles }) {
 
   console.log("記事", pickupArticles);
   return (
-    <div>
-      <section className="w-full h-96 bg-gradient-to-b from-primary to-secondary"></section>
+    <>
+      <Seo />
+      <div>
+        <section className="w-full h-96 bg-gradient-to-b from-primary to-secondary"></section>
 
-      <section className="flex flex-col justify-center items-center w-full px-4 pt-10 bg-gray-50">
-        <FontAwesomeIcon
-          icon={faLightbulb}
-          className="text-accent mb-2"
-          size="3x"
-        />
-        <h1 className="text-3xl">PickUp求人</h1>
-        <div className="w-full my-10 p-4 space-x-4 carousel carousel-center rounded-box">
-          {pickupArticles.map((article) => (
-            <div className="carousel-item md:w-1/3 w-full" key={article.id}>
-              <PickupCard article={article} />
-            </div>
-          ))}
-        </div>
-      </section>
-      <section className="flex flex-col justify-center items-center w-full px-4 pt-10">
-        <FontAwesomeIcon icon={faStar} className="text-accent mb-2" size="3x" />
-        <h1 className="text-3xl">特集一覧</h1>
-      </section>
-      <section className="flex flex-col justify-center items-center w-full px-4 pt-10 bg-gray-50">
-        <FontAwesomeIcon
-          icon={faLightbulb}
-          className="text-accent mb-2"
-          size="3x"
-        />
-        <h1 className="text-3xl">新着求人</h1>
-
-        <div className="w-full my-10 p-4 space-x-4 carousel carousel-center rounded-box">
-          {omJobs.map((job) => (
-            <div className="carousel-item md:w-1/3 w-full" key={job.id}>
-              <OmJobCard job={job} user={user} userFavorites={userFavorites} />
-            </div>
-          ))}
-        </div>
-      </section>
-      <section className="flex flex-col justify-center items-center w-full px-4 pt-10 bg-gradient-to-b from-primary to-secondary">
-        <FontAwesomeIcon
-          icon={faSearch}
-          className="text-accent mb-2"
-          size="3x"
-        />
-        <h1 className="text-3xl text-white">求人をさがす</h1>
-        <div className="flex justify-center items-center w-10/12 pt-10">
-          {["勤務地", "職種"].map((text, i) => (
-            <SearchTypeCard text={text} key={i} />
-          ))}
-        </div>
-        <form className="w-full flex flex-col items-center mt-10">
-          <div className="relative w-10/12">
-            <input
-              type="text"
-              className="w-full rounded-3xl shadow h-16 p-6 focus:border-0 focus:bg-gray-100"
-              placeholder="フリーワードで検索"
-              ref={searchWordsInputRef}
-            />
-            <span className="absolute inset-y-2 right-3">
-              <button
-                type="submit"
-                className="btn-circle btn-accent btn-md"
-                onClick={searchJobByWord}
-              >
-                <FontAwesomeIcon icon={faSearch} className="hover:text-white" />
-              </button>
-            </span>
+        <section className="flex flex-col justify-center items-center w-full px-4 pt-10 bg-gray-50">
+          <FontAwesomeIcon
+            icon={faLightbulb}
+            className="text-accent mb-2"
+            size="3x"
+          />
+          <h1 className="text-3xl">PickUp求人</h1>
+          <div className="w-full my-10 p-4 space-x-4 carousel carousel-center rounded-box">
+            {pickupArticles.map((article) => (
+              <div className="carousel-item md:w-1/3 w-full" key={article.id}>
+                <PickupCard article={article} />
+              </div>
+            ))}
           </div>
-        </form>
-        <div className="container w-10/12 mx-auto mt-3">
-          <p>
-            <FontAwesomeIcon icon={faKey} size="lg" className="text-accent" />
-            人気の検索ワード
-          </p>
+        </section>
+        <section className="flex flex-col justify-center items-center w-full px-4 pt-10">
+          <FontAwesomeIcon
+            icon={faStar}
+            className="text-accent mb-2"
+            size="3x"
+          />
+          <h1 className="text-3xl">特集一覧</h1>
+        </section>
+        <section className="flex flex-col justify-center items-center w-full px-4 pt-10 bg-gray-50">
+          <FontAwesomeIcon
+            icon={faLightbulb}
+            className="text-accent mb-2"
+            size="3x"
+          />
+          <h1 className="text-3xl">新着求人</h1>
 
-          <button
-            type="button"
-            value="フレックス"
-            className="text-sm bg-white px-6 py-2 m-3 rounded-full hover:bg-blue-200"
-            onClick={onClickKeyword}
-          >
-            フレックス
-          </button>
-        </div>
-      </section>
-    </div>
+          <div className="w-full my-10 p-4 space-x-4 carousel carousel-center rounded-box">
+            {omJobs.map((job) => (
+              <div className="carousel-item md:w-1/3 w-full" key={job.id}>
+                <OmJobCard
+                  job={job}
+                  user={user}
+                  userFavorites={userFavorites}
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+        <section className="flex flex-col justify-center items-center w-full px-4 pt-10 bg-gradient-to-b from-primary to-secondary">
+          <FontAwesomeIcon
+            icon={faSearch}
+            className="text-accent mb-2"
+            size="3x"
+          />
+          <h1 className="text-3xl text-white">求人をさがす</h1>
+          <div className="flex justify-center items-center w-10/12 pt-10">
+            {["勤務地", "職種"].map((text, i) => (
+              <SearchTypeCard text={text} key={i} />
+            ))}
+          </div>
+          <form className="w-full flex flex-col items-center mt-10">
+            <div className="relative w-10/12">
+              <input
+                type="text"
+                className="w-full rounded-3xl shadow h-16 p-6 focus:border-0 focus:bg-gray-100"
+                placeholder="フリーワードで検索"
+                ref={searchWordsInputRef}
+              />
+              <span className="absolute inset-y-2 right-3">
+                <button
+                  type="submit"
+                  className="btn-circle btn-accent btn-md"
+                  onClick={searchJobByWord}
+                >
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    className="hover:text-white"
+                  />
+                </button>
+              </span>
+            </div>
+          </form>
+          <div className="container w-10/12 mx-auto mt-3">
+            <p>
+              <FontAwesomeIcon icon={faKey} size="lg" className="text-accent" />
+              人気の検索ワード
+            </p>
+
+            <button
+              type="button"
+              value="フレックス"
+              className="text-sm bg-white px-6 py-2 m-3 rounded-full hover:bg-blue-200"
+              onClick={onClickKeyword}
+            >
+              フレックス
+            </button>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }
 

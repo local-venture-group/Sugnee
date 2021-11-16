@@ -13,7 +13,7 @@ const AuthProvider = ({ children }) => {
 
   const getUser = () => {
     axios
-      .get("/api/user")
+      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user`)
       .then((res) => {
         console.log("[getUser]ログイン済み");
         console.log(res.data);
@@ -37,8 +37,8 @@ const AuthProvider = ({ children }) => {
     } = data;
     const birth = `${birthYear}-${birthMonth}-${birthDay}`;
 
-    const resData = axios
-      .post("/api/user/register", {
+    axios
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user`, {
         firstName,
         lastName,
         email,
@@ -67,11 +67,11 @@ const AuthProvider = ({ children }) => {
   const login = (data) => {
     const { email, password } = data;
     axios
-      .get("http://localhost/sanctum/csrf-cookie", { withCredentials: true })
+      .get(process.env.NEXT_PUBLIC_API_AUTH_URL, { withCredentials: true })
       .then(() => {
         axios
           .post(
-            "http://localhost/api/user/login",
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/login`,
             {
               email,
               password,
@@ -96,7 +96,7 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     axios
-      .post("http://localhost/api/user/logout")
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/logout`)
       .then((res) => {
         if (res.status === 200) {
           alert("ログアウトしました");
@@ -119,12 +119,15 @@ const AuthProvider = ({ children }) => {
       return;
     }
 
-    await axios.get("/sanctum/csrf-cookie").then((response) => {
+    await axios.get(process.env.NEXT_PUBLIC_API_AUTH_URL).then((response) => {
       axios
-        .put("/api/user/joboffer/favorites", {
-          user_id: user.id,
-          corporation_joboffer_id: jobId,
-        })
+        .put(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/joboffer/favorites`,
+          {
+            user_id: user.id,
+            corporation_joboffer_id: jobId,
+          }
+        )
         .then((res) => {
           if (res.status === 201) {
             console.log("[addFavorite]追加成功", res);
@@ -144,12 +147,15 @@ const AuthProvider = ({ children }) => {
 
     await axios.get("/sanctum/csrf-cookie").then((response) => {
       axios
-        .delete("/api/user/joboffer/favorites", {
-          data: {
-            user_id: user.id,
-            corporation_joboffer_id: jobId,
-          },
-        })
+        .delete(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/joboffer/favorites`,
+          {
+            data: {
+              user_id: user.id,
+              corporation_joboffer_id: jobId,
+            },
+          }
+        )
         .then((res) => {
           if (res.status === 200) {
             console.log("[deleteFavorite]削除成功", res);
