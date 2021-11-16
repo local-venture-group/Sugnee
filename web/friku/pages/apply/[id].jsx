@@ -95,17 +95,29 @@ export default function apply({ job }) {
               </tbody>
             </table>
           </div>
-          {job.type_of_job === 1 && (
+          {job.type_of_job[0] === 0 && (
             <p className="text-warning my-6">
               この求人はキャリアアドバイザー面談が必要です
             </p>
           )}
-          <button
-            onClick={(e) => applyJobOffer(e, user)}
-            className="btn btn-accent w-full mt-10"
-          >
-            応募する
-          </button>
+          {/* 一覧から外部リンクへとばすようなら分岐を削除 */}
+          {job.type_of_job[0] === 3 ? (
+            <a
+              href={job.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-accent w-full mt-10"
+            >
+              応募ページへとぶ（外部リンク）
+            </a>
+          ) : (
+            <button
+              onClick={(e) => applyJobOffer(e, user)}
+              className="btn btn-accent w-full mt-10"
+            >
+              応募する
+            </button>
+          )}
           <div className="lg:hidden bottom-0 fixed w-full flex justify-center bg-white bg-opacity-90 px-3 pt-8 pb-2">
             <button
               onClick={(e) => applyJobOffer(e, user)}
