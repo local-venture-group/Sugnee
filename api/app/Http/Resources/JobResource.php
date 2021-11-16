@@ -59,7 +59,7 @@ class JobResource extends JsonResource
             "salary_min" => $this->resource->salary_min,
             "salary_max" => $this->resource->salary_max,
             "salary_description" => $this->resource->salary_description,
-            "travel_cost" => $this->resource->travel_cost,
+            "travel_cost" => JobConditionConsts::TRAVEL_COSTS[$this->resource->travel_cost] ,
             "travel_cost_description" => $this->resource->travel_cost_description,
             "shift_income_example" => $this->resource->shift_income_example,
             "image1_caption" => $this->resource->image1_caption,

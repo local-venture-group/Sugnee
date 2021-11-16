@@ -57,8 +57,8 @@ class JobsController extends Controller
         //     $mergeOmJoboffers[$index]['type_of_job'] = $joboffer['type_of_job'][0];
         // }
 
-        // return $mergeOmJoboffers;
-        return JobResource::collection($mergeOmJoboffers)->toJson();
+        return $mergeOmJoboffers;
+        // return JobResource::collection($mergeOmJoboffers)->toJson();
     }
     public function getConditions(JobService $jobService)
     {
