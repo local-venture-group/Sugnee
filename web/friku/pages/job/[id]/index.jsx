@@ -1,7 +1,11 @@
+import { useContext } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
+import { handleDate, isFavorite } from "../../../utils";
 
-import { handleDate } from "../../utils";
+// Contexts
+import { AuthContext } from "../../../contexts/Auth";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +16,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function job({ job }) {
+  const router = useRouter();
+  const { user, addOmBookmark, deleteOmBookmark } = useContext(AuthContext);
+  const userFavorites = user?.favorites.map(
+    (favoriteJob) => favoriteJob.corporation_joboffer_id
+  );
+
+  if (!job) return null;
   return (
     <>
       <section id="hero">
@@ -57,10 +68,27 @@ export default function job({ job }) {
               </p>
             </div>
             <div className="hidden lg:flex flex-col justify-end w-1/4">
-              <button className="btn btn-outline btn-primary w-3/4 mb-4">
-                お気に入りに追加
+              {user && userFavorites && isFavorite(userFavorites, job.id) ? (
+                <button
+                  className="btn btn-outline btn-primary w-3/4 mb-4"
+                  onClick={(e) => deleteOmBookmark(e, user, job.id)}
+                >
+                  お気に入りから削除
+                </button>
+              ) : (
+                <button
+                  className="btn btn-outline btn-primary w-3/4 mb-4"
+                  onClick={(e) => addOmBookmark(e, user, job.id)}
+                >
+                  お気に入りに追加
+                </button>
+              )}
+              <button
+                className="btn btn-primary w-3/4"
+                onClick={() => router.push(`/apply/${job.id}`)}
+              >
+                応募する
               </button>
-              <button className="btn btn-primary w-3/4">応募する</button>
             </div>
           </div>
 
@@ -127,10 +155,27 @@ export default function job({ job }) {
           </div>
         </div>
         <div className="lg:hidden bottom-0 fixed w-full flex justify-center bg-white bg-opacity-90 px-3 pt-8 pb-2">
-          <button className="btn btn-outline w-2/5 mr-2">
-            お気に入りに追加
+          {user && userFavorites && isFavorite(userFavorites, job.id) ? (
+            <button
+              className="btn btn-outline btn-primary w-2/5 mr-3"
+              onClick={(e) => deleteOmBookmark(e, user, job.id)}
+            >
+              お気に入りから削除
+            </button>
+          ) : (
+            <button
+              className="btn btn-outline btn-primary w-2/5 mr-3"
+              onClick={(e) => addOmBookmark(e, user, job.id)}
+            >
+              お気に入りに追加
+            </button>
+          )}
+          <button
+            className="btn btn-primary w-2/5"
+            onClick={() => router.push(`/apply/${job.id}`)}
+          >
+            応募する
           </button>
-          <button className="btn w-2/5">応募する</button>
         </div>
       </section>
     </>
