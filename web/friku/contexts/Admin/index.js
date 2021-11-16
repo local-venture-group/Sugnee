@@ -13,7 +13,7 @@ const AdminProvider = ({ children }) => {
 
   const getAdmin = () => {
     axios
-      .get("/api/admin")
+      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin`)
       .then((res) => {
         console.log("[getadmin]ログイン済み");
         setAdmin(res.data);
@@ -25,9 +25,9 @@ const AdminProvider = ({ children }) => {
 
   const adminLogin = (data) => {
     const { email, password } = data;
-    axios.get("http://localhost/sanctum/csrf-cookie").then((response) => {
+    axios.get(process.env.NEXT_PUBLIC_API_AUTH_URL).then((response) => {
       axios
-        .post("http://localhost/api/admin/login", {
+        .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/login`, {
           email,
           password,
         })
@@ -49,7 +49,7 @@ const AdminProvider = ({ children }) => {
 
   const adminLogout = () => {
     axios
-      .post("http://localhost/api/admin/logout")
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/logout`)
       .then((res) => {
         if (res.status === 200) {
           setAdmin(null);
