@@ -20,7 +20,7 @@ const SearchConditionProvider = ({ children }) => {
 
   const getConditions = () => {
     axios
-      .get("/api/user/joboffer/conditions")
+      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/joboffer/conditions`)
       .then((res) => {
         setWorkLocations(
           Object.entries(res.data.city).map(([area, city]) => ({ area, city }))
@@ -43,7 +43,7 @@ const SearchConditionProvider = ({ children }) => {
   const searchJobOffers = async (searchCondition) => {
     console.log("API条件", searchCondition);
     const resData = await axios
-      .get("/api/user/joboffer/search", {
+      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/joboffer/search`, {
         params: {
           city: searchCondition.cities,
           keyword: searchCondition.keyWords,
