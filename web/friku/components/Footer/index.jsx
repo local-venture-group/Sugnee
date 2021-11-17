@@ -58,7 +58,7 @@ export default function Footer() {
         <Link href="/terms">
           <a className="link link-hover">利用規約</a>
         </Link>
-        <Link href="/">
+        <Link href="/privacyPolicy">
           <a className="link link-hover">プライバシーポリシー</a>
         </Link>
         <Link href="/">
