@@ -21,6 +21,7 @@ class CorporationApplicant extends Model
     ];
     public function corporationApplicantSchedules()
     {
+
         return $this->hasMany(CorporationApplicantschedule::class, 'applicant_id');
     }
     public function user()

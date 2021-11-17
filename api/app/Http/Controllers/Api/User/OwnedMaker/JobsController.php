@@ -47,19 +47,9 @@ class JobsController extends Controller
         $useCase = new SearchJoboffersCrawledUseCase();
         $omCrawledJoboffers = $useCase->handle($request, $this->limit);
 
-        //TODO: 無事mergeしたら、下のコメントは消す。
 
-        //type_of_jobは今のところindexにしてるけど、type名でも返せるし、これはどちらでもいいのでフロントでやりやすいようによしなに
-        // $omOriginalJoboffers = $omOriginalJoboffers->append('type_of_job');
-        // $omCrawledJoboffers = $omCrawledJoboffers->append('type_of_job');
         $mergeOmJoboffers = $omOriginalJoboffers->merge($omCrawledJoboffers);
-        // $mergeOmJoboffers = $omOriginalJoboffers->merge($omCrawledJoboffers)->toArray();
-        //type_of_jobがlength1の配列になってしまうので、取り出して数値に変換。
-        // foreach($mergeOmJoboffers as $index => $joboffer){
-        //     $mergeOmJoboffers[$index]['type_of_job'] = $joboffer['type_of_job'][0];
-        // }
 
-        // return $mergeOmJoboffers;
         return JobResource::collection($mergeOmJoboffers)->toJson();
     }
     public function getConditions(JobService $jobService)
@@ -69,6 +59,40 @@ class JobsController extends Controller
             'work_type' => JobConditionConsts::WORK_TYPES,
         ];
     }
+
+    //OMオリジナル求人に応募するときのアクション
+    public function applyOmOriginalJoboffer(
+        Request $request,
+        CorporationJoboffer $corporationJoboffer ,
+        CorporationApplicant $applicant,
+        CorporationApplicantschedule $applicantschedule,
+        applyService $applyService
+    )
+    {
+
+        //ここから応募処理を書く
+        $user = User::with('corporationApplicant')->where('id', Auth::guard('users')->id())->first();
+        $isApplied = $corporationJoboffer->isAlreadyAppliedByUser($corporationJoboffer, $user);
+        if($isApplied){
+            return response()->json([
+                'message' => 'すでに応募済みです。',
+            ], 400);
+        }
+        $applicant = $applicant->getApplicant($user)->first();
+
+        $scheduleArray = $applyService->createScheduleArray($request, $corporationJoboffer->id, $applicant->id);
+        //ユーザーの面接申込日データを作成
+
+        $applicantschedule->create($scheduleArray);
+
+        return response()->json(['message' => 'success'], 201);
+
+
+
+    }
+
+
+    //TODO: もう使うことはないかもしれないけど、後々、企業とユーザーの面接日程調整の機能がついたときのために、残しておく。
     // public function applyOm(CorporationJoboffer $corporationJoboffer)
     // {
     //     //当該求人を取得
@@ -119,29 +143,4 @@ class JobsController extends Controller
     //     //面接日時の候補が存在していれば、面接日時の候補を返す。
 
     // }
-    //OMオリジナル求人に応募するときのアクション
-    public function applyOmOriginalJoboffer(
-        Request $request,
-        CorporationJoboffer $corporationJoboffer ,
-        CorporationApplicant $applicant,
-        CorporationApplicantschedule $applicantschedule,
-        applyService $applyService
-    )
-    {
-
-        //ここから応募処理を書く
-       $user = User::with('corporationApplicant')->where('id', Auth::guard('users')->id())->first();
-
-        $applicant = $applicant->getApplicant($user)->first();
-
-        $scheduleArray = $applyService->createScheduleArray($request, $corporationJoboffer->id, $applicant->id);
-        //ユーザーの面接申込日データを作成
-
-        $applicantschedule->create($scheduleArray);
-
-        return response()->json(['message' => 'success'], 201);
-
-
-
-    }
 }
