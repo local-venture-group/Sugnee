@@ -56,10 +56,9 @@ Route::prefix('user')->group(function () {
             ->name('friku_joboffer.favorites.attach');
         Route::delete('/frikuJoboffer/{frikuJoboffer}/favorites/', [FrikuFavoritesController::class, 'frikuUnfavorite'])
             ->name('friku_joboffer.favorites.detach');
-
+        // Route::get('joboffer/om/apply/{corporationJoboffer}', [JobsController::class, 'applyOm'])->name('joboffer.om.apply');
+        Route::post('joboffer/om/apply/{corporationJoboffer}/', [JobsController::class, 'applyOmOriginalJoboffer'])->name('joboffer.omOriginal.apply');
     });
-    Route::get('joboffer/om/apply/{corporationJoboffer}', [JobsController::class, 'applyOm'])->name('joboffer.om.apply');
-    Route::post('joboffer/om/apply/{corporationJoboffer}', [JobsController::class, 'applyOmOriginalJoboffer'])->name('joboffer.omOriginal.apply');
 });
 //企業用ルート
 Route::prefix('staff')->group(function () {
@@ -80,6 +79,5 @@ Route::prefix('admin')->group(function () {
         Route::get('/', function (Request $request) {
             return $request->user();
         });
-
     });
 });

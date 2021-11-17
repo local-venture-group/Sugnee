@@ -13,6 +13,9 @@ class CorporationApplicantschedule extends Model
     protected $connection = 'ats';
     protected $table = 'corporation_applicantschedule';
     public $timestamps = false;
+    protected $guarded = [
+        'id'
+    ];
     public function user()
     {
         return $this->hasOne(User::class);
