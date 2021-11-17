@@ -140,7 +140,9 @@ class CorporationJoboffer extends Model
         }
         // $jobApplicant = CorporationApplicant::findOrFail($applicant->id);
         $jobApplicant = CorporationApplicant::with('corporationApplicantSchedules')
-            ->where('id', $applicant->id)->first();
+            ->findOrFail($applicant->id)
+            ->first();
+
         if (!empty($jobApplicant->corporationApplicantSchedules)) {
             foreach ($jobApplicant->corporationApplicantSchedules as $jobApplicantSchedule) {
                 if ($jobApplicantSchedule->job_offer_id == $corporationJoboffer->id) {
