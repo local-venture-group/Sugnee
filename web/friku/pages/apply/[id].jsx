@@ -95,13 +95,13 @@ export default function apply({ job }) {
               </tbody>
             </table>
           </div>
-          {job.type_of_job[0] === 0 && (
+          {job.type_of_job === 0 && (
             <p className="text-warning my-6">
               この求人はキャリアアドバイザー面談が必要です
             </p>
           )}
           {/* 一覧から外部リンクへとばすようなら分岐を削除 */}
-          {job.type_of_job[0] === 3 ? (
+          {job.type_of_job === 3 ? (
             <a
               href={job.url}
               target="_blank"
