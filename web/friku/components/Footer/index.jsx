@@ -55,7 +55,7 @@ export default function Footer() {
         </Link>
       </div>
       <div className="grid grid-flow-col gap-4">
-        <Link href="/">
+        <Link href="/terms">
           <a className="link link-hover">利用規約</a>
         </Link>
         <Link href="/">
