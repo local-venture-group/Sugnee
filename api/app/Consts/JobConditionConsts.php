@@ -51,7 +51,7 @@ class JobConditionConsts
     ];
 
     public const TRIALS = [
-        0 => 'どちらもなし',
+        0 => '試用・研修期間 なし',
         1 => '試用期間あり',
         2 => '研修期間あり',
         3 => '本文中に記載',
