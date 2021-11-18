@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\User;
+namespace App\Http\Controllers\Api\User\OwnedMaker;
 
 use App\Http\Controllers\Controller;
 use App\Models\CorporationJoboffer;
@@ -35,21 +35,5 @@ class FavoritesController extends Controller
             return response()->json($favoriteAll, 200);
         }
     }
-    public function frikuFavorites(FrikuJoboffer $frikuJoboffer)    //既にfavoritesテ
-    {
-        $frikuJoboffer->frikuFavorited()->detach(auth()->guard('users')->id());
-        $frikuJoboffer->frikuFavorited()->attach(auth()->guard('users')->id());
-        $user = User::findOrFail(auth()->guard('users')->id());
-        $favoriteAll = $user->frikuFavorites();
-
-
-        return response()->json($favoriteAll, 201);
-    }
-    public function frikuUnfavorite(FrikuJoboffer $frikuJoboffer)
-    {
-        $frikuJoboffer->frikuFavorited()->detach(auth()->guard('users')->id());
-        $user = User::findOrFail(auth()->guard('users')->id());
-        $favoriteAll = $user->frikuFavorites();
-        return response()->json($favoriteAll);
-    }
+   
 }

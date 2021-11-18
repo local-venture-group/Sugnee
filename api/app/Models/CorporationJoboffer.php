@@ -11,6 +11,7 @@ use App\Models\CorporationApplicantschedule;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Carbon\Carbon;
+
 class CorporationJoboffer extends Model
 {
 
@@ -23,33 +24,31 @@ class CorporationJoboffer extends Model
     protected $table = 'corporation_joboffer';
 
     protected $appends = ['type_of_job'];
-    protected $casts = [
-
-    ];
+    protected $casts = [];
 
     public function getTypeOfJobAttribute()
     {
-       return  $this->is_crawled
+        return  $this->is_crawled === true
             ? array_keys(JobConditionConsts::TYPE_OF_JOB, 'OMクローリング求人')
             : array_keys(JobConditionConsts::TYPE_OF_JOB, 'OM独自求人');
     }
-    public function favorites() :HasMany
+    public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class, 'corporation_joboffer_id');
     }
-    public function favoritedByUsers() :BelongsToMany
+    public function favoritedByUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'favorites', 'corporation_joboffer_id')->withTimestamps();
     }
-    public function offerUsers() :BelongsToMany
+    public function offerUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'offers')->withTimestamps()->withPivot('status', 'type');
     }
-    public function appliedByUsers() :BelongsToMany
+    public function appliedByUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'applies')->withTimestamps()->withPivot('is_offer');
     }
-    public function rooms() :HasMany
+    public function rooms(): HasMany
     {
         return $this->hasMany(MessageRoom::class);
     }
@@ -85,9 +84,9 @@ class CorporationJoboffer extends Model
                 $query->orWhere('job_description', 'like', '%' . $word . '%')
                     ->orWhere('city', 'like', '%' . $word . '%')
                     ->orWhere('company_name', 'like', '%' . $word . '%');
-                    // ->orWhere('work_type', 'like', '%' . $word . '%');
-                    // ->orWhere('job_type', 'like', '%' . $word . '%')
-                    // ->orWhere('hiring_system', 'like', '%' . $word . '%');
+                // ->orWhere('work_type', 'like', '%' . $word . '%');
+                // ->orWhere('job_type', 'like', '%' . $word . '%')
+                // ->orWhere('hiring_system', 'like', '%' . $word . '%');
 
             }
         });
@@ -126,42 +125,31 @@ class CorporationJoboffer extends Model
     public function scopeSearchPeriod($query, $period)
     {
 
-        if(empty($period)){
+        if (empty($period)) {
             return $query;
         }
         return $query->whereDate('created_at', '>=', Carbon::today()->subDay($period));
-
     }
-     //このメソッドで、申込済みかどうかを判定する処理を行う。
-    public function isAlreadyApplied(CorporationJoboffer $joboffer, User $user)
+    //このメソッドで、申込済みかどうかを判定する処理を行う。
+    public function isAlreadyAppliedByUser($corporationJoboffer, $user)
     {
-        //ユーザー変数が空でない場合、処理を続ける。
-        if(empty($user)){
+        $applicant = $user->corporationApplicant;
+
+        if (empty($applicant)) {
             return false;
         }
-        //応募フラグ変数をfalseで初期化。
-        $applied = false;
+        // $jobApplicant = CorporationApplicant::findOrFail($applicant->id);
+        $jobApplicant = CorporationApplicant::with('corporationApplicantSchedules')
+            ->findOrFail($applicant->id)
+            ->first();
 
-        //求人に紐づく応募管理データがあるかどうかを判定する。
-        if(!empty($joboffer->corporationApplicantSchedules)){
-            //応募管理データがあれば、更なる判定を行う。
-
-            $eachApplicantLoginUser = collect($joboffer->corporationApplicantSchedules)->each(function($schedule) use ($user){
-
-                if(empty($schedule->corporation_applicant)){
-                    return false;
+        if (!empty($jobApplicant->corporationApplicantSchedules)) {
+            foreach ($jobApplicant->corporationApplicantSchedules as $jobApplicantSchedule) {
+                if ($jobApplicantSchedule->job_offer_id == $corporationJoboffer->id) {
+                    return true;
                 }
-
-                return $schedule->corporation_applicant->user_id == $user->id;
-            });
-            //応募管理データがあれば、応募フラグ変数にtrueを代入する。
-            if($eachApplicantLoginUser){
-                $applied = true;
             }
         }
-        return $applied;
+        return false;
     }
-
-
-
 }
