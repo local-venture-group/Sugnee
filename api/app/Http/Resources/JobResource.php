@@ -19,9 +19,12 @@ class JobResource extends JsonResource
         $this->resource->hiring_system = array_key_exists($this->resource->hiring_system, JobConditionConsts::HIRING_SYSTEMS)
         ? JobConditionConsts::HIRING_SYSTEMS[$this->resource->hiring_system]
         : "" ;
-        $this->resource->type_of_job = $this->resource->is_crawled
-            ? array_keys(JobConditionConsts::TYPE_OF_JOB, 'OMクローリング求人')
-            : array_keys(JobConditionConsts::TYPE_OF_JOB, 'OM独自求人');
+        // $this->resource->type_of_job = $this->resource->is_crawled
+        //     ? array_keys(JobConditionConsts::TYPE_OF_JOB, 'OMクローリング求人')
+        //     : array_keys(JobConditionConsts::TYPE_OF_JOB, 'OM独自求人');
+        // $this->resource->type_of_job = array_key_exists($this->resource->type_of_job, JobConditionConsts::TYPE_OF_JOB);
+        $this->type_of_job = $this->resource->type_of_job[0];
+
         return [
              'id' => $this->id,
             'company_id' => $this->resource->company_id,
@@ -32,12 +35,11 @@ class JobResource extends JsonResource
             'item_name' => $this->resource->item_name,
             'work_type' => JobConditionConsts::WORK_TYPES[$this->resource->work_type],
             'hiring_system' => $this->hiring_system,
-            'is_pickup' => $this->resource->is_pickup,
             'job_type' => JobConditionConsts::JOB_TYPES[$this->resource->job_type],
             'job_description' => $this->resource->job_description,
             'work_time' => $this->resource->work_time,
             "work_flow" => $this->resource->work_flow,
-            "trial" => $this->resource->trial,
+            "trial" => JobConditionConsts::TRIALS[$this->resource->trial],
             "trial_condition" => $this->resource->trial_condition,
             "trial_period" => $this->resource->trial_period,
             "holiday_description" => $this->resource->holiday_description,
@@ -56,7 +58,7 @@ class JobResource extends JsonResource
             "salary_min" => $this->resource->salary_min,
             "salary_max" => $this->resource->salary_max,
             "salary_description" => $this->resource->salary_description,
-            "travel_cost" => $this->resource->travel_cost,
+            "travel_cost" => JobConditionConsts::TRAVEL_COSTS[$this->resource->travel_cost] ,
             "travel_cost_description" => $this->resource->travel_cost_description,
             "shift_income_example" => $this->resource->shift_income_example,
             "image1_caption" => $this->resource->image1_caption,
@@ -67,12 +69,12 @@ class JobResource extends JsonResource
             "phone" => $this->resource->phone,
             "recruit_number" => $this->resource->recruit_number,
             "recruit_number_description" => $this->resource->recruit_number_description,
-            'is_crawled' => true,
+            'is_crawled' => $this->resource->is_crawled,
             "image1" => $this->resource->image1,
             "image2" => $this->resource->image2,
             "image3" => $this->resource->image3,
             "image4" => $this->resource->image4,
-            'type_of_job' => $this->resource->type_of_job,
+            "type_of_job" => $this->type_of_job,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
         ];

@@ -53,7 +53,6 @@ export default function Home({ omJobs, pickupArticles }) {
     router.push("/job");
   };
 
-  console.log("記事", pickupArticles);
   return (
     <>
       <Seo />

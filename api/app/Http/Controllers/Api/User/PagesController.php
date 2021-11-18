@@ -28,7 +28,8 @@ class PagesController extends Controller
         //TODO: ここも、配列はそのうち一つにまとめる？　typeもつける？
         $omOriginalUseCase = new GetOmJobofferOriginalUseCase();
         $omOriginalJoboffers = $omOriginalUseCase->handle();
-        return $omOriginalJoboffers;
+        return JobResource::collection($omOriginalJoboffers)->toJson();
+        // return $omOriginalJoboffers;
     }
 
 

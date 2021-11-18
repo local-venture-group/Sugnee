@@ -4,9 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\AdminController;
 use App\Http\Controllers\Api\Staff\StaffController;
-use App\Http\Controllers\Api\User\FavoritesController;
+use App\Http\Controllers\Api\User\OwnedMaker\FavoritesController;
+use App\Http\Controllers\Api\User\Friku\FrikuFavoritesController;
 use App\Http\Controllers\Api\User\UserController;
-use App\Http\Controllers\Api\User\JobsController;
+use App\Http\Controllers\Api\User\OwnedMaker\JobsController;
 use App\Http\Controllers\Api\User\PagesController;
 use App\Http\Controllers\Api\User\ForgotPasswordController;
 use App\Http\Controllers\Api\User\ResetPasswordController;
@@ -51,14 +52,13 @@ Route::prefix('user')->group(function () {
         Route::delete('/joboffer/favorites', [FavoritesController::class, 'omUnfavorites'])
             ->name('/joboffer.favorites.detach');
 
-        Route::put('/frikuJoboffer/{frikuJoboffer}/favorites/', [FavoritesController::class, 'frikuFavorites'])
+        Route::put('/frikuJoboffer/{frikuJoboffer}/favorites/', [FrikuFavoritesController::class, 'frikuFavorites'])
             ->name('friku_joboffer.favorites.attach');
-        Route::delete('/frikuJoboffer/{frikuJoboffer}/favorites/', [FavoritesController::class, 'frikuUnfavorite'])
+        Route::delete('/frikuJoboffer/{frikuJoboffer}/favorites/', [FrikuFavoritesController::class, 'frikuUnfavorite'])
             ->name('friku_joboffer.favorites.detach');
-
+        // Route::get('joboffer/om/apply/{corporationJoboffer}', [JobsController::class, 'applyOm'])->name('joboffer.om.apply');
+        Route::post('joboffer/om/apply/{corporationJoboffer}/', [JobsController::class, 'applyOmOriginalJoboffer'])->name('joboffer.omOriginal.apply');
     });
-    Route::get('joboffer/om/apply/{corporationJoboffer}', [JobsController::class, 'applyOm'])->name('joboffer.om.apply');
-    Route::post('joboffer/om/apply/{corporationJoboffer}', [JobsController::class, 'applyOmOriginalJoboffer'])->name('joboffer.omOriginal.apply');
 });
 //企業用ルート
 Route::prefix('staff')->group(function () {
@@ -79,6 +79,5 @@ Route::prefix('admin')->group(function () {
         Route::get('/', function (Request $request) {
             return $request->user();
         });
-
     });
 });

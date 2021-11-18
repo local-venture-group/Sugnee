@@ -30,6 +30,8 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
+            'first_name_kana' => $this->faker->firstKanaName,
+            'last_name_kana' => $this->faker->lastKanaName,
             // 'first_name_kana' => $this->faker->firstKanaName,
             // 'last_name_kana' => $this->faker->lastKanaName,
             'birth' => $this->faker->dateTimeBetween('-60 years', '-18 years'),

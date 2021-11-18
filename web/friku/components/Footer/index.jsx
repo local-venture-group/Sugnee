@@ -50,15 +50,15 @@ export default function Footer() {
         <Link href="/">
           <a className="link link-hover">よくあるご質問</a>
         </Link>
-        <Link href="/">
+        <Link href="/contact">
           <a className="link link-hover">お問い合わせ</a>
         </Link>
       </div>
       <div className="grid grid-flow-col gap-4">
-        <Link href="/">
+        <Link href="/terms">
           <a className="link link-hover">利用規約</a>
         </Link>
-        <Link href="/">
+        <Link href="/privacyPolicy">
           <a className="link link-hover">プライバシーポリシー</a>
         </Link>
         <Link href="/">
