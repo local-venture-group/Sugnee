@@ -33,6 +33,6 @@ class Staff extends Authenticatable
     ];
     public function companies()
     {
-        return $this->hasMany(FrikuCompany::class);
+        return $this->hasMany(FrikuCompany::class, 'user_id');
     }
 }

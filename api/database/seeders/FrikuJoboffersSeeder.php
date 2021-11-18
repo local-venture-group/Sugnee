@@ -14,6 +14,6 @@ class FrikuJoboffersSeeder extends Seeder
      */
     public function run()
     {
-        FrikuJoboffer::factory(20)->create();
+        FrikuJoboffer::factory(3)->create();
     }
 }
