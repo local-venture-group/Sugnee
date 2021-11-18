@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   nginx:
     container_name: nginx
@@ -18,8 +18,10 @@ services:
       context: ./.docker/web
       dockerfile: Dockerfile
     environment:
-      PORT: '3000'
-      HOST: '0.0.0.0'
+      PORT: "3000"
+      HOST: "0.0.0.0"
+    ports:
+      - 6006:6006
     expose:
       - 3000
     volumes:
@@ -46,8 +48,8 @@ services:
       # DB_DATABASE: 'fukuriku'
       # DB_USERNAME: 'fukuriku'
       # DB_PASSWORD: 'password'
-      SESSION_DOMAIN: 'localhost'
-      SANCTUM_STATEFUL_DOMAINS: 'localhost'
+      SESSION_DOMAIN: "localhost"
+      SANCTUM_STATEFUL_DOMAINS: "localhost"
     volumes:
       - ./api:/app
     expose:
@@ -59,7 +61,7 @@ services:
 
   db:
     container_name: db
-    image: 'postgres:10-alpine'
+    image: "postgres:10-alpine"
     restart: always
     environment:
       - POSTGRES_DB=fukuriku
@@ -78,22 +80,22 @@ services:
       - POSTGRES_USER=fukuriku2
       - POSTGRES_PASSWORD=password
     ports:
-      - '5434:5432'
+      - "5434:5432"
   pgadmin4:
-        image: dpage/pgadmin4:4.2
-        container_name: pgadmin4
-        ports:
-            - 5050:80
-        volumes:
-            - ./docker/pgadmin4:/var/lib/pgadmin
-        environment:
-            PGADMIN_DEFAULT_EMAIL: root
-            PGADMIN_DEFAULT_PASSWORD: root
-        hostname: pgadmin4
-        depends_on:
-          - db
-          - db2
-        restart: always
+    image: dpage/pgadmin4:4.2
+    container_name: pgadmin4
+    ports:
+      - 5050:80
+    volumes:
+      - ./docker/pgadmin4:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root
+      PGADMIN_DEFAULT_PASSWORD: root
+    hostname: pgadmin4
+    depends_on:
+      - db
+      - db2
+    restart: always
 volumes:
   db:
   db2:
