@@ -13,7 +13,8 @@ use App\Http\Controllers\Api\User\ForgotPasswordController;
 use App\Http\Controllers\Api\User\ResetPasswordController;
 use App\Http\Controllers\Api\Staff\SendOfferController;
 use App\Http\Controllers\Api\Staff\UserSearchController;
-
+use App\Http\Controllers\Api\User\Friku\FrikuJobsController;
+use App\Models\FrikuJoboffer;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +45,13 @@ Route::prefix('user')->group(function () {
         Route::get('/conditions', [JobsController::class, 'getConditions'])->name('joboffer.conditions');
         Route::get('/search', [JobsController::class, 'searchJobOffers'])->name('joboffer.search');
         Route::get('/{corporationJoboffer}', [JobsController::class, 'showJoboffer'])->name('pickup.show');
+
     });
+    Route::prefix('/friku')->group(function () {
+        Route::get('/{frikuCompany}/joboffers',[FrikuJobsController::class, 'companyJoboffers'])->name('friku.company.joboffers');
+
+    });
+
     Route::group(['middleware' => ['auth:users']], function () {
         Route::get('/', [UserController::class, 'getAuthUser']);
         Route::put('/joboffer/favorites', [FavoritesController::class, 'omFavorites'])

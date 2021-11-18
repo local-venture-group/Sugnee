@@ -23,7 +23,10 @@ class JobResource extends JsonResource
         //     ? array_keys(JobConditionConsts::TYPE_OF_JOB, 'OMクローリング求人')
         //     : array_keys(JobConditionConsts::TYPE_OF_JOB, 'OM独自求人');
         // $this->resource->type_of_job = array_key_exists($this->resource->type_of_job, JobConditionConsts::TYPE_OF_JOB);
-        $this->type_of_job = $this->resource->type_of_job[0];
+        if($this->resource->type_of_job){
+            $this->type_of_job = $this->resource->type_of_job[0];
+        }
+
 
         return [
              'id' => $this->id,

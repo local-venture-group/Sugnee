@@ -17,6 +17,7 @@ class FrikuCompaniesSeeder extends Seeder
     {
         DB::table('friku_companies')->insert([
         [
+
             'username_kana' => 'ユキムラ　セイイチ',
             'first_name_kana' => 'セイイチ',
             'last_name_kana' => 'ユキムラ',
@@ -24,7 +25,7 @@ class FrikuCompaniesSeeder extends Seeder
             'site_url'=> 'https://www.google.com/',
             'is_registered' => true,
             'temp_id' => Str::uuid(),
-            'staff_id' => 1,
+            'user_id' => 1,
             'plan' => 1
         ],
         [
@@ -35,7 +36,7 @@ class FrikuCompaniesSeeder extends Seeder
             'site_url'=> 'https://www.google.com/',
             'is_registered' => true,
             'temp_id' => Str::uuid(),
-            'staff_id' => 2,
+            'user_id' => 2,
             'plan' => 1
         ],
         [
@@ -46,7 +47,7 @@ class FrikuCompaniesSeeder extends Seeder
             'site_url'=> 'https://www.google.com/',
             'is_registered' => true,
             'temp_id' => Str::uuid(),
-            'staff_id' => 3,
+            'user_id' => 3,
             'plan' => 1
         ],
 
