@@ -9,8 +9,15 @@ class FrikuCompany extends Model
 {
     use HasFactory;
     protected $connection = 'fukuriku';
+    protected $guarded = [
+        'id'
+    ];
     public function staff()
     {
-        return $this->belongsTo(Staff::class);
+        return $this->belongsTo(Staff::class, 'user_id');
+    }
+    public function frikuJoboffers()
+    {
+        return $this->hasMany(FrikuJoboffer::class, 'company_id');
     }
 }

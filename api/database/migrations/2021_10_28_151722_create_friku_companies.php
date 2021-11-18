@@ -27,7 +27,7 @@ class CreateFrikuCompanies extends Migration
             $table->integer('plan');
             $table->timestamp('charged_at')->nullable();
             $table->timestamp('not_charged_at')->nullable();
-            $table->foreignId('staff_id')->constrained('staffs')
+            $table->foreignId('user_id')->constrained('staffs')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->timestamps();

@@ -24,7 +24,7 @@ class FrikuJobofferFactory extends Factory
     public function definition()
     {
         return [
-            'company_id' => CorporationCompany::factory(),
+            'company_id' => 1,
             'url' => $this->faker->url,
             'job_offer_status' => $this->faker->numberBetween(0, 1),
             "preview_id" => "9b5ab56c-e08f-47b7-8d26-640d0cf09525",
