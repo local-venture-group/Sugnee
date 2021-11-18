@@ -36,7 +36,7 @@ const Button: React.FC<ButtonProps> = ({
   ) : (
     <button
       type="button"
-      className={`text-gray-600 bg-transparent shadow-inner ${baseButton} ${sizeMode}`}
+      className={`text-gray-600 rounded-lg ${baseButton} ${sizeMode}`}
       style={{ backgroundColor }}
       {...props}
     >
@@ -46,15 +46,3 @@ const Button: React.FC<ButtonProps> = ({
 };
 
 export default Button;
-
-// export default function Button({ text, type, size, shape, option, event }) {
-//   return (
-//     <button
-//       type={type}
-//       className={`btn btn-primary border-0 hover:shadow px-8 rounded-xl ${shape} btn-${size} ${option} `}
-//       onClick={event}
-//     >
-//       {text}
-//     </button>
-//   );
-// }

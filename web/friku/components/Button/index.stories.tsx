@@ -30,4 +30,6 @@ export default {
 };
 
 export const Primary = () => <Button primary={true} label={"text"} />;
-export const Secondary = () => <Button primary={false} label={"text"} />;
+export const Secondary = () => (
+  <Button primary={false} label={"text"} backgroundColor={"#ffd65a"} />
+);
