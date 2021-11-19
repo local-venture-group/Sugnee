@@ -29,7 +29,11 @@ export default function apply({ job }) {
             console.log("[applyOmJoboffer]応募失敗", res.data);
           }
         })
-        .catch((err) => console.log("[applyOmJoboffer]応募失敗", err.config));
+        .catch((err) => {
+          console.log("[applyOmJoboffer]応募失敗", err.response);
+          // 仮でアラート、応募済み求人をユーザー情報に保持するようになればボタンを非活性にする
+          if (err.response.status === 400) alert(err.response.data.message);
+        });
       return;
     }
   };
