@@ -26,6 +26,6 @@ class CorporationApplicantschedule extends Model
     }
     public function corporationJoboffer()
     {
-        return $this->belongsTo(CorporationJoboffer::class, 'joboffer_id');
+        return $this->belongsTo(CorporationJoboffer::class, 'job_offer_id');
     }
 }

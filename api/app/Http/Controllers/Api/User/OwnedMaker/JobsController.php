@@ -84,7 +84,6 @@ class JobsController extends Controller
         //ユーザーの面接申込日データを作成
 
         $applicantschedule->create($scheduleArray);
-
         return response()->json(['message' => 'success'], 201);
 
 
