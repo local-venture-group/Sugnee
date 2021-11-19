@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadImageRequest;
 use App\Http\Requests\UserRequest;
 use App\Mail\UserRegistered;
+use App\Models\CorporationApplicant;
+use App\Models\CorporationApplicantschedule;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -64,8 +66,25 @@ class UserController extends Controller
     }
     public function getAuthUser(Request $request)
     {
-        $user = User::with('favorites')->where('id', $request->user()->id)->first();
-        return $user;
+        //① OM求人のお気に入りを取得
+        $user = User::with('favorites')->where('id', Auth::guard('users')->id())->first();
+
+        //② OM求人の応募済みを取得
+        $appliantWithApplied = CorporationApplicantschedule::with('corporationJoboffer')
+            ->where('applicant_id', $user->id)
+            ->first();
+        if(!empty($appliantWithApplied)){
+            $appliedJobs = $appliantWithApplied->corporationJoboffer;
+            if(!empty($appliedJobs)){
+                $user->appliedJobs = collect($appliedJobs);
+            }
+        }
+        //③ Fリク求人のお気に入りを取得
+
+        //④ Fリク求人の応募済みを取得
+
+        //toJsonでエンコード
+        return $user->toJson(JSON_UNESCAPED_UNICODE);
     }
     public function update(Request $request, User $user, ImageService $imageService)
     {
