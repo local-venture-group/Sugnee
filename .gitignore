@@ -2,3 +2,5 @@
 # fukuriku.dio
 api/friku_question.dio
 api/friku_url.dio
+
+docker/pgadmin4
