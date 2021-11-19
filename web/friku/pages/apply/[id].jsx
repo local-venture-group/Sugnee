@@ -13,10 +13,25 @@ export default function apply({ job }) {
     (favoriteJob) => favoriteJob.corporation_joboffer_id
   );
 
-  const applyJobOffer = (e, user) => {
+  const applyJobOffer = async (e, user, job) => {
     e.preventDefault();
     if (!user) alert("応募はログインが必要です");
-    router.push("/apply/success");
+
+    // OM求人応募仮ロジック
+    if (job.type_of_job === 2) {
+      await axios
+        .post(`/api/user/joboffer/om/apply/${job.id}`)
+        .then((res) => {
+          if (res.status === 201) {
+            console.log("[applyOmJoboffer]応募成功", res);
+            router.push("/apply/success");
+          } else {
+            console.log("[applyOmJoboffer]応募失敗", res.data);
+          }
+        })
+        .catch((err) => console.log("[applyOmJoboffer]応募失敗", err.config));
+      return;
+    }
   };
 
   if (!job) return null;
@@ -112,7 +127,7 @@ export default function apply({ job }) {
             </a>
           ) : (
             <button
-              onClick={(e) => applyJobOffer(e, user)}
+              onClick={(e) => applyJobOffer(e, user, job)}
               className="btn btn-accent w-full mt-10"
             >
               応募する
@@ -120,7 +135,7 @@ export default function apply({ job }) {
           )}
           <div className="lg:hidden bottom-0 fixed w-full flex justify-center bg-white bg-opacity-90 px-3 pt-8 pb-2">
             <button
-              onClick={(e) => applyJobOffer(e, user)}
+              onClick={(e) => applyJobOffer(e, user, job)}
               className="btn btn-accent"
             >
               応募する
@@ -139,7 +154,7 @@ export async function getStaticPaths() {
     .catch((err) => console.log(err));
 
   return {
-    paths: allPickupJobs?.map(({ id }) => `/jobOffer/job/${id}`) ?? [],
+    paths: allPickupJobs?.map(({ id }) => `/apply/${id}`) ?? [],
     fallback: true,
   };
 }
