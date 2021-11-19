@@ -1,7 +1,7 @@
 interface ButtonProps {
   primary?: boolean;
   backgroundColor?: string;
-  size?: "small" | "medium" | "large";
+  size?: "small" | "medium" | "large" | "full";
   label: string;
   onClick?: () => void;
 }
@@ -21,6 +21,8 @@ const Button: React.FC<ButtonProps> = ({
       ? "py-2 px-5 text-sm"
       : size === "large"
       ? "py-3 px-6 text-base"
+      : size === "full"
+      ? "w-full py-3 px-6"
       : "";
 
   return primary ? (
