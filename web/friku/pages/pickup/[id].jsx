@@ -1,9 +1,15 @@
+import { useContext } from "react";
 import Link from "next/link";
+import axios from "axios";
 import { client } from "../../libs/client";
 import { handleDate } from "../../utils";
 
+// Contexts
+import { AuthContext } from "../../contexts/Auth";
+
 // Components
 import Seo from "../../components/Seo";
+import PickupJobCard from "../../components/Card/PickupJobCard";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,7 +20,12 @@ import {
   faLine,
 } from "@fortawesome/free-brands-svg-icons";
 
-export default function pickUpArticle({ article }) {
+export default function pickUpArticle({ article, companyData }) {
+  const { user } = useContext(AuthContext);
+  const userFavorites = user?.favorites.map(
+    (favoriteJob) => favoriteJob.corporation_joboffer_id
+  );
+
   return (
     <>
       <Seo
@@ -36,7 +47,7 @@ export default function pickUpArticle({ article }) {
           style={{ backgroundImage: `url(${article.thumbnail.url})` }}
         ></div>
       </section>
-      <section id="body" className="container mx-auto mt-10 px-8 md:px-28">
+      <section id="body" className="container mx-auto my-10 px-8 md:px-28">
         <div className="w-full">
           <h1 className="text-4xl font-bold mb-10">{article.title}</h1>
           <h2 className="text-2xl text-primary font-bold mb-6">
@@ -132,6 +143,20 @@ export default function pickUpArticle({ article }) {
           </div>
         </div>
       </section>
+      <section id="jobOffers" style={{ backgroundColor: "#E6F2F4" }}>
+        <div className="container mx-auto px-8 py-28 md:px-28">
+          <h2 className="text-2xl font-bold mb-16">求人情報</h2>
+          {companyData.frikuJoboffers.map((job) => (
+            <div key={job.id} className="mb-3">
+              <PickupJobCard
+                job={job}
+                user={user}
+                userFavorites={userFavorites}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
     </>
   );
 }
@@ -155,7 +180,16 @@ export async function getStaticProps({ params }) {
     endpoint: `articles/${params.id}`,
   });
 
+  // 今は1しか存在しないので1で対応、のちにarticle.companyIdを渡すよう変更＆エラーハンドリングします
+  const companyData = await axios
+    .get(`http://nginx:80/api/user/friku/1/joboffers`)
+    .then((res) => res.data)
+    .catch((err) => console.log(err));
+
   return {
-    props: { article: article ? article : null },
+    props: {
+      article: article ? article : null,
+      companyData: companyData ? companyData : null,
+    },
   };
 }
