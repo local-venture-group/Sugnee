@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Crop } from "react-image-crop";
 
 import axios from "axios";
 
-// icons
+// Components
+import CropModal from "../Modal/CropModal";
+
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 export default function Profile({ user }) {
   const {
-    control,
     register,
     formState: { errors },
     handleSubmit,
@@ -37,25 +40,26 @@ export default function Profile({ user }) {
   };
 
   //画像アップロード
-  const [image, setImage] = useState(null);
-  const [src, setSrc] = useState(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [src, setSrc] = useState<string | null>(null);
 
-  const [crop, setCrop] = useState({
+  const [crop, setCrop] = useState<Crop>({
     unit: "%",
     x: 25,
     y: 10,
     width: 80,
+    height: 80,
     aspect: 4 / 4,
   });
-  const [imageRef, setImageRef] = useState(null);
+  const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null);
 
   // 画像読み込み
-  const onSelectFile = (e) => {
+  const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files !== null) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
-        setSrc(reader.result);
+        typeof reader.result === "string" && setSrc(reader.result);
       });
       reader.readAsDataURL(e.target.files[0]);
     }
@@ -106,7 +110,10 @@ export default function Profile({ user }) {
 
   const addProfileImage = async () => {
     await onCropComplete(crop);
-    document.querySelector("#cropModal").checked = false;
+    const ModalcheckBox = document.querySelector(
+      "#cropModal"
+    ) as HTMLInputElement;
+    ModalcheckBox.checked = false;
   };
 
   return (
@@ -134,7 +141,7 @@ export default function Profile({ user }) {
               </label>
             )}
             <input type="checkbox" id="cropModal" className="modal-toggle" />
-            {/* <CropModal
+            <CropModal
               src={src}
               crop={crop}
               onSelectFile={onSelectFile}
@@ -142,7 +149,7 @@ export default function Profile({ user }) {
               onCropComplete={onCropComplete}
               onCropChange={onCropChange}
               addProfileImage={addProfileImage}
-            /> */}
+            />
           </div>
           <div className="pl-6">
             <p className="text-3xl mb-3　">{user.name}</p>
