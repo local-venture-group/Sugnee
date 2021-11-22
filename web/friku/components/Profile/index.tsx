@@ -96,17 +96,8 @@ const Profile = ({ user, updateProfile }) => {
       <div className="w-3/4 bg-white mb-6">
         <div className="w-full flex px-10 py-6 md:mb-0">
           <div className="avatar placeholder">
-            {user.img_path ? (
-              <label
-                htmlFor="cropModal"
-                className="text-neutral-content rounded-full w-32 h-32 border"
-              >
-                <img
-                  src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/user.img_path`}
-                  style={{ borderRadius: "100%" }}
-                />
-              </label>
-            ) : image ? (
+            {/* ユーザー情報の画像表示ができるようになったら分岐修正 */}
+            {image ? (
               <label
                 htmlFor="cropModal"
                 className="text-neutral-content rounded-full w-32 h-32 border"
@@ -125,25 +116,6 @@ const Profile = ({ user, updateProfile }) => {
                 />
               </label>
             )}
-            {/* {image ? (
-              <label
-                htmlFor="cropModal"
-                className="text-neutral-content rounded-full w-32 h-32 border"
-              >
-                <img src={image} style={{ borderRadius: "100%" }} />
-              </label>
-            ) : (
-              <label
-                htmlFor="cropModal"
-                className="bg-neutral-focus text-neutral-content rounded-full w-32 h-32 hover:bg-primary"
-              >
-                <FontAwesomeIcon
-                  icon={faUser}
-                  size="lg"
-                  className="ml-14 mt-14"
-                />
-              </label>
-            )} */}
             <input type="checkbox" id="cropModal" className="modal-toggle" />
             <CropModal
               src={src}

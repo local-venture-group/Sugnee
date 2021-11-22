@@ -113,24 +113,26 @@ const AuthProvider = ({ children }) => {
   };
 
   const updateProfile = async (data, user, image) => {
-    console.log(data);
+    console.log("base64", image);
     // 後々body内容変更
     await axios
       .put(`http://localhost/api/user/${user.id}/edit`, {
-        last_name: data.lastName,
-        first_name: data.firstName,
-        email,
+        // last_name: data.lastName,
+        // first_name: data.firstName,
+        // email,
         imageBase64: image,
       })
       .then((res) => {
+        console.log(res);
         if (res.status === 200) {
+          console.log(res.data);
           setUser(res.data);
         } else {
           console.log(res.data);
           alert("更新失敗");
         }
       })
-      .catch((err) => console.log(err.response));
+      .catch((err) => console.log("更新失敗", err));
   };
 
   const addFrikuBookmark = async (e, user, jobId) => {
@@ -139,7 +141,6 @@ const AuthProvider = ({ children }) => {
       alert("お気に入り追加はログインが必要です");
       return;
     }
-
     await axios.get(process.env.NEXT_PUBLIC_API_AUTH_URL).then((response) => {
       axios
         .put(
