@@ -112,6 +112,27 @@ const AuthProvider = ({ children }) => {
       });
   };
 
+  const updateProfile = async (data, user, image) => {
+    console.log(data);
+    // 後々body内容変更
+    await axios
+      .put(`http://localhost/api/user/${user.id}/edit`, {
+        last_name: data.lastName,
+        first_name: data.firstName,
+        email,
+        imageBase64: image,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setUser(res.data);
+        } else {
+          console.log(res.data);
+          alert("更新失敗");
+        }
+      })
+      .catch((err) => console.log(err.response));
+  };
+
   const addFrikuBookmark = async (e, user, jobId) => {
     e.preventDefault();
     if (!user) {
@@ -233,6 +254,7 @@ const AuthProvider = ({ children }) => {
         signup,
         login,
         logout,
+        updateProfile,
         addFrikuBookmark,
         deleteFrikuBookmark,
         addOmBookmark,

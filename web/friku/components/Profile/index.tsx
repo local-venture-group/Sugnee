@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Crop } from "react-image-crop";
 
-import axios from "axios";
-
 // Components
 import CropModal from "../Modal/CropModal";
 
@@ -11,33 +9,12 @@ import CropModal from "../Modal/CropModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
-export default function Profile({ user }) {
+const Profile = ({ user, updateProfile }) => {
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
-
-  const updateProfile = async (data) => {
-    // 画像ファイルで送信する可能性をふまえ、FormDataで送ってます
-    console.log(data, image);
-    const formData = new FormData();
-    formData.append("image", image);
-    formData.append("_method", "PUT");
-    console.log(formData.get("image"));
-
-    await axios
-      .post(`http://localhost/api/user/${user.id}/edit`, formData, {
-        headers: { "content-type": "multipart/form-data" },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        console.log("[login]ログイン失敗");
-      });
-  };
 
   //画像アップロード
   const [image, setImage] = useState<string | null>(null);
@@ -67,7 +44,6 @@ export default function Profile({ user }) {
 
   const onImageLoaded = (image) => {
     setImageRef(image);
-    console.log("ロード", imageRef);
   };
 
   // 画像くり抜き
@@ -102,7 +78,6 @@ export default function Profile({ user }) {
           crop.height
         );
       }
-      // base64にしてstate保存(仮)
       const base64Image = canvas.toDataURL("img/url");
       setImage(base64Image);
     }
@@ -121,7 +96,17 @@ export default function Profile({ user }) {
       <div className="w-3/4 bg-white mb-6">
         <div className="w-full flex px-10 py-6 md:mb-0">
           <div className="avatar placeholder">
-            {image ? (
+            {user.img_path ? (
+              <label
+                htmlFor="cropModal"
+                className="text-neutral-content rounded-full w-32 h-32 border"
+              >
+                <img
+                  src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/user.img_path`}
+                  style={{ borderRadius: "100%" }}
+                />
+              </label>
+            ) : image ? (
               <label
                 htmlFor="cropModal"
                 className="text-neutral-content rounded-full w-32 h-32 border"
@@ -140,6 +125,25 @@ export default function Profile({ user }) {
                 />
               </label>
             )}
+            {/* {image ? (
+              <label
+                htmlFor="cropModal"
+                className="text-neutral-content rounded-full w-32 h-32 border"
+              >
+                <img src={image} style={{ borderRadius: "100%" }} />
+              </label>
+            ) : (
+              <label
+                htmlFor="cropModal"
+                className="bg-neutral-focus text-neutral-content rounded-full w-32 h-32 hover:bg-primary"
+              >
+                <FontAwesomeIcon
+                  icon={faUser}
+                  size="lg"
+                  className="ml-14 mt-14"
+                />
+              </label>
+            )} */}
             <input type="checkbox" id="cropModal" className="modal-toggle" />
             <CropModal
               src={src}
@@ -161,7 +165,9 @@ export default function Profile({ user }) {
         </div>
       </div>
       <div className="w-3/4 bg-white px-10 py-6">
-        <form onSubmit={handleSubmit(updateProfile)}>
+        <form
+          onSubmit={handleSubmit((data) => updateProfile(data, user, image))}
+        >
           <div className="w-full md:mb-0">
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -207,4 +213,6 @@ export default function Profile({ user }) {
       </div>
     </>
   );
-}
+};
+
+export default Profile;
