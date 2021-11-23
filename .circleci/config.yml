@@ -9,4 +9,4 @@ jobs:
       - run: composer install -n --prefer-dist --working-dir=./api
       - run:
           name: php test
-          command: ./api/vendor/bin/phpunit
+          command: ~/api/vendor/bin/phpunit --configuration=./api/phpunit.xml
