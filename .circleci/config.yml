@@ -6,9 +6,9 @@ jobs:
     steps:
       - checkout
       - run: sudo composer self-update --1
-      - run: composer install -n --prefer-dist
+      - run: composer install -n --prefer-dist --working-dir=./api
       - run: npm ci
       - run: npm run dev
       - run:
           name: php test
-          command: vendor/bin/phpunit
+          command: ./api/vendor/bin/phpunit
