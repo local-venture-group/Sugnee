@@ -86,8 +86,16 @@ class UserController extends Controller
         //toJsonでエンコード
         return $user->toJson(JSON_UNESCAPED_UNICODE);
     }
-    public function update(UserRequest $request, User $user, ImageService $imageService)
+    public function update(Request $request, User $user, ImageService $imageService)
     {
+        $request->first_name = 'さる';
+        $request->last_name = 'たろう';
+        $request->email = 'fefefe@exam.com';
+        $request->password = 'Password12';
+        $request->birth = '2000-02-01';
+        $request->gender = 1;
+
+
         $folderName = 'users';
         if($request->has('imageBase64')){
             $request->validate([
@@ -108,7 +116,8 @@ class UserController extends Controller
             }
             // $user->update(['img_path' => $filePath ]);
         }
-        $user->fill($request->validated() +  ['img_path' => $filePath])->save();
+
+        $user->fill($request->all() +  ['img_path' => $filePath])->save();
 
 
 
