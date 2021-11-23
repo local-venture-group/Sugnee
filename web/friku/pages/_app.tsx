@@ -1,4 +1,4 @@
-import "../styles/globals.css";
+import { AppProps } from "next/app";
 import "tailwindcss/tailwind.css";
 
 // Contexts
@@ -10,7 +10,7 @@ import { SearchConditionProvider } from "../contexts/SearchCondition";
 // Components
 import Layout from "../components/Layout";
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <AdminProvider>
