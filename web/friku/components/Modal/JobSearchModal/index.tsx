@@ -6,9 +6,9 @@ import { useForm } from "react-hook-form";
 import { SearchConditionContext } from "../../../contexts/SearchCondition";
 
 // Component
-import KeyWordTab from "../JobSearchModal/KeyWordTab";
-import WorkTypeTab from "../JobSearchModal/WorkTypeTab";
-import WorkLocationTab from "../JobSearchModal/WorkLocationTab";
+import KeyWordTab from "./KeyWordTab";
+import WorkTypeTab from "./WorkTypeTab";
+import WorkLocationTab from "./WorkLocationTab";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,8 +18,14 @@ import {
   faPencilAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
-const MobileSearchModal = () => {
-  const [currentTab, setCurrentTab] = useState("location");
+// Types
+interface JobSearchModalProps {
+  current: string;
+}
+
+const JobSearchModal = (props: JobSearchModalProps) => {
+  const { current } = props;
+  const [currentTab, setCurrentTab] = useState(current);
   const router = useRouter();
   const {
     register,
@@ -43,19 +49,22 @@ const MobileSearchModal = () => {
         ? data.workType.map((type) => parseInt(type))
         : [],
     });
-    document.querySelector("#mobileSearchModal").checked = false;
+    const modalCheck = document.querySelector(
+      "#jobSearchModal"
+    ) as HTMLInputElement;
+    modalCheck.checked = false;
     router.push("/job");
   };
 
   return (
-    <div className="modal" id="mobileSearchModal">
+    <div className="modal" id="jobSearchModal">
       <div className="modal-box h-screen w-full lg:max-w-3xl lg:h-4/5">
         <div className="w-full flex flex-col justify-center items-center px-4">
           <div className="w-full">
             <button
               type="button"
               id="location"
-              className={`text-gray-400 py-4 w-1/3 rounded-t-lg border-primary border-t-4 border-r-4 border-l-4 hover:text-primary ${
+              className={`text-2xl text-gray-400 py-4 w-1/3 rounded-t-lg border-primary border-t-4 border-r-4 border-l-4 hover:text-primary ${
                 currentTab === "location" && "text-gray-900 bg-blue-50"
               }`}
               onClick={handleClickTab}
@@ -63,21 +72,21 @@ const MobileSearchModal = () => {
               <FontAwesomeIcon
                 icon={faMapMarkerAlt}
                 className="text-primary mr-2"
-                size="sm"
+                size="lg"
               />
               勤務地
             </button>
             <button
               type="button"
               id="type"
-              className={`text-gray-400 py-4 w-1/3 rounded-t-lg border-primary border-t-4 border-r-4 border-l-4 hover:text-primary ${
+              className={`text-2xl text-gray-400 py-4 w-1/3 rounded-t-lg border-primary border-t-4 border-r-4 border-l-4 hover:text-primary ${
                 currentTab === "type" && "text-gray-900 bg-blue-50"
               }`}
               onClick={handleClickTab}
             >
               <FontAwesomeIcon
                 icon={faSuitcase}
-                size="sm"
+                size="lg"
                 className="text-primary mr-2"
               />
               職種
@@ -85,28 +94,30 @@ const MobileSearchModal = () => {
             <button
               type="button"
               id="word"
-              className={`text-gray-400 py-4 w-1/3 rounded-t-lg border-primary border-t-4 border-r-4 border-l-4 hover:text-primary ${
+              className={`text-2xl text-gray-400 py-4 w-1/3 rounded-t-lg border-primary border-t-4 border-r-4 border-l-4 hover:text-primary ${
                 currentTab === "word" && "text-gray-900 bg-blue-50"
               }`}
               onClick={handleClickTab}
             >
               <FontAwesomeIcon
                 icon={faPencilAlt}
-                size="sm"
+                size="lg"
                 className="text-primary mr-2"
               />
-              ワード
+              キーワード
             </button>
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <div
-              className="w-full bg-blue-50 p-3 rounded-b-lg border-primary border-r-4 border-l-4 border-b-4 flex flex-col items-center"
-              style={{ height: "24rem" }}
+              className="w-full bg-blue-50 lg:p-10 rounded-b-lg border-primary border-r-4 border-l-4 border-b-4 flex flex-col items-center"
+              style={{ height: "32rem" }}
             >
               {currentTab === "location" && (
-                <WorkLocationTab register={register} />
+                <WorkLocationTab register={register} modalSize={"lg"} />
               )}
-              {currentTab === "type" && <WorkTypeTab register={register} />}
+              {currentTab === "type" && (
+                <WorkTypeTab register={register} modalSize={"lg"} />
+              )}
               {currentTab === "word" && <KeyWordTab register={register} />}
             </div>
             <button type="submit" className="w-full btn btn-primary mt-8">
@@ -115,7 +126,7 @@ const MobileSearchModal = () => {
           </form>
           <div className="justify-center w-full mt-2">
             <label
-              htmlFor="mobileSearchModal"
+              htmlFor="jobSearchModal"
               className="w-full btn btn-outline btn-primary"
             >
               とじる
@@ -127,4 +138,4 @@ const MobileSearchModal = () => {
   );
 };
 
-export default MobileSearchModal;
+export default JobSearchModal;
