@@ -66,6 +66,7 @@ interface AuthContextType {
   signup: (props: SignupProps) => void;
   login: (props: LoginProps) => void;
   logout: () => void;
+  updateProfile: (props: UpdateProfileProps) => Promise<void>;
   addFrikuBookmark: (props: BookmarkProps) => Promise<void>;
   deleteFrikuBookmark: (props: BookmarkProps) => Promise<void>;
   addOmBookmark: (props: BookmarkProps) => Promise<void>;
