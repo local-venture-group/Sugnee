@@ -16,7 +16,7 @@ export default {
     },
     size: {
       description: "ボタンサイズ",
-      options: ["small", "medium", "large"],
+      options: ["small", "medium", "large", "full"],
       control: { type: "select" },
     },
     label: {
