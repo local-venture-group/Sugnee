@@ -120,12 +120,9 @@ const AuthProvider = ({ children }) => {
         first_name: firstName,
         email,
         imageBase64: image,
-        password: "",
       })
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
-          console.log(res.data);
           setUser(res.data);
         } else {
           console.log(res.data);
