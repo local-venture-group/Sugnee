@@ -112,15 +112,15 @@ const AuthProvider = ({ children }) => {
       });
   };
 
-  const updateProfile = async (data, user, image) => {
-    console.log("base64", image);
-    // 後々body内容変更
+  const updateProfile = async (data, image) => {
+    const { lastName, firstName, email } = data;
     await axios
       .put(`http://localhost/api/user/${user.id}/edit`, {
-        // last_name: data.lastName,
-        // first_name: data.firstName,
-        // email,
+        last_name: lastName,
+        first_name: firstName,
+        email,
         imageBase64: image,
+        password: "",
       })
       .then((res) => {
         console.log(res);

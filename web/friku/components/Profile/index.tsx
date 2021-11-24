@@ -137,13 +137,11 @@ const Profile = ({ user, updateProfile }) => {
         </div>
       </div>
       <div className="w-3/4 bg-white px-10 py-6">
-        <form
-          onSubmit={handleSubmit((data) => updateProfile(data, user, image))}
-        >
+        <form onSubmit={handleSubmit((data) => updateProfile(data, image))}>
           <div className="w-full md:mb-0">
             <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              htmlFor="email"
+              className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="name"
             >
               氏名
             </label>
@@ -164,7 +162,7 @@ const Profile = ({ user, updateProfile }) => {
           </div>
           <div className="w-full md:mb-0">
             <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="email"
             >
               メールアドレス
@@ -177,7 +175,36 @@ const Profile = ({ user, updateProfile }) => {
               {...register("email", { required: true })}
             />
           </div>
-
+          <div className="w-full md:mb-0">
+            <label
+              className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="birth"
+            >
+              生年月日
+            </label>
+            <input
+              disabled
+              id="birth"
+              type="text"
+              defaultValue={user.birth}
+              className="bg-white rounded py-3 px-4 mb-3 w-full"
+            />
+          </div>
+          <div className="w-full md:mb-0">
+            <label
+              className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="gender"
+            >
+              性別
+            </label>
+            <input
+              disabled
+              id="gender"
+              type="text"
+              defaultValue={user.gender === 1 ? "男性" : "女性"}
+              className="bg-white rounded py-3 px-4 mb-3 w-full"
+            />
+          </div>
           <button type="submit" className="w-full btn">
             変更する
           </button>
