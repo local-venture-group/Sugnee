@@ -21,7 +21,7 @@ class PagesController extends Controller
     {
         // dd(Storage::files('public/users/'));
         // dd(Storage::disk('public')->path('22c128fd377344cad5f35dd5184257b8.png'));
-        dd(Storage::disk('public')->url('22c128fd377344cad5f35dd5184257b8.png'));
+        // dd(Storage::disk('public')->url('22c128fd377344cad5f35dd5184257b8.png'));
         //TODO: 2種類のデータを返す
 
         //     ②注目記事一覧
