@@ -163,6 +163,28 @@ const Profile = ({ user, updateProfile }) => {
           <div className="w-full md:mb-0">
             <label
               className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="nameKana"
+            >
+              氏名（フリガナ）
+            </label>
+            <input
+              id="lastNameKana"
+              type="text"
+              defaultValue={user.last_name_kana}
+              className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-1/2"
+              {...register("lastNameKana", { required: true })}
+            />
+            <input
+              id="firstNameKana"
+              type="text"
+              defaultValue={user.first_name_kana}
+              className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-1/2"
+              {...register("firstNameKana", { required: true })}
+            />
+          </div>
+          <div className="w-full md:mb-0">
+            <label
+              className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="email"
             >
               メールアドレス
