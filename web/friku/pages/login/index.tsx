@@ -10,11 +10,17 @@ import { AuthContext } from "../../contexts/Auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
+// Types
+interface FormValues {
+  email: string;
+  password: string;
+}
+
 const logIn = () => {
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormValues>();
   const { user, login } = useContext(AuthContext);
-  const [isRevealPassword, setIsRevealPassword] = useState(false);
+  const [isRevealPassword, setIsRevealPassword] = useState<Boolean>(false);
 
   const togglePassword = () => {
     setIsRevealPassword((prevState) => !prevState);
