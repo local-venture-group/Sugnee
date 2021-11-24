@@ -23,6 +23,12 @@ interface MobileJobSearchModalProps {
   current: string;
 }
 
+interface FormValue {
+  locations: [string] | null;
+  keywords: [string] | null;
+  workType: [string] | null;
+}
+
 const MobileSearchModal = (props: MobileJobSearchModalProps) => {
   const { current } = props;
   const [currentTab, setCurrentTab] = useState(current);
@@ -31,7 +37,7 @@ const MobileSearchModal = (props: MobileJobSearchModalProps) => {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm<FormValue>();
   const { addSearchCondition } = useContext(SearchConditionContext);
 
   const handleClickTab = (e) => {
