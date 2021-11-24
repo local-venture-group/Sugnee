@@ -18,14 +18,26 @@ import {
   faPencilAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
-const MobileSearchModal = () => {
-  const [currentTab, setCurrentTab] = useState("location");
+// Types
+interface MobileJobSearchModalProps {
+  current: string;
+}
+
+interface FormValue {
+  locations: [string] | null;
+  keywords: [string] | null;
+  workType: [string] | null;
+}
+
+const MobileSearchModal = (props: MobileJobSearchModalProps) => {
+  const { current } = props;
+  const [currentTab, setCurrentTab] = useState(current);
   const router = useRouter();
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm<FormValue>();
   const { addSearchCondition } = useContext(SearchConditionContext);
 
   const handleClickTab = (e) => {
@@ -43,7 +55,10 @@ const MobileSearchModal = () => {
         ? data.workType.map((type) => parseInt(type))
         : [],
     });
-    document.querySelector("#mobileSearchModal").checked = false;
+    const modalCheck = document.querySelector(
+      "#jobSearchModal"
+    ) as HTMLInputElement;
+    modalCheck.checked = false;
     router.push("/job");
   };
 
@@ -104,9 +119,11 @@ const MobileSearchModal = () => {
               style={{ height: "24rem" }}
             >
               {currentTab === "location" && (
-                <WorkLocationTab register={register} />
+                <WorkLocationTab register={register} modalSize={"sm"} />
               )}
-              {currentTab === "type" && <WorkTypeTab register={register} />}
+              {currentTab === "type" && (
+                <WorkTypeTab register={register} modalSize={"sm"} />
+              )}
               {currentTab === "word" && <KeyWordTab register={register} />}
             </div>
             <button type="submit" className="w-full btn btn-primary mt-8">

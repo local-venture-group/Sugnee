@@ -1,9 +1,17 @@
 import { useContext } from "react";
+import { UseFormRegister, FieldValues } from "react-hook-form";
 
 // Context
 import { SearchConditionContext } from "../../../../contexts/SearchCondition";
 
-export default function WorkLocationTab({ register }) {
+// Type
+interface TabProps {
+  register: UseFormRegister<FieldValues>;
+  modalSize: string;
+}
+
+const WorkLocationTab = (props: TabProps) => {
+  const { register, modalSize } = props;
   const { workLocations } = useContext(SearchConditionContext);
 
   if (!workLocations) return null;
@@ -13,7 +21,7 @@ export default function WorkLocationTab({ register }) {
         <div key={index} className="mb-3">
           <label className="cursor-pointer label justify-start bg-primary">
             <input
-              id={`area-${index}`}
+              id={`area-${modalSize}-${index}`}
               type="checkbox"
               className="checkbox checkbox-xs bg-white"
               value={location.area}
@@ -43,4 +51,6 @@ export default function WorkLocationTab({ register }) {
       ))}
     </div>
   );
-}
+};
+
+export default WorkLocationTab;

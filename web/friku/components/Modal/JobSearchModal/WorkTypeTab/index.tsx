@@ -1,9 +1,17 @@
 import { useContext } from "react";
+import { UseFormRegister, FieldValues } from "react-hook-form";
 
 // Context
 import { SearchConditionContext } from "../../../../contexts/SearchCondition";
 
-export default function WorkTypeTab({ register }) {
+// Type
+interface TabProps {
+  register: UseFormRegister<FieldValues>;
+  modalSize: string;
+}
+
+const WorkTypeTab = (props: TabProps) => {
+  const { register, modalSize } = props;
   const { workTypes } = useContext(SearchConditionContext);
   if (!workTypes) return null;
 
@@ -13,7 +21,9 @@ export default function WorkTypeTab({ register }) {
         <div key={i} className="w-1/2 lg:w-full">
           <label className="cursor-pointer label justify-start">
             <input
-              id={`${type === "勤務地" ? "location" : "workType"}-${i}`}
+              id={`${
+                type === "勤務地" ? "location" : "workType"
+              }-${modalSize}-${i}`}
               type="checkbox"
               value={i}
               {...register("workType")}
@@ -24,4 +34,6 @@ export default function WorkTypeTab({ register }) {
       ))}
     </div>
   );
-}
+};
+
+export default WorkTypeTab;

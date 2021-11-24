@@ -30,6 +30,7 @@ class RegisterApiTest extends TestCase
 
         $this->assertSame($a, $b);
     }
+
     // public function testRegisterUser()
     // {
     //     $userData = [
@@ -55,4 +56,5 @@ class RegisterApiTest extends TestCase
     //     $this->assertSame($userData['email'], $user->email);
 
     // }
+
 }
