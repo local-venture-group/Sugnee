@@ -44,6 +44,17 @@ interface LoginProps {
   password: string;
 }
 
+interface UpdateProfileProps {
+  data: {
+    firstName: string;
+    lastName: string;
+    firstNameKana: string;
+    lastNameKana: string;
+    email: string;
+  };
+  image: string;
+}
+
 interface BookmarkProps {
   e: React.MouseEvent<HTMLElement>;
   user: User;
@@ -171,6 +182,32 @@ const AuthProvider = (props: AppProviderProps) => {
       });
   };
 
+  const updateProfile = async (props: UpdateProfileProps) => {
+    const {
+      data: { lastName, firstName, lastNameKana, firstNameKana, email },
+      image,
+    } = props;
+
+    await axios
+      .put(`http://localhost/api/user/${user.id}/edit`, {
+        last_name: lastName,
+        first_name: firstName,
+        last_name_kana: lastNameKana,
+        first_name_kana: firstNameKana,
+        email,
+        imageBase64: image,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setUser(res.data);
+        } else {
+          console.log(res.data);
+          alert("更新失敗");
+        }
+      })
+      .catch((err) => console.log("更新失敗", err));
+  };
+
   const addFrikuBookmark = async (props: BookmarkProps) => {
     const { e, user, jobId } = props;
     e.preventDefault();
@@ -178,7 +215,6 @@ const AuthProvider = (props: AppProviderProps) => {
       alert("お気に入り追加はログインが必要です");
       return;
     }
-
     await axios.get(process.env.NEXT_PUBLIC_API_AUTH_URL).then((response) => {
       axios
         .put(
@@ -296,6 +332,7 @@ const AuthProvider = (props: AppProviderProps) => {
         signup,
         login,
         logout,
+        updateProfile,
         addFrikuBookmark,
         deleteFrikuBookmark,
         addOmBookmark,

@@ -1,61 +1,42 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Crop } from "react-image-crop";
 
-import axios from "axios";
+// Components
+import CropModal from "../Modal/CropModal";
 
-// icons
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
-export default function Profile({ user }) {
+const Profile = ({ user, updateProfile }) => {
   const {
-    control,
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
 
-  const updateProfile = async (data) => {
-    // 画像ファイルで送信する可能性をふまえ、FormDataで送ってます
-    console.log(data, image);
-    const formData = new FormData();
-    formData.append("image", image);
-    formData.append("_method", "PUT");
-    console.log(formData.get("image"));
-
-    await axios
-      .post(`http://localhost/api/user/${user.id}/edit`, formData, {
-        headers: { "content-type": "multipart/form-data" },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        console.log("[login]ログイン失敗");
-      });
-  };
-
   //画像アップロード
-  const [image, setImage] = useState(null);
-  const [src, setSrc] = useState(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [src, setSrc] = useState<string | null>(null);
 
-  const [crop, setCrop] = useState({
+  const [crop, setCrop] = useState<Crop>({
     unit: "%",
     x: 25,
     y: 10,
     width: 80,
+    height: 80,
     aspect: 4 / 4,
   });
-  const [imageRef, setImageRef] = useState(null);
+  const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null);
 
   // 画像読み込み
-  const onSelectFile = (e) => {
+  const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files !== null) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
-        setSrc(reader.result);
+        typeof reader.result === "string" && setSrc(reader.result);
       });
       reader.readAsDataURL(e.target.files[0]);
     }
@@ -63,7 +44,6 @@ export default function Profile({ user }) {
 
   const onImageLoaded = (image) => {
     setImageRef(image);
-    console.log("ロード", imageRef);
   };
 
   // 画像くり抜き
@@ -98,7 +78,6 @@ export default function Profile({ user }) {
           crop.height
         );
       }
-      // base64にしてstate保存(仮)
       const base64Image = canvas.toDataURL("img/url");
       setImage(base64Image);
     }
@@ -106,7 +85,10 @@ export default function Profile({ user }) {
 
   const addProfileImage = async () => {
     await onCropComplete(crop);
-    document.querySelector("#cropModal").checked = false;
+    const ModalcheckBox = document.querySelector(
+      "#cropModal"
+    ) as HTMLInputElement;
+    ModalcheckBox.checked = false;
   };
 
   return (
@@ -114,6 +96,7 @@ export default function Profile({ user }) {
       <div className="w-3/4 bg-white mb-6">
         <div className="w-full flex px-10 py-6 md:mb-0">
           <div className="avatar placeholder">
+            {/* ユーザー情報の画像表示ができるようになったら分岐修正 */}
             {image ? (
               <label
                 htmlFor="cropModal"
@@ -134,7 +117,7 @@ export default function Profile({ user }) {
               </label>
             )}
             <input type="checkbox" id="cropModal" className="modal-toggle" />
-            {/* <CropModal
+            <CropModal
               src={src}
               crop={crop}
               onSelectFile={onSelectFile}
@@ -142,7 +125,7 @@ export default function Profile({ user }) {
               onCropComplete={onCropComplete}
               onCropChange={onCropChange}
               addProfileImage={addProfileImage}
-            /> */}
+            />
           </div>
           <div className="pl-6">
             <p className="text-3xl mb-3　">{user.name}</p>
@@ -154,11 +137,11 @@ export default function Profile({ user }) {
         </div>
       </div>
       <div className="w-3/4 bg-white px-10 py-6">
-        <form onSubmit={handleSubmit(updateProfile)}>
+        <form onSubmit={handleSubmit((data) => updateProfile(data, image))}>
           <div className="w-full md:mb-0">
             <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              htmlFor="email"
+              className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="name"
             >
               氏名
             </label>
@@ -179,7 +162,29 @@ export default function Profile({ user }) {
           </div>
           <div className="w-full md:mb-0">
             <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="nameKana"
+            >
+              氏名（フリガナ）
+            </label>
+            <input
+              id="lastNameKana"
+              type="text"
+              defaultValue={user.last_name_kana}
+              className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-1/2"
+              {...register("lastNameKana", { required: true })}
+            />
+            <input
+              id="firstNameKana"
+              type="text"
+              defaultValue={user.first_name_kana}
+              className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-1/2"
+              {...register("firstNameKana", { required: true })}
+            />
+          </div>
+          <div className="w-full md:mb-0">
+            <label
+              className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="email"
             >
               メールアドレス
@@ -192,7 +197,36 @@ export default function Profile({ user }) {
               {...register("email", { required: true })}
             />
           </div>
-
+          <div className="w-full md:mb-0">
+            <label
+              className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="birth"
+            >
+              生年月日
+            </label>
+            <input
+              disabled
+              id="birth"
+              type="text"
+              defaultValue={user.birth}
+              className="bg-white rounded py-3 px-4 mb-3 w-full"
+            />
+          </div>
+          <div className="w-full md:mb-0">
+            <label
+              className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="gender"
+            >
+              性別
+            </label>
+            <input
+              disabled
+              id="gender"
+              type="text"
+              defaultValue={user.gender === 1 ? "男性" : "女性"}
+              className="bg-white rounded py-3 px-4 mb-3 w-full"
+            />
+          </div>
           <button type="submit" className="w-full btn">
             変更する
           </button>
@@ -200,4 +234,6 @@ export default function Profile({ user }) {
       </div>
     </>
   );
-}
+};
+
+export default Profile;

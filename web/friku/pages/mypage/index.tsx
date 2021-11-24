@@ -1,15 +1,17 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState, MouseEventHandler } from "react";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../contexts/Auth/index";
 
+// Components
+import Profile from "../../components/Profile";
+
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faHeart, faFileAlt } from "@fortawesome/free-solid-svg-icons";
 
-import Profile from "../../components/Profile";
-
-const Mypage = () => {
+const Mypage: React.FC = () => {
   const [currentMenu, setCurrentMenu] = useState("profile");
-  const { user } = useContext(AuthContext);
+  const { user, updateProfile } = useContext(AuthContext);
   const router = useRouter();
 
   useEffect(() => {
@@ -61,7 +63,9 @@ const Mypage = () => {
         </button>
       </div>
       <div className="flex flex-col justify-center items-center w-10/12 bg-gray-100 p-10 rounded-lg">
-        {user && currentMenu === "profile" && <Profile user={user} />}
+        {user && currentMenu === "profile" && (
+          <Profile user={user} updateProfile={updateProfile} />
+        )}
       </div>
     </div>
   );
