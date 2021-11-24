@@ -8,6 +8,8 @@ use App\Http\Requests\UserRequest;
 use App\Mail\UserRegistered;
 use App\Models\CorporationApplicant;
 use App\Models\CorporationApplicantschedule;
+use App\Models\CorporationJoboffer;
+use App\Models\Favorite;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -67,7 +69,11 @@ class UserController extends Controller
     public function getAuthUser(Request $request)
     {
         //① OM求人のお気に入りを取得
-        $user = User::with('favorites')->where('id', Auth::guard('users')->id())->first();
+        // $user = User::with('favorites')->where('id', Auth::guard('users')->id())->first();
+        $user = User::findOrFail(Auth::guard('users')->id())->first();
+        $omfavorites = Favorite::where('user_id', $user->id)->get();
+        $favorites = CorporationJoboffer::whereIn('id', $omfavorites->pluck('corporation_joboffer_id'))->get();
+        $user->favorites['omFavorites'] = collect($favorites);
 
         //② OM求人の応募済みを取得
         $appliantWithApplied = CorporationApplicantschedule::with('corporationJoboffer')
