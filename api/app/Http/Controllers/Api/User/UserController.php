@@ -90,7 +90,7 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, User $user, ImageService $imageService)
     {
 
-
+        $filePath = $user->img_path;
         $folderName = 'users';
         if($request->has('imageBase64')){
             $request->validate([
