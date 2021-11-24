@@ -22,8 +22,9 @@ class FavoritesController extends Controller
         $favorite->fill($request->all())->save();
         $favoriteAll = Favorite::where('user_id', $request->user_id)->get();
 
+        $favoriteJobs = CorporationJoboffer::whereIn('id', $favoriteAll->pluck('corporation_joboffer_id'))->get();
 
-        return response()->json($favoriteAll, 201);
+        return response()->json($favoriteJobs, 201);
     }
     public function omUnFavorites(Request $request, Favorite $favorite)
     {
@@ -32,8 +33,9 @@ class FavoritesController extends Controller
             $deleteFavorite =  Favorite::where('user_id', $request->user_id)->where('corporation_joboffer_id', $request->corporation_joboffer_id)->first();
             $deleteFavorite->delete();
             $favoriteAll = Favorite::where('user_id', $request->user_id)->get();
-            return response()->json($favoriteAll, 200);
+            $favoriteJobs = CorporationJoboffer::whereIn('id', $favoriteAll->pluck('corporation_joboffer_id'))->get();
+            return response()->json($favoriteJobs, 200);
         }
     }
-   
+
 }
