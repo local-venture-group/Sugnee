@@ -1,10 +1,81 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, ReactNode } from "react";
 import Router from "next/router";
 
-const AuthContext = createContext(null);
+// Types
+interface AppProviderProps {
+  children: ReactNode;
+}
 
-const AuthProvider = ({ children }) => {
+// 求人の型はあとでつける
+interface User {
+  id: number;
+  appliedJobs: [];
+  applied_at: string;
+  birth: string;
+  created_at: string;
+  email: string;
+  email_verified_at: string;
+  favorites: [];
+  first_name: string;
+  first_name_kana: string;
+  gender: number;
+  img_path: string;
+  last_name: string;
+  last_name_kana: string;
+  name: string;
+  phone: string;
+  updated_at: string;
+}
+
+interface SignupProps {
+  firstName: string;
+  lastName: string;
+  birthYear: number;
+  birthMonth: number;
+  birthDay: number;
+  gender: number;
+  email: string;
+  password: string;
+}
+
+interface LoginProps {
+  email: string;
+  password: string;
+}
+
+interface UpdateProfileProps {
+  data: {
+    firstName: string;
+    lastName: string;
+    firstNameKana: string;
+    lastNameKana: string;
+    email: string;
+  };
+  image?: string;
+}
+
+interface BookmarkProps {
+  e: React.MouseEvent<HTMLElement>;
+  user: User;
+  jobId: number;
+}
+
+interface AuthContextType {
+  user: User | null;
+  signup: (props: SignupProps) => void;
+  login: (props: LoginProps) => void;
+  logout: () => void;
+  updateProfile: (props: UpdateProfileProps) => Promise<void>;
+  addFrikuBookmark: (props: BookmarkProps) => Promise<void>;
+  deleteFrikuBookmark: (props: BookmarkProps) => Promise<void>;
+  addOmBookmark: (props: BookmarkProps) => Promise<void>;
+  deleteOmBookmark: (props: BookmarkProps) => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType>(null);
+
+const AuthProvider = (props: AppProviderProps) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -24,7 +95,7 @@ const AuthProvider = ({ children }) => {
       });
   };
 
-  const signup = (data) => {
+  const signup = (data: SignupProps) => {
     const {
       firstName,
       lastName,
@@ -64,7 +135,7 @@ const AuthProvider = ({ children }) => {
       });
   };
 
-  const login = (data) => {
+  const login = (data: LoginProps) => {
     const { email, password } = data;
     axios
       .get(process.env.NEXT_PUBLIC_API_AUTH_URL, { withCredentials: true })
@@ -112,20 +183,23 @@ const AuthProvider = ({ children }) => {
       });
   };
 
-  const updateProfile = async (data, user, image) => {
-    console.log("base64", image);
-    // 後々body内容変更
+  const updateProfile = async (props: UpdateProfileProps) => {
+    const {
+      data: { lastName, firstName, lastNameKana, firstNameKana, email },
+      image,
+    } = props;
+
     await axios
       .put(`http://localhost/api/user/${user.id}/edit`, {
-        // last_name: data.lastName,
-        // first_name: data.firstName,
-        // email,
+        last_name: lastName,
+        first_name: firstName,
+        last_name_kana: lastNameKana,
+        first_name_kana: firstNameKana,
+        email,
         imageBase64: image,
       })
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
-          console.log(res.data);
           setUser(res.data);
         } else {
           console.log(res.data);
@@ -135,7 +209,8 @@ const AuthProvider = ({ children }) => {
       .catch((err) => console.log("更新失敗", err));
   };
 
-  const addFrikuBookmark = async (e, user, jobId) => {
+  const addFrikuBookmark = async (props: BookmarkProps) => {
+    const { e, user, jobId } = props;
     e.preventDefault();
     if (!user) {
       alert("お気に入り追加はログインが必要です");
@@ -163,7 +238,8 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  const deleteFrikuBookmark = async (e, user, jobId) => {
+  const deleteFrikuBookmark = async (props: BookmarkProps) => {
+    const { e, user, jobId } = props;
     e.preventDefault();
 
     await axios.get("/sanctum/csrf-cookie").then((response) => {
@@ -191,7 +267,8 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  const addOmBookmark = async (e, user, jobId) => {
+  const addOmBookmark = async (props: BookmarkProps) => {
+    const { e, user, jobId } = props;
     e.preventDefault();
     if (!user) {
       alert("お気に入り追加はログインが必要です");
@@ -220,7 +297,8 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  const deleteOmBookmark = async (e, user, jobId) => {
+  const deleteOmBookmark = async (props: BookmarkProps) => {
+    const { e, user, jobId } = props;
     e.preventDefault();
 
     await axios.get("/sanctum/csrf-cookie").then((response) => {
@@ -262,7 +340,7 @@ const AuthProvider = ({ children }) => {
         deleteOmBookmark,
       }}
     >
-      {children}
+      {props.children}
     </AuthContext.Provider>
   );
 };

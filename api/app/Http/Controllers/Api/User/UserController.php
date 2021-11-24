@@ -24,7 +24,6 @@ class UserController extends Controller
             'password' => ['required'],
         ]);
         if (auth()->guard('users')->attempt($credentials)) {
-
             $request->session()->regenerate();
             $userId = Auth::guard('users')->id();
             $user = User::with('favorites')->where('id', $userId)->first();
@@ -51,6 +50,7 @@ class UserController extends Controller
     }
     public function register(UserRequest $request, User $user)
     {
+
         $user = User::create([
             'name' => $request->lastName . ' ' . $request->firstName,
             'firstName' => $request->firstName,
@@ -67,6 +67,7 @@ class UserController extends Controller
     public function getAuthUser(Request $request)
     {
         //① OM求人のお気に入りを取得
+        //TODO : favoritesテーブルと紐付いている求人テーブルを取得する
         $user = User::with('favorites')->where('id', Auth::guard('users')->id())->first();
 
         //② OM求人の応募済みを取得
@@ -90,6 +91,7 @@ class UserController extends Controller
     {
 
 
+        $filePath = $user->img_path;
         $folderName = 'users';
         if($request->has('imageBase64')){
             $request->validate([

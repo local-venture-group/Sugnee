@@ -5,7 +5,13 @@ import JobSearchModal from "../../Modal/JobSearchModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt, faSuitcase } from "@fortawesome/free-solid-svg-icons";
 
-export default function SearchTypeCard({ text }) {
+// Type
+interface SearchTypeCardProps {
+  text: string;
+}
+const SearchTypeCard = (props: SearchTypeCardProps) => {
+  const { text } = props;
+
   return (
     <>
       <label
@@ -41,4 +47,6 @@ export default function SearchTypeCard({ text }) {
       <JobSearchModal current={`${text === "勤務地" ? "location" : "type"}`} />
     </>
   );
-}
+};
+
+export default SearchTypeCard;

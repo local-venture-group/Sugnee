@@ -1,8 +1,16 @@
+import { UseFormRegister, FieldValues } from "react-hook-form";
+
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey } from "@fortawesome/free-solid-svg-icons";
 
-export default function KeywordTab({ register }) {
+// Type
+interface TabProps {
+  register: UseFormRegister<FieldValues>;
+}
+
+export const KeyWordTab = (props: TabProps) => {
+  const { register } = props;
   return (
     <div className="w-full">
       <input
@@ -28,4 +36,6 @@ export default function KeywordTab({ register }) {
       </div>
     </div>
   );
-}
+};
+
+export default KeyWordTab;

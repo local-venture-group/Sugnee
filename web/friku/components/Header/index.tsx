@@ -18,7 +18,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Header() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<Boolean>(false);
   const { user, logout } = useContext(AuthContext);
 
   return (
@@ -179,7 +179,7 @@ export default function Header() {
               id="mobileSearchModal"
               className="modal-toggle"
             />
-            <MobileSearchModal />
+            <MobileSearchModal current={"location"} />
           </div>
         </div>
       </div>

@@ -27,6 +27,7 @@ const Mypage: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full px-4 pt-10">
+
       <div className="mt-10 w-1/2">
         <button
           type="button"
