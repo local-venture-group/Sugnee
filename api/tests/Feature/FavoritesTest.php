@@ -49,15 +49,10 @@ class FavoritesTest extends TestCase
         $this->actingAs($this->user, 'users')->putJson(route('joboffer.favorites.attach'), $data);
         $this->actingAs($this->user, 'users')->putJson(route('joboffer.favorites.attach'), $data2);
         $response = $this->actingAs($this->user, 'users')->putJson(route('joboffer.favorites.attach'), $data3);
-
         $response->assertStatus(201)
-            ->assertJsonCount(3)
-            ->assertJsonFragment(
-                [
-                    'user_id' => $this->user->id
-                ]
-            );
+            ->assertJsonCount(3);
     }
+
     //OM求人お気に入り削除
     public function testDetachFavoritesTest()
     {
@@ -84,12 +79,7 @@ class FavoritesTest extends TestCase
         $response = $this->actingAs($this->user, 'users')->deleteJson(route('joboffer.favorites.detach'), $data);
         $response
             ->assertStatus(200)
-            ->assertJsonCount(2)
-            ->assertJsonFragment(
-                [
-                    'user_id' => $this->user->id
-                ]
-            );
+            ->assertJsonCount(2);
     }
     //ログインユーザーではないユーザーがOM求人お気に入り追加処理をおこなったときにエラーを返す
     public function testNotAuthorizedAccess()
