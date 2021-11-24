@@ -30,29 +30,5 @@ class RegisterApiTest extends TestCase
 
         $this->assertSame($a, $b);
     }
-    public function testRegisterUser()
-    {
-        $userData = [
-            'firstName' => 'ああああ',
-            'lastName' => 'いいいい',
-            'gender' => 1,
-            'birth' => now(),
-            'email' => 'testuser@example.com',
-            'password' => 'password'
-        ];
 
-        //登録のURLにテストデータを渡して登録
-        $response = $this->postJson('api/user/register', $userData);
-        $user = User::first();
-
-;        //登録が成功しているかを確認
-        $response->assertStatus(201)
-            ->assertJson([
-                'name' => $userData['lastName'] . ' ' . $userData['firstName'],
-                'email' => $userData['email'],
-                'id' => 1
-            ]);
-        $this->assertSame($userData['email'], $user->email);
-
-    }
 }
