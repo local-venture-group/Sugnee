@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+// Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTwitter,
@@ -7,7 +8,7 @@ import {
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
 
-export default function Footer() {
+const Footer: React.FC = () => {
   return (
     <footer className="mt-60 p-10 footer bg-base-200 text-base-content footer-center">
       <div>
@@ -72,4 +73,6 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;

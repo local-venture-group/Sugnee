@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useContext, useRef } from "react";
 import { useRouter } from "next/router";
 
@@ -16,19 +17,31 @@ import SearchTypeCard from "../components/Card/SearchTypeCard";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faKey, faStar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSearch,
+  faKey,
+  faStar,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { faLightbulb } from "@fortawesome/free-regular-svg-icons";
 
-export default function Home({ omJobs, pickupArticles }) {
+// Types
+import { GetStaticProps, NextPage } from "next";
+import { JobOffer, pickupArticle } from "../interfaces/job";
+interface HomeProps {
+  omJobs: [JobOffer];
+  pickupArticles: [pickupArticle];
+}
+
+const Home: NextPage<HomeProps> = ({ omJobs, pickupArticles }) => {
   const router = useRouter();
   const { user } = useContext(AuthContext);
+
   const userFavorites = user?.favorites.map(
     (favoriteJob) => favoriteJob.corporation_joboffer_id
   );
-  const { addSearchCondition, searchCondition } = useContext(
-    SearchConditionContext
-  );
-  const searchWordsInputRef = useRef();
+  const { addSearchCondition } = useContext(SearchConditionContext);
+  const searchWordsInputRef = useRef<HTMLInputElement>();
 
   const searchJobByWord = async (e) => {
     e.preventDefault();
@@ -65,8 +78,21 @@ export default function Home({ omJobs, pickupArticles }) {
             className="text-accent mb-2"
             size="3x"
           />
-          <h1 className="text-3xl">PickUp求人</h1>
-          <div className="w-full my-10 p-4 space-x-4 carousel carousel-center rounded-box">
+          <h1 className="text-3xl">ピックアップ企業</h1>
+          <p className="mt-4 mb-10 text-sm hover:text-gray-400">
+            <Link href="/pickup">
+              <a>
+                すべて見る
+                <span>
+                  <FontAwesomeIcon
+                    icon={faChevronRight}
+                    className="ml-1 text-primary"
+                  />
+                </span>
+              </a>
+            </Link>
+          </p>
+          <div className="w-full mb-10 p-4 space-x-4 carousel carousel-center rounded-box">
             {pickupArticles.map((article) => (
               <div className="carousel-item md:w-1/3 w-full" key={article.id}>
                 <PickupCard article={article} />
@@ -80,7 +106,7 @@ export default function Home({ omJobs, pickupArticles }) {
             className="text-accent mb-2"
             size="3x"
           />
-          <h1 className="text-3xl">特集一覧</h1>
+          <h1 className="text-3xl">注目企業</h1>
         </section>
         <section className="flex flex-col justify-center items-center w-full px-4 pt-10 bg-gray-50">
           <FontAwesomeIcon
@@ -155,9 +181,11 @@ export default function Home({ omJobs, pickupArticles }) {
       </div>
     </>
   );
-}
+};
 
-export async function getStaticProps() {
+export default Home;
+
+export const getStaticProps: GetStaticProps = async () => {
   const omJobs = await axios
     .get("http://nginx:80/api/user/top")
     .then((res) => res.data)
@@ -170,4 +198,4 @@ export async function getStaticProps() {
   return {
     props: { omJobs, pickupArticles: pickupArticleData.contents },
   };
-}
+};

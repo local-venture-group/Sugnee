@@ -1,13 +1,23 @@
 import Head from "next/head";
 
-export default function Seo({
+// Type
+interface SeoProps {
+  pageTitle?: string;
+  pageDescription?: string;
+  pagePath?: string;
+  pageImg?: string;
+  pageImgWidth?: number;
+  pageImgHeight?: number;
+}
+
+const Seo: React.FC<SeoProps> = ({
   pageTitle,
   pageDescription,
   pagePath,
   pageImg,
   pageImgWidth,
   pageImgHeight,
-}) {
+}) => {
   const defaultTitle = "Fリク";
   const defaultDescription = "九州であなたに合ったお仕事を探すなら、Fリク！";
   const defaultPath = "http://localhost/";
@@ -37,4 +47,6 @@ export default function Seo({
       {/* <meta name="twitter:site" content="Twitterのユーザー名" /> */}
     </Head>
   );
-}
+};
+
+export default Seo;

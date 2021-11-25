@@ -10,8 +10,7 @@ interface TabProps {
   modalSize: string;
 }
 
-const WorkLocationTab = (props: TabProps) => {
-  const { register, modalSize } = props;
+const WorkLocationTab = ({ register, modalSize }: TabProps) => {
   const { workLocations } = useContext(SearchConditionContext);
 
   if (!workLocations) return null;
@@ -21,7 +20,7 @@ const WorkLocationTab = (props: TabProps) => {
         <div key={index} className="mb-3">
           <label className="cursor-pointer label justify-start bg-primary">
             <input
-              id={`area-${modalSize}-${index}`}
+              id={`area-${index}-${modalSize}`}
               type="checkbox"
               className="checkbox checkbox-xs bg-white"
               value={location.area}
@@ -37,7 +36,7 @@ const WorkLocationTab = (props: TabProps) => {
                 key={i}
               >
                 <input
-                  id={`area${index}-city-${i}`}
+                  id={`area${index}-city-${i}-${modalSize}`}
                   type="checkbox"
                   className="checkbox checkbox-xs"
                   value={c}
