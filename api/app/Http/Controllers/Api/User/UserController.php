@@ -111,11 +111,11 @@ class UserController extends Controller
             }
             // $user->update(['img_path' => $filePath ]);
         }
-
-        $user->fill($request->validated() +  ['img_path' => $filePath])->save();
         if(app()->environment('local')){
-            $user->img_path = config('app.aws_access_bucket') . '.s3.' . config('app.aws_default_region') . '.amazonaws.com' . $user->img_path;
+            $filePath = config('app.aws_access_bucket') . '.s3.' . config('app.aws_default_region') . '.amazonaws.com' . $filePath;
         }
+        $user->fill($request->validated() +  ['img_path' => $filePath])->save();
+
         return $user;
     }
 }
