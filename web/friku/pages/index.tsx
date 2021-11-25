@@ -36,7 +36,6 @@ interface HomeProps {
 const Home: NextPage<HomeProps> = ({ omJobs, pickupArticles }) => {
   const router = useRouter();
   const { user } = useContext(AuthContext);
-  console.log(user);
 
   const userFavorites = user?.favorites.map(
     (favoriteJob) => favoriteJob.corporation_joboffer_id
@@ -79,7 +78,7 @@ const Home: NextPage<HomeProps> = ({ omJobs, pickupArticles }) => {
             className="text-accent mb-2"
             size="3x"
           />
-          <h1 className="text-3xl">PickUp求人</h1>
+          <h1 className="text-3xl">ピックアップ企業</h1>
           <p className="mt-4 mb-10 text-sm hover:text-gray-400">
             <Link href="/pickup">
               <a>
@@ -107,7 +106,7 @@ const Home: NextPage<HomeProps> = ({ omJobs, pickupArticles }) => {
             className="text-accent mb-2"
             size="3x"
           />
-          <h1 className="text-3xl">特集一覧</h1>
+          <h1 className="text-3xl">注目企業</h1>
         </section>
         <section className="flex flex-col justify-center items-center w-full px-4 pt-10 bg-gray-50">
           <FontAwesomeIcon
