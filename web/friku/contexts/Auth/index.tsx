@@ -99,6 +99,8 @@ const AuthProvider = (props: AppProviderProps) => {
       .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/register`, {
         firstName,
         lastName,
+        firstNameKana,
+        lastNameKana,
         email,
         birth,
         gender,
