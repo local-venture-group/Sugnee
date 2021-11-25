@@ -29,6 +29,8 @@ const logIn = () => {
   if (user) router.push("/");
   return (
     <div className="h-screen bg-gradient-to-b from-primary to-secondary">
+
+      <img src="https://friku-local-file.s3.ap-northeast-1.amazonaws.com/users/6eb6f9322b568c1936a6751eaacc53c7.png" alt="" />
       <div className="container mx-auto">
         <div className="flex justify-center px-6 py-14">
           <div
