@@ -162,13 +162,13 @@ const SignupForm: React.FC<formProps> = (props) => {
             className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
             htmlFor="firstNameKana"
           >
-            名
+            名（フリガナ）
           </label>
           <input
             className="appearance-none block w-full text-gray-700 border border-gray-500 rounded py-3 px-4 mb-3 leading-tight focus:bg-gray-200"
             id="firstNameKana"
             type="text"
-            placeholder="名（フリガナ）"
+            placeholder="メイ"
             {...register("firstNameKana", {
               required: true,
               pattern: /^[^0-9]+$/,
