@@ -18,3 +18,17 @@ export interface User {
   phone: string;
   updated_at: string;
 }
+
+export interface SignupFormData {
+  firstName: string;
+  lastName: string;
+  firstNameKana: string;
+  lastNameKana: string;
+  email: string;
+  birthYear: number;
+  birthMonth: number;
+  birthDay: number;
+  gender: number;
+  password: string;
+  passwordConfirm: string;
+}
