@@ -1,7 +1,7 @@
 import Header from "../Header";
 import Footer from "../Footer";
 
-export default function Layout({ children }) {
+const Layout: React.FC = ({ children }) => {
   return (
     <>
       <div className="bg-white">
@@ -11,4 +11,6 @@ export default function Layout({ children }) {
       </div>
     </>
   );
-}
+};
+
+export default Layout;
