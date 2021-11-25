@@ -3,30 +3,13 @@ import { createContext, useEffect, useState, ReactNode } from "react";
 import Router from "next/router";
 
 // Types
+import { User } from "../../interfaces/user";
+
 interface AppProviderProps {
   children: ReactNode;
 }
 
 // 求人の型はあとでつける
-interface User {
-  id: number;
-  appliedJobs: [];
-  applied_at: string;
-  birth: string;
-  created_at: string;
-  email: string;
-  email_verified_at: string;
-  favorites: [];
-  first_name: string;
-  first_name_kana: string;
-  gender: number;
-  img_path: string;
-  last_name: string;
-  last_name_kana: string;
-  name: string;
-  phone: string;
-  updated_at: string;
-}
 
 interface SignupProps {
   firstName: string;
@@ -76,7 +59,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>(null);
 
 const AuthProvider = (props: AppProviderProps) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getUser();

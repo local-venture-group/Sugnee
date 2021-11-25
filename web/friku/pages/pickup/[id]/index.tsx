@@ -1,27 +1,45 @@
 import { useContext } from "react";
 import Link from "next/link";
 import axios from "axios";
-import { client } from "../../libs/client";
-import { handleDate } from "../../utils";
+import { client } from "../../../libs/client";
+import { handleDate } from "../../../utils";
 
 // Contexts
-import { AuthContext } from "../../contexts/Auth";
+import { AuthContext } from "../../../contexts/Auth";
 
 // Components
-import Seo from "../../components/Seo";
-import PickupJobCard from "../../components/Card/PickupJobCard";
+import Seo from "../../../components/Seo";
+import PickupJobCard from "../../../components/Card/PickupJobCard";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMapMarkerAlt,
+  faLink,
+  faClock,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebook,
   faTwitter,
   faLine,
 } from "@fortawesome/free-brands-svg-icons";
 
-export default function pickUpArticle({ article, companyData }) {
+// Type
+import { pickupArticle, JobOffer } from "../../../interfaces/job";
+interface pickUpArticleProps {
+  article: pickupArticle;
+  jobData: {
+    // returnされるデータが変更されたら定義します
+    frikuJoboffers?: [JobOffer];
+  };
+}
+
+export default function pickUpArticle({
+  article,
+  jobData,
+}: pickUpArticleProps) {
   const { user } = useContext(AuthContext);
+  // getUserでreturnされるfavoriteJobが変更されたら定義してエラー解消します
   const userFavorites = user?.favorites.map(
     (favoriteJob) => favoriteJob.corporation_joboffer_id
   );
@@ -38,7 +56,9 @@ export default function pickUpArticle({ article, companyData }) {
         <p className="my-10 ml-10 text-xs text-gray-500">
           <Link href="/">TOP</Link>
           <span className="ml-2">&gt;</span>
-          <span className="ml-2">ピックアップ求人</span>
+          <span className="ml-2">
+            <Link href="/pickup">ピックアップ企業</Link>
+          </span>
           <span className="ml-2">&gt;</span>
           <span className="ml-2">{article.companyName}</span>
         </p>
@@ -116,8 +136,29 @@ export default function pickUpArticle({ article, companyData }) {
                   {article.companyName}
                 </span>
               </div>
-              <p className="text-gray-500 py-3 text-sm">会社情報</p>
-              <div className="text-center">
+              <ul className="my-6">
+                <li>
+                  <FontAwesomeIcon
+                    icon={faMapMarkerAlt}
+                    className="text-gray-500"
+                  />
+                  <span className="text-gray-500 ml-3">
+                    {article.companyAddress}
+                  </span>
+                </li>
+                <li>
+                  <FontAwesomeIcon icon={faLink} className="text-gray-500" />
+                  <a
+                    href={article.companyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-500 ml-3 hover:text-primary"
+                  >
+                    {article.companyUrl}
+                  </a>
+                </li>
+              </ul>
+              <div>
                 {article.twitterUrl && (
                   <a
                     href={article.twitterUrl}
@@ -125,7 +166,7 @@ export default function pickUpArticle({ article, companyData }) {
                     rel="noopener noreferrer"
                     className="btn btn-info mr-3"
                   >
-                    <FontAwesomeIcon icon={faTwitter} />
+                    <FontAwesomeIcon icon={faTwitter} size="2x" />
                   </a>
                 )}
                 {article.facebookUrl && (
@@ -146,15 +187,16 @@ export default function pickUpArticle({ article, companyData }) {
       <section id="jobOffers" style={{ backgroundColor: "#E6F2F4" }}>
         <div className="container mx-auto px-8 py-28 md:px-28">
           <h2 className="text-2xl font-bold mb-16">求人情報</h2>
-          {companyData.frikuJoboffers.map((job) => (
-            <div key={job.id} className="mb-3">
-              <PickupJobCard
-                job={job}
-                user={user}
-                userFavorites={userFavorites}
-              />
-            </div>
-          ))}
+          {jobData  &&
+            jobData.frikuJoboffers.map((job) => (
+              <div key={job.id} className="mb-3">
+                <PickupJobCard
+                  job={job}
+                  user={user}
+                  userFavorites={userFavorites}
+                />
+              </div>
+            ))}
         </div>
       </section>
     </>
@@ -181,7 +223,7 @@ export async function getStaticProps({ params }) {
   });
 
   // 今は1しか存在しないので1で対応、のちにarticle.companyIdを渡すよう変更＆エラーハンドリングします
-  const companyData = await axios
+  const jobData = await axios
     .get(`http://nginx:80/api/user/friku/1/joboffers`)
     .then((res) => res.data)
     .catch((err) => console.log(err));
@@ -189,7 +231,7 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       article: article ? article : null,
-      companyData: companyData ? companyData : null,
+      jobData: jobData ? jobData : null,
     },
   };
 }
