@@ -1,4 +1,11 @@
-export default function SignupConfirmation(props) {
+import { SignupFormData } from "../../../interfaces/user";
+interface ConfirmationProps {
+  formData: SignupFormData;
+  onClickBack: () => void;
+  signup: (props: SignupFormData) => void;
+}
+
+const SignupConfirmation: React.FC<ConfirmationProps> = (props) => {
   const { formData, onClickBack, signup } = props;
 
   return (
@@ -19,6 +26,16 @@ export default function SignupConfirmation(props) {
           </label>
           {formData.lastName}
           {formData.firstName}
+        </div>
+        <div className="w-full px-3 my-6 md:mb-0">
+          <label
+            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+            htmlFor="name"
+          >
+            氏名（カナ）
+          </label>
+          {formData.lastNameKana}
+          {formData.firstNameKana}
         </div>
         <div className="w-full px-3 my-6 md:mb-0">
           <label
@@ -66,4 +83,6 @@ export default function SignupConfirmation(props) {
       </div>
     </div>
   );
-}
+};
+
+export default SignupConfirmation;
