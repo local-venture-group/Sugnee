@@ -4,7 +4,10 @@ import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 
-const signupSuccess = () => {
+// Type
+import { NextPage } from "next";
+
+const signupSuccess: NextPage = () => {
   const router = useRouter();
 
   return (

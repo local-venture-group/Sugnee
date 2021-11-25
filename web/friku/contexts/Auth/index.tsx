@@ -14,6 +14,8 @@ interface AppProviderProps {
 interface SignupProps {
   firstName: string;
   lastName: string;
+  firstNameKana: string;
+  lastNameKana: string;
   birthYear: number;
   birthMonth: number;
   birthDay: number;
@@ -82,6 +84,8 @@ const AuthProvider = (props: AppProviderProps) => {
     const {
       firstName,
       lastName,
+      firstNameKana,
+      lastNameKana,
       birthYear,
       birthMonth,
       birthDay,
@@ -92,7 +96,7 @@ const AuthProvider = (props: AppProviderProps) => {
     const birth = `${birthYear}-${birthMonth}-${birthDay}`;
 
     axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user`, {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/register`, {
         firstName,
         lastName,
         email,

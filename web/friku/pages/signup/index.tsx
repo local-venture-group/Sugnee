@@ -10,20 +10,23 @@ import SignupConfirmation from "../../components/SignupConfirmation/user";
 // Contexts
 import { AuthContext } from "../../contexts/Auth/index";
 
-const signUp = () => {
-  const [formData, setFormData] = useState();
-  const [isConfirmed, setIsConfirmed] = useState(false);
+// Type
+import { NextPage } from "next";
+import { SignupFormData } from "../../interfaces/user";
+
+const signUp: NextPage = () => {
+  const [formData, setFormData] = useState<SignupFormData>();
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const { user, signup } = useContext(AuthContext);
   const router = useRouter();
   const {
-    control,
     register,
     formState: { errors },
     handleSubmit,
     watch,
-  } = useForm();
+  } = useForm<SignupFormData>();
 
-  const onSubmit = async (data) => {
+  const signupSubmit = async (data) => {
     setFormData({ ...data, gender: parseInt(data.gender) });
     setIsConfirmed(true);
   };
@@ -67,10 +70,8 @@ const signUp = () => {
               />
             ) : (
               <SignupForm
-                Controller={Controller}
-                control={control}
                 handleSubmit={handleSubmit}
-                onSubmit={onSubmit}
+                signupSubmit={signupSubmit}
                 register={register}
                 errors={errors}
                 watch={watch}

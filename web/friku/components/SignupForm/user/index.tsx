@@ -1,11 +1,37 @@
-import { useState } from "react";
+import { FormEventHandler, useState } from "react";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
-export default function SignupForm(props) {
-  const { handleSubmit, onSubmit, register, errors, watch } = props;
+// Type
+import { SignupFormData } from "../../../interfaces/user";
+import {
+  UseFormHandleSubmit,
+  UseFormRegister,
+  FieldValues,
+  FieldError,
+} from "react-hook-form";
+interface formProps {
+  handleSubmit: UseFormHandleSubmit<SignupFormData>;
+  signupSubmit: (props: SignupFormData) => void;
+  register: UseFormRegister<FieldValues>;
+  errors: {
+    password?: FieldError;
+    lastName?: FieldError;
+    firstName?: FieldError;
+    lastNameKana?: FieldError;
+    firstNameKana?: FieldError;
+    email?: FieldError;
+    gender?: FieldError;
+    passwordConfirm?: FieldError;
+    terms?: FieldError;
+  };
+  watch: (props: string) => void;
+}
+
+const SignupForm: React.FC<formProps> = (props) => {
+  const { handleSubmit, signupSubmit, register, errors, watch } = props;
   const watchPassword = watch("password");
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const [isRevealPasswordConfirm, setIsRevealPasswordConfirm] = useState(false);
@@ -55,7 +81,7 @@ export default function SignupForm(props) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(signupSubmit)}>
       <div className="flex flex-wrap -mx-3 mb-6">
         <ul className="w-full steps mb-10">
           <li className="step step-primary">必要事項入力</li>
@@ -104,6 +130,54 @@ export default function SignupForm(props) {
             <p className="text-red-500 text-xs italic">名は必須です</p>
           )}
           {errors.firstName?.type === "pattern" && (
+            <p className="text-red-500 text-xs italic">数字は入力できません</p>
+          )}
+        </div>
+        <div className="w-full md:w-1/2 px-3 mb-6">
+          <label
+            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+            htmlFor="lastNameKana"
+          >
+            姓（フリガナ）
+          </label>
+          <input
+            className="appearance-none block w-full text-gray-700 border border-gray-500 rounded py-3 px-4 mb-3 leading-tight focus:bg-gray-200"
+            id="lastNameKana"
+            type="text"
+            placeholder="セイ"
+            {...register("lastNameKana", {
+              required: true,
+              pattern: /^[^0-9]+$/,
+            })}
+          />
+          {errors.lastNameKana?.type === "required" && (
+            <p className="text-red-500 text-xs italic">姓は必須です</p>
+          )}
+          {errors.lastNameKana?.type === "pattern" && (
+            <p className="text-red-500 text-xs italic">数字は入力できません</p>
+          )}
+        </div>
+        <div className="w-full md:w-1/2 px-3 mb-6">
+          <label
+            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+            htmlFor="firstNameKana"
+          >
+            名
+          </label>
+          <input
+            className="appearance-none block w-full text-gray-700 border border-gray-500 rounded py-3 px-4 mb-3 leading-tight focus:bg-gray-200"
+            id="firstNameKana"
+            type="text"
+            placeholder="名（フリガナ）"
+            {...register("firstNameKana", {
+              required: true,
+              pattern: /^[^0-9]+$/,
+            })}
+          />
+          {errors.firstNameKana?.type === "required" && (
+            <p className="text-red-500 text-xs italic">名は必須です</p>
+          )}
+          {errors.firstNameKana?.type === "pattern" && (
             <p className="text-red-500 text-xs italic">数字は入力できません</p>
           )}
         </div>
@@ -514,4 +588,6 @@ export default function SignupForm(props) {
       </button>
     </form>
   );
-}
+};
+
+export default SignupForm;
