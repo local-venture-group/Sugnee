@@ -30,7 +30,7 @@ interface pickUpArticleProps {
   article: pickupArticle;
   jobData: {
     // returnされるデータが変更されたら定義します
-    frikuJoboffers: [JobOffer];
+    frikuJoboffers?: [JobOffer];
   };
 }
 
@@ -187,15 +187,16 @@ export default function pickUpArticle({
       <section id="jobOffers" style={{ backgroundColor: "#E6F2F4" }}>
         <div className="container mx-auto px-8 py-28 md:px-28">
           <h2 className="text-2xl font-bold mb-16">求人情報</h2>
-          {jobData.frikuJoboffers.map((job) => (
-            <div key={job.id} className="mb-3">
-              <PickupJobCard
-                job={job}
-                user={user}
-                userFavorites={userFavorites}
-              />
-            </div>
-          ))}
+          {jobData.frikuJoboffers &&
+            jobData.frikuJoboffers.map((job) => (
+              <div key={job.id} className="mb-3">
+                <PickupJobCard
+                  job={job}
+                  user={user}
+                  userFavorites={userFavorites}
+                />
+              </div>
+            ))}
         </div>
       </section>
     </>
