@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import { handleDate, isFavorite } from "../../../utils";
 
@@ -17,7 +17,20 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faClock } from "@fortawesome/free-regular-svg-icons";
 
-export default function PickupJobCard({ job, user, userFavorites }) {
+// Type
+import { User } from "../../../interfaces/user";
+import { JobOffer } from "../../../interfaces/job";
+interface PickupJobCardProps {
+  job: JobOffer;
+  user: User;
+  userFavorites: number[];
+}
+
+export const PickupJobCard: React.FC<PickupJobCardProps> = ({
+  job,
+  user,
+  userFavorites,
+}) => {
   const { addFrikuBookmark, deleteFrikuBookmark } = useContext(AuthContext);
 
   return (
@@ -42,12 +55,13 @@ export default function PickupJobCard({ job, user, userFavorites }) {
               <BookmarkButton
                 text={<FontAwesomeIcon icon={faBookmarked} />}
                 color={"pink"}
-                event={(e) => deleteFrikuBookmark(e, user, job.id)}
+                event={(e) => deleteFrikuBookmark({ e, user, jobId: job.id })}
               />
             ) : (
               <BookmarkButton
                 text={<FontAwesomeIcon icon={faBookmark} />}
-                event={(e) => addFrikuBookmark(e, user, job.id)}
+                color={"gray"}
+                event={(e) => addFrikuBookmark({ e, user, jobId: job.id })}
               />
             )}
           </div>
@@ -99,4 +113,6 @@ export default function PickupJobCard({ job, user, userFavorites }) {
       </div>
     </Link>
   );
-}
+};
+
+export default PickupJobCard;
