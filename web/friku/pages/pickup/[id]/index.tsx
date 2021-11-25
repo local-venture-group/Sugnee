@@ -43,7 +43,6 @@ export default function pickUpArticle({
   const userFavorites = user?.favorites.map(
     (favoriteJob) => favoriteJob.corporation_joboffer_id
   );
-  console.log(jobData);
 
   return (
     <>
