@@ -187,7 +187,7 @@ export default function pickUpArticle({
       <section id="jobOffers" style={{ backgroundColor: "#E6F2F4" }}>
         <div className="container mx-auto px-8 py-28 md:px-28">
           <h2 className="text-2xl font-bold mb-16">求人情報</h2>
-          {jobData.frikuJoboffers &&
+          {jobData  &&
             jobData.frikuJoboffers.map((job) => (
               <div key={job.id} className="mb-3">
                 <PickupJobCard
