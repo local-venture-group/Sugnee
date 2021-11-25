@@ -137,7 +137,7 @@ const Profile = ({ user, updateProfile }) => {
         </div>
       </div>
       <div className="w-3/4 bg-white px-10 py-6">
-        <form onSubmit={handleSubmit((data) => updateProfile(data, image))}>
+        <form onSubmit={handleSubmit((data) => updateProfile({ data, image }))}>
           <div className="w-full md:mb-0">
             <label
               className="block tracking-wide text-gray-700 text-xs font-bold mb-2"

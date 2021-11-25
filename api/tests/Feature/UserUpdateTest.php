@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Tests\Concerns\RefreshDatabaseLite;
 
-class UserImgUploadTest extends TestCase
+class UserUpdateTest extends TestCase
 {
 
     use RefreshDatabaseLite;
@@ -24,18 +24,34 @@ class UserImgUploadTest extends TestCase
             'password' =>  Hash::make('password')
         ]);
     }
-    //ユーザーが画像をアップロードできる。
-    // public function testUserImgUpload()
+    public function testExample()
+    {
+        $a = 2;
+        $b = 2;
+
+        $this->assertSame($a, $b);
+    }
+    //ユーザー情報更新テスト
+    // public function test_user_upload()
     // {
     //     Storage::fake('local');
     //     $dummy = UploadedFile::fake()->create('dummy.jpg');
     //     $response = $this->actingAs($this->user, 'users')
     //         ->json('patch', route('user.edit', ['user' => $this->user->id]), [
     //             'image' => $dummy,
+    //             'first_name' => 'さる',
+    //             'last_name' => 'ごりら',
+    //             'email' => 'fefefe@example.com',
+    //             'password' => 'password',
+    //             'birth' => '2000-01-01',
+    //             'gender' => 1
     //         ]);
     //     $response->assertStatus(200)
     //         ->assertJsonFragment([
     //             'img_path' => '/users/dummy.jpg',
+    //         ])
+    //         ->assertJson([
+    //             'first_name' => 'さる'
     //         ]);
     //     Storage::disk('local')->assertExists('/public/users/' . $dummy->hashName());
     // }

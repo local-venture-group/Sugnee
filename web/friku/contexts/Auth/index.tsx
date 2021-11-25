@@ -52,7 +52,7 @@ interface UpdateProfileProps {
     lastNameKana: string;
     email: string;
   };
-  image: string;
+  image?: string;
 }
 
 interface BookmarkProps {

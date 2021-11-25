@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UploadImageRequest;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Mail\UserRegistered;
 use App\Models\CorporationApplicant;
 use App\Models\CorporationApplicantschedule;
@@ -26,7 +26,6 @@ class UserController extends Controller
             'password' => ['required'],
         ]);
         if (auth()->guard('users')->attempt($credentials)) {
-
             $request->session()->regenerate();
             $userId = Auth::guard('users')->id();
             $user = User::with('favorites')->where('id', $userId)->first();
@@ -53,6 +52,7 @@ class UserController extends Controller
     }
     public function register(UserRequest $request, User $user)
     {
+
         $user = User::create([
             'name' => $request->lastName . ' ' . $request->firstName,
             'firstName' => $request->firstName,
@@ -69,11 +69,16 @@ class UserController extends Controller
     public function getAuthUser(Request $request)
     {
         //① OM求人のお気に入りを取得
+
         // $user = User::with('favorites')->where('id', Auth::guard('users')->id())->first();
         $user = User::findOrFail(Auth::guard('users')->id())->first();
         $omfavorites = Favorite::where('user_id', $user->id)->get();
         $favorites = CorporationJoboffer::whereIn('id', $omfavorites->pluck('corporation_joboffer_id'))->get();
-        $user->favorites['omFavorites'] = collect($favorites);
+        $user->favorites = collect($favorites);
+
+        //TODO : favoritesテーブルと紐付いている求人テーブルを取得する
+        $user = User::with('favorites')->where('id', Auth::guard('users')->id())->first();
+
 
         //② OM求人の応募済みを取得
         $appliantWithApplied = CorporationApplicantschedule::with('corporationJoboffer')
@@ -92,8 +97,10 @@ class UserController extends Controller
         //toJsonでエンコード
         return $user->toJson(JSON_UNESCAPED_UNICODE);
     }
-    public function update(Request $request, User $user, ImageService $imageService)
+    public function update(UserUpdateRequest $request, User $user, ImageService $imageService)
     {
+
+        $filePath = $user->img_path;
         $folderName = 'users';
         if($request->has('imageBase64')){
             $request->validate([
@@ -105,15 +112,17 @@ class UserController extends Controller
             if(!is_null($imageFile)){
                 $filePath = $imageService->uploadBase64Image($imageFile, $folderName);
             }
-            $user->update(['img_path' => $filePath ]);
+            // $user->update(['img_path' => $filePath ]);
 
         } else {
             $imageFile = $request->image;
             if(!is_null($imageFile) && $imageFile->isValid()){
                 $filePath = $imageService->uploadImage($imageFile, $folderName);
             }
-            $user->update(['img_path' => $filePath ]);
+            // $user->update(['img_path' => $filePath ]);
         }
+
+        $user->fill($request->validated() +  ['img_path' => $filePath])->save();
 
 
 
