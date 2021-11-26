@@ -22,6 +22,7 @@ class AddLogoAddressSnsToFrikuCompaniesTable extends Migration
             $table->string('instagram_url')->nullable();
             $table->string('twitter_url')->nullable();
             $table->string('facebook_url')->nullable();
+            $table->boolean('is_pickup')->default(false);
         });
     }
 
@@ -39,6 +40,7 @@ class AddLogoAddressSnsToFrikuCompaniesTable extends Migration
             $table->dropColumn('instagram_url');
             $table->dropColumn('twitter_url');
             $table->dropColumn('facebook_url');
+            $table->dropColumn('is_pickup');
         });
     }
 }
