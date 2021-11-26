@@ -9,6 +9,6 @@ RUN apk update && \
 ENV TZ Asia/Tokyo
 ENV PATH $HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH
 
-WORKDIR /app/friku
+WORKDIR /app/sugnee
 
 CMD ["/bin/ash"]
