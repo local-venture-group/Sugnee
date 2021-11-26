@@ -1,5 +1,8 @@
 import { AppProps } from "next/app";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import "tailwindcss/tailwind.css";
+import "../components/Loading/Loading.css";
 
 // Contexts
 import { AuthProvider } from "../contexts/Auth";
@@ -9,15 +12,32 @@ import { SearchConditionProvider } from "../contexts/SearchCondition";
 
 // Components
 import Layout from "../components/Layout";
+import Loading from "../components/Loading";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const [pageLoading, setPageLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleStart = () => {
+      setPageLoading(true);
+    };
+    const handleComplete = () => {
+      setPageLoading(false);
+    };
+
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
+  }, [router]);
+
   return (
     <AuthProvider>
       <AdminProvider>
         <StaffProvider>
           <SearchConditionProvider>
             <Layout>
-              <Component {...pageProps} />
+              {pageLoading ? <Loading /> : <Component {...pageProps} />}
             </Layout>
           </SearchConditionProvider>
         </StaffProvider>
