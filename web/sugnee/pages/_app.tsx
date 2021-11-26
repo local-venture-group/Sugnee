@@ -2,7 +2,7 @@ import { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import "tailwindcss/tailwind.css";
-import "../components/Loading/Loading.css";
+import "../styles/components.scss";
 
 // Contexts
 import { AuthProvider } from "../contexts/Auth";
