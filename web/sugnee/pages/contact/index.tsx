@@ -1,7 +1,13 @@
+import { NextPage } from "next";
 import { useForm } from "react-hook-form";
 
-const contact = () => {
-  const { register, handleSubmit } = useForm();
+interface FormValue {
+  name: string;
+  email: string;
+  content: string;
+}
+const contact: NextPage = () => {
+  const { register, handleSubmit } = useForm<FormValue>();
 
   return (
     <div className="container mx-auto">
@@ -52,7 +58,6 @@ const contact = () => {
           <textarea
             className="appearance-none block w-full text-gray-700 border border-gray-500 rounded py-3 px-4 mb-3 leading-tight focus:bg-gray-200"
             id="content"
-            type="content"
             placeholder="お問い合わせ内容"
             {...register("content", { required: true })}
             required

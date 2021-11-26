@@ -1,4 +1,6 @@
-const terms = () => {
+import { NextPage } from "next";
+
+const terms: NextPage = () => {
   return (
     <div className="container mx-auto">
       <h1 className="text-2xl text-center my-20">利用規約</h1>

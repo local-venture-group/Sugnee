@@ -1,4 +1,6 @@
-const privacyPolicy = () => {
+import { NextPage } from "next";
+
+const privacyPolicy: NextPage = () => {
   return (
     <div className="container mx-auto">
       <h1 className="text-2xl text-center my-20">プライバシーポリシー</h1>
