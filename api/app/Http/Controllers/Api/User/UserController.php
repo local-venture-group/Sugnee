@@ -50,12 +50,13 @@ class UserController extends Controller
     }
     public function register(UserRequest $request, User $user)
     {
-
         $user = User::create([
             'name' => $request->lastName . ' ' . $request->firstName,
-            'firstName' => $request->firstName,
-            'lastName' => $request->lastName,
+            'first_name' => $request->firstName,
+            'last_name' => $request->lastName,
             'birth' => $request->birth,
+            'first_name_kana' => $request->firstNameKana,
+            'last_name_kana' => $request->lastNameKana,
             'gender' => $request->gender,
             'email' => $request->email,
             'password' => Hash::make($request->password),

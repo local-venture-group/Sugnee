@@ -25,13 +25,12 @@ class UserRequest extends FormRequest
     {
 
         return [
-            'first_name' => 'required|string|max:191',
-            'last_name' => 'required|string|max:191',
+            'firstName' => 'required|string|max:191',
+            'lastName' => 'required|string|max:191',
             'email' => 'required|string|max:191|unique:users,email',
             'password' => 'required|string',
             'birth' => 'required|date',
             'gender' => 'integer|digits_between:1,2',
-            // 'image' => 'image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
 }
