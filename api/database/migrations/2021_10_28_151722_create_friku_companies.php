@@ -20,6 +20,9 @@ class CreateFrikuCompanies extends Migration
             $table->string('last_name_kana');
             $table->string('company_phone');
             $table->string('site_url');
+            //ロゴ
+            //住所
+            //SNS_URL
             $table->boolean('is_registered');
             $table->uuid('temp_id');
             $table->string('password_change_id')->nullable();
