@@ -15,7 +15,7 @@ services:
   front:
     container_name: front
     build:
-      context: ./.docker/web
+      context: ./web
       dockerfile: Dockerfile
     environment:
       PORT: "3000"
@@ -26,7 +26,7 @@ services:
       - 3000
     volumes:
       - ./web:/app
-    # command: sh -c "yarn run dev"
+    command: sh -c "npm run dev"
     stdin_open: true
     tty: true
     restart: always
