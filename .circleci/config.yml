@@ -22,9 +22,6 @@ jobs:
       DB_DATABASE: fukuriku
       DB_USERNAME: fukuriku
       DB_PASSWORD: password
-
-    environment:
-      APP_ENV: local
       DB_CONNECTION_B: ats
       DB_HOST_B: localhost
       DB_PORT_B: 5432
