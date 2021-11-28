@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -10,15 +11,14 @@ use Illuminate\Support\Facades\Password;
 use Tests\Concerns\RefreshDatabaseLite;
 class PasswordResetTest extends TestCase
 {
-    use RefreshDatabaseLite;
+    use DatabaseTransactions;
+    protected $connectionsToTransact = ['fukuriku', 'ats'];
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->artisan('migrate:refresh');
-        User::factory()->create([
-            'email' => 'test@example.com'
-        ]);
+        // $this->artisan('migrate:refresh');
+        User::factory()->create();
     }
 
 

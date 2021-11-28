@@ -6,16 +6,20 @@ use App\Models\CorporationApplicant;
 use App\Models\CorporationApplicantschedule;
 use App\Models\CorporationJoboffer;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class GetAuthUserTest extends TestCase
 {
+    use DatabaseTransactions;
+    protected $connectionsToTransact = ['fukuriku', 'ats'];
+
     public function setUp(): void
     {
         parent::setUp();
-        $this->artisan('migrate:refresh');
+        // $this->artisan('migrate:refresh');
         $this->user = User::factory()->create();
         $this->joboffer = CorporationJoboffer::factory()->create();
     }

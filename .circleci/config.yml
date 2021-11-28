@@ -3,5 +3,48 @@ jobs:
   build:
     docker:
       - image: circleci/php:7.4-node-browsers
+      - image: circleci/postgres:10-alpine
+        environment:
+          - POSTGRES_USER=fukuriku
+          - POSTGRES_PASSWORD=password
+          - POSTGRES_DB=fukuriku
+    environment:
+     APP_ENV: local
+     DB_CONNECTION: fukuriku
+     DB_HOST: localhost
+     DB_PORT: 5432
+     DB_DATABASE: fukuriku
+     DB_USERNAME: fukuriku
+     DB_PASSWORD: password
+     DB_CONNECTION_B: ats
+     DB_HOST_B: localhost
+     DB_PORT_B: 5432
+     DB_DATABASE_B: fukuriku2
+     DB_USERNAME_B: fukuriku2
+     DB_PASSWORD_B: password
+
     steps:
+      - checkout
+      - run:
+          name: Install and enable pdo_pgsql php extension
+          command: |
+            sudo apt-get update && sudo apt-get install libpq-dev
+            sudo docker-php-ext-install pdo_pgsql && sudo docker-php-ext-enable pdo_pgsql
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "composer.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: sudo composer self-update --1
+      - run: composer install -n --prefer-dist --working-dir=./api
+      - save_cache:
+          paths:
+            - ./vendor
+          key: v1-dependencies-{{ checksum "composer.json" }}
+      - run: php artisan migrate
+      - run: php artisan db:seed
+      - run: ./vendor/bin/phpunit
+      # command: ./api/vendor/bin/phpunit --configuration=./api/phpunit.xml
+      #
       - run: echo "Hello World"
+
