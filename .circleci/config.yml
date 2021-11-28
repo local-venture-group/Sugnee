@@ -15,19 +15,19 @@ jobs:
           - POSTGRES_PASSWORD=password
           - POSTGRES_DB=fukuriku2
     environment:
-      APP_ENV: local
-      DB_CONNECTION: fukuriku
-      DB_HOST: localhost
-      DB_PORT: 5432
-      DB_DATABASE: fukuriku
-      DB_USERNAME: fukuriku
-      DB_PASSWORD: password
-      DB_CONNECTION_B: ats
-      DB_HOST_B: localhost
-      DB_PORT_B: 5432
-      DB_DATABASE: fukuriku2
-      DB_USERNAME_B: fukuriku2
-      DB_PASSWORD_B: password
+     APP_ENV: local
+     DB_CONNECTION: fukuriku
+     DB_HOST: localhost
+     DB_PORT: 5432
+     DB_DATABASE: fukuriku
+     DB_USERNAME: fukuriku
+     DB_PASSWORD: password
+     DB_CONNECTION_B: ats
+     DB_HOST_B: localhost
+     DB_PORT_B: 5432
+     DB_DATABASE_B: fukuriku2
+     DB_USERNAME_B: fukuriku2
+     DB_PASSWORD_B: password
 
     steps:
       - checkout
