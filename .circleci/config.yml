@@ -8,11 +8,6 @@ jobs:
           - POSTGRES_USER=fukuriku
           - POSTGRES_PASSWORD=password
           - POSTGRES_DB=fukuriku
-      - image: circleci/postgres:10-alpine
-        environment:
-          - POSTGRES_USER=fukuriku2
-          - POSTGRES_PASSWORD=password
-          - POSTGRES_DB=fukuriku2
     environment:
      APP_ENV: local
      DB_CONNECTION: fukuriku
