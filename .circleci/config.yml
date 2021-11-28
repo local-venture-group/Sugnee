@@ -4,7 +4,6 @@ jobs:
     docker:
       - image: circleci/php:7.4-node-browsers
       - image: circleci/postgres:10-alpine
-        command: ["/opt/bin/entry_point.sh"]
         environment:
           - POSTGRES_USER=fukuriku
           - POSTGRES_PASSWORD=password
