@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -15,11 +16,12 @@ use Tests\Concerns\RefreshDatabaseLite;
 class UserUpdateTest extends TestCase
 {
 
-    use RefreshDatabaseLite;
+    use DatabaseTransactions;
+    protected $connectionsToTransact = ['fukuriku', 'ats'];
     public function setUp(): void
     {
         parent::setUp();
-        $this->artisan('migrate:refresh');
+        // $this->artisan('migrate:refresh');
         $this->user = User::factory()->create([
             'password' =>  Hash::make('password')
         ]);

@@ -7,21 +7,24 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\Concerns\RefreshDatabaseLite;
 
 class RegisterApiTest extends TestCase
 {
+    use DatabaseTransactions;
+    protected $connectionsToTransact = ['fukuriku', 'ats'];
     /**
      * A basic feature test example.
      *
      * @return void
      */
     // use RefreshDatabase;
-    use RefreshDatabaseLite;
+    // use RefreshDatabaseLite;
     public function setUp(): void
     {
         parent::setUp();
-        $this->artisan('migrate:refresh');
+        // $this->artisan('migrate:refresh');
     }
     public function testExample()
     {
