@@ -50,12 +50,13 @@ class UserController extends Controller
     }
     public function register(UserRequest $request, User $user)
     {
-
         $user = User::create([
             'name' => $request->lastName . ' ' . $request->firstName,
-            'firstName' => $request->firstName,
-            'lastName' => $request->lastName,
+            'first_name' => $request->firstName,
+            'last_name' => $request->lastName,
             'birth' => $request->birth,
+            'first_name_kana' => $request->firstNameKana,
+            'last_name_kana' => $request->lastNameKana,
             'gender' => $request->gender,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -112,13 +113,10 @@ class UserController extends Controller
             }
             // $user->update(['img_path' => $filePath ]);
         }
-
+        if(app()->environment('local')){
+            $filePath = config('app.aws_access_bucket') . '.s3.' . config('app.aws_default_region') . '.amazonaws.com' . $filePath;
+        }
         $user->fill($request->validated() +  ['img_path' => $filePath])->save();
-
-
-
-
-
 
         return $user;
     }

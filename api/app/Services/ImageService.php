@@ -30,7 +30,7 @@ class ImageService
         // ランダムなファイル名生成
         $fileName = md5(uniqid(rand(), true)). ".$extension";
         $filePath = $folderName . '/' . $fileName;
-        Storage::disk('public')->put($filePath . '/', $fileData);
+        Storage::disk('s3')->put($filePath . '/', $fileData);
         return '/' .$folderName . '/' . $fileName;
     }
 }
