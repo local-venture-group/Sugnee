@@ -22,10 +22,7 @@ jobs:
       DB_DATABASE: fukuriku
       DB_USERNAME: fukuriku
       DB_PASSWORD: password
-        environment:
-          - POSTGRES_USER=fukuriku2
-          - POSTGRES_PASSWORD=password
-          - POSTGRES_DB=fukuriku2
+
     environment:
       APP_ENV: local
       DB_CONNECTION_B: ats
