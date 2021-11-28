@@ -16,6 +16,8 @@ class FrikuJobsController extends Controller
     {
 
         $pickUpCompany = $frikuCompany->with('frikuJoboffers')->first();
-        return collect(new FrikuCompanyResource($pickUpCompany));
+        $pickUpJobs =  $pickUpCompany->frikuJoboffers;
+        return JobResource::collection($pickUpJobs)->toJson();
+        // return collect(new JobResource($pickUpJobs));
     }
 }
