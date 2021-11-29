@@ -17,7 +17,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faClock } from "@fortawesome/free-regular-svg-icons";
 
-export default function OmJobCard({ job, user, userFavorites }) {
+// Types
+import { JobOffer } from "../../../interfaces/job";
+import { User } from "../../../interfaces/user";
+interface OmJobCardProps {
+  job: JobOffer;
+  user: User;
+  userFavorites: number[];
+}
+
+const OmJobCard: React.FC<OmJobCardProps> = ({ job, user, userFavorites }) => {
   const { addOmBookmark, deleteOmBookmark } = useContext(AuthContext);
 
   return (
@@ -36,14 +45,15 @@ export default function OmJobCard({ job, user, userFavorites }) {
             </p>
             {user && userFavorites && isFavorite(userFavorites, job.id) ? (
               <BookmarkButton
-                text={<FontAwesomeIcon icon={faBookmarked} />}
                 color={"pink"}
-                event={(e) => deleteOmBookmark(e, user, job.id)}
+                text={<FontAwesomeIcon icon={faBookmarked} />}
+                event={(e) => deleteOmBookmark({ e, user, jobId: job.id })}
               />
             ) : (
               <BookmarkButton
+                color={"gray"}
                 text={<FontAwesomeIcon icon={faBookmark} />}
-                event={(e) => addOmBookmark(e, user, job.id)}
+                event={(e) => addOmBookmark({ e, user, jobId: job.id })}
               />
             )}
           </div>
@@ -95,4 +105,6 @@ export default function OmJobCard({ job, user, userFavorites }) {
       </div>
     </Link>
   );
-}
+};
+
+export default OmJobCard;
