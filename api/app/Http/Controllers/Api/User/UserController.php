@@ -91,7 +91,7 @@ class UserController extends Controller
         $favoritesJobs += ['friku' => $favoritesFrikuBaseJobs];
         //④ Fリク求人の応募済みを取得
         $user->favorites = $favoritesJobs;
-
+        dd($user);
         //toJsonでエンコード
         return $user->toJson(JSON_UNESCAPED_UNICODE);
     }
