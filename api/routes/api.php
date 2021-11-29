@@ -48,7 +48,8 @@ Route::prefix('user')->group(function () {
 
     });
     Route::prefix('/friku')->group(function () {
-        Route::get('/{frikuCompany}/joboffers',[FrikuJobsController::class, 'pickUpCompanyJoboffers'])->name('friku.company.joboffers');
+        Route::get('/{frikuCompany}/joboffers/pickup',[FrikuJobsController::class, 'pickUpCompanyJoboffers'])->name('friku.company.pickupJoboffers');
+        Route::get('/{frikuCompany}/joboffers/feature',[FrikuJobsController::class, 'featureCompanyJoboffers'])->name('friku.company.featureJoboffers');
 
     });
 
