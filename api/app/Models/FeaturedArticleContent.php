@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class FeaturedArticleContent extends Model
 {
     use HasFactory;
+    protected $connection = 'fukuriku';
     protected $fillable = [
         'featured_company_article_id',
         'subTitle',
