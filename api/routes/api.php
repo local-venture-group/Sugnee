@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\User\ResetPasswordController;
 use App\Http\Controllers\Api\Staff\SendOfferController;
 use App\Http\Controllers\Api\Staff\UserSearchController;
 use App\Http\Controllers\Api\User\Friku\FrikuJobsController;
+use App\Http\Controllers\Api\User\JobSearchesController;
 use App\Models\FrikuJoboffer;
 
 /*
@@ -43,12 +44,13 @@ Route::prefix('user')->group(function () {
     //Route::prefix('joboffer')内のグループにはjobofferがURIに付きます。
     Route::prefix('/joboffer')->group(function () {
         Route::get('/conditions', [JobsController::class, 'getConditions'])->name('joboffer.conditions');
-        Route::get('/search', [JobsController::class, 'searchJobOffers'])->name('joboffer.search');
+        Route::get('/search', [JobSearchesController::class, 'searchJobOffers'])->name('joboffer.search');
         Route::get('/{corporationJoboffer}', [JobsController::class, 'showJoboffer'])->name('pickup.show');
 
     });
     Route::prefix('/friku')->group(function () {
-        Route::get('/{frikuCompany}/joboffers',[FrikuJobsController::class, 'pickUpCompanyJoboffers'])->name('friku.company.joboffers');
+        Route::get('/{frikuCompany}/joboffers/pickup',[FrikuJobsController::class, 'pickUpCompanyJoboffers'])->name('friku.company.pickupJoboffers');
+        Route::get('/{frikuCompany}/joboffers/feature',[FrikuJobsController::class, 'featureCompanyJoboffers'])->name('friku.company.featureJoboffers');
 
     });
 
