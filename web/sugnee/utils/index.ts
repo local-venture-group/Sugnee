@@ -1,10 +1,12 @@
-export const handleDate = (date) => {
+export const handleDate = (date: string): string => {
   const day = new Date(date);
   const parseDate =
     day.getFullYear() + "." + (day.getMonth() + 1) + "." + day.getDate();
   return parseDate;
 };
 
-export const isFavorite = (userFavorites, jobId) => {
+export const isFavorite = (userFavorites: number[], jobId: number): boolean => {
+  console.log(userFavorites, jobId);
+
   return userFavorites.includes(jobId);
 };
