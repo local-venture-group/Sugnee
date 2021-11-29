@@ -31,27 +31,7 @@ class JobsController extends Controller
         //ここで、応募済かどうかを取得する。
         return collect(new JobResource($corporationJoboffer));
     }
-    public function searchJobOffers(Request $request)
-    {
-        $this->limit = 10;
-        //ダイエット
-        if (!(empty($request->query() || empty(Auth::guard('users'))))) {
-            //ここにユーザーの検索条件を保存する処理を書く(メソッドを作り呼び出す)
-        }
 
-        //OM求人(独自)取得
-        $useCase = new SearchJoboffersOmOriginalUseCase();
-        $omOriginalJoboffers = $useCase->handle($request, $this->limit);
-
-        //OM求人(ハロワ、indeed)取得
-        $useCase = new SearchJoboffersCrawledUseCase();
-        $omCrawledJoboffers = $useCase->handle($request, $this->limit);
-
-
-        $mergeOmJoboffers = $omOriginalJoboffers->merge($omCrawledJoboffers);
-
-        return JobResource::collection($mergeOmJoboffers)->toJson();
-    }
     public function getConditions(JobService $jobService)
     {
         return [
