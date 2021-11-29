@@ -11,17 +11,24 @@ import OmJobCard from "../../components/Card/OmJobCard";
 
 // Types
 import { NextPage } from "next";
+import { JobOffer } from "../../interfaces/job";
 
 const job: NextPage = () => {
-  const [jobOffers, setJobOffers] = useState();
+  const [jobOffers, setJobOffers] = useState<[JobOffer]>();
   const { workTypes, searchCondition, searchJobOffers } = useContext(
     SearchConditionContext
   );
   const { user } = useContext(AuthContext);
-  const userFavorites = user?.favorites.map((favoriteJob) => favoriteJob.id);
+  // cardデザインが決まったら修正します
+  const userFrikuFavorites: number[] = user?.favorites.friku.map(
+    (favoriteJob) => favoriteJob.id
+  );
+  const userOmFavorites: number[] = user?.favorites.friku.map(
+    (favoriteJob) => favoriteJob.id
+  );
 
   useEffect(() => {
-    const getJobData = async () => {
+    const getJobData = async (): Promise<void> => {
       const jobData = await searchJobOffers(searchCondition);
       setJobOffers(jobData);
     };
@@ -33,7 +40,7 @@ const job: NextPage = () => {
 
   if (!jobOffers) {
     return null;
-  } else if (jobOffers.length === 0) {
+  } else if (!jobOffers.length) {
     return <p>検索条件に一致する求人はありません</p>;
   }
 
@@ -69,13 +76,14 @@ const job: NextPage = () => {
         </div>
         <div className="w-full lg:w-3/4 p-5">
           <p>検索結果一覧</p>
+          {/* デザインが決まったら修正します */}
           {jobOffers.length &&
             jobOffers.map((job) => (
               <div className="w-full mb-3" key={job.id}>
                 <OmJobCard
                   job={job}
                   user={user}
-                  userFavorites={userFavorites}
+                  userFavorites={userOmFavorites}
                 />
               </div>
             ))}
