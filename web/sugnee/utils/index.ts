@@ -6,7 +6,5 @@ export const handleDate = (date: string): string => {
 };
 
 export const isFavorite = (userFavorites: number[], jobId: number): boolean => {
-  console.log(userFavorites, jobId);
-
   return userFavorites.includes(jobId);
 };
