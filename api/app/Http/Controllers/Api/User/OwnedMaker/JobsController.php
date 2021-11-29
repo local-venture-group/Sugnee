@@ -31,15 +31,6 @@ class JobsController extends Controller
         //ここで、応募済かどうかを取得する。
         return collect(new JobResource($corporationJoboffer));
     }
-
-    public function getConditions(JobService $jobService)
-    {
-        return [
-            'city' => $jobService->getJobConditions(),
-            'work_type' => JobConditionConsts::WORK_TYPES,
-        ];
-    }
-
     //OMオリジナル求人に応募するときのアクション
     public function applyOmOriginalJoboffer(
         Request $request,

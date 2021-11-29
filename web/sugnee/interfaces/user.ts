@@ -7,7 +7,7 @@ export interface User {
   created_at: string;
   email: string;
   email_verified_at: string;
-  favorites: [FavoriteJobOffer];
+  favorites: { friku: [FavoriteJobOffer]; om: [FavoriteJobOffer] };
   first_name: string;
   first_name_kana: string;
   gender: number;

@@ -216,7 +216,10 @@ const AuthProvider = (props: AppProviderProps) => {
         .then((res) => {
           if (res.status === 201) {
             console.log("[addFavorite]追加成功", res);
-            setUser({ ...user, favorites: res.data });
+            setUser({
+              ...user,
+              favorites: { ...user.favorites, om: res.data },
+            });
           } else {
             console.log("[addFavorite]お気に入り追加失敗", res.data);
           }
@@ -244,7 +247,10 @@ const AuthProvider = (props: AppProviderProps) => {
         .then((res) => {
           if (res.status === 200) {
             console.log("[deleteFavorite]削除成功", res);
-            setUser({ ...user, favorites: res.data });
+            setUser({
+              ...user,
+              favorites: { ...user.favorites, om: res.data },
+            });
           } else {
             console.log("[deleteFavorite]お気に入り削除失敗", res.data);
           }
@@ -275,7 +281,10 @@ const AuthProvider = (props: AppProviderProps) => {
         )
         .then((res) => {
           if (res.status === 201) {
-            setUser({ ...user, favorites: res.data });
+            setUser({
+              ...user,
+              favorites: { ...user.favorites, om: res.data },
+            });
           } else {
             console.log("[addFavorite]お気に入り追加失敗", res.data);
           }
@@ -303,7 +312,10 @@ const AuthProvider = (props: AppProviderProps) => {
         )
         .then((res) => {
           if (res.status === 200) {
-            setUser({ ...user, favorites: res.data });
+            setUser({
+              ...user,
+              favorites: { ...user.favorites, om: res.data },
+            });
           } else {
             console.log("[deleteFavorite]お気に入り削除失敗", res.data);
           }
