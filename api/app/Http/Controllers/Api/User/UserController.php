@@ -8,6 +8,8 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Mail\UserRegistered;
 use App\Models\CorporationApplicant;
 use App\Models\CorporationApplicantschedule;
+use App\Models\CorporationJoboffer;
+use App\Models\Favorite;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -68,8 +70,12 @@ class UserController extends Controller
     public function getAuthUser(Request $request)
     {
         //① OM求人のお気に入りを取得
-        //TODO : favoritesテーブルと紐付いている求人テーブルを取得する
-        $user = User::with('favorites')->where('id', Auth::guard('users')->id())->first();
+        $user = User::findOrFail(Auth::guard('users')->id())->first();
+
+        $omfavorites = Favorite::where('user_id', $user->id)->get();
+
+        $favoritesOmBaseJobs = CorporationJoboffer::whereIn('id', $omfavorites->pluck('corporation_joboffer_id'))->get();
+        $favoritesJobs = ['om' => $favoritesOmBaseJobs];
 
         //② OM求人の応募済みを取得
         $appliantWithApplied = CorporationApplicantschedule::with('corporationJoboffer')
@@ -82,9 +88,10 @@ class UserController extends Controller
             }
         }
         //③ Fリク求人のお気に入りを取得
-
+        $favoritesFrikuBaseJobs = $user->frikuFavorites;
+        $favoritesJobs += ['friku' => $favoritesFrikuBaseJobs];
         //④ Fリク求人の応募済みを取得
-
+        $user->favorites = $favoritesJobs;
         //toJsonでエンコード
         return $user->toJson(JSON_UNESCAPED_UNICODE);
     }
