@@ -9,19 +9,23 @@ import { SearchConditionContext } from "../../contexts/SearchCondition";
 import JobSearchSidebar from "../../components/JobSearchSidebar";
 import OmJobCard from "../../components/Card/OmJobCard";
 
-export default function Job() {
+// Types
+import { NextPage } from "next";
+
+const job: NextPage = () => {
   const [jobOffers, setJobOffers] = useState();
   const { workTypes, searchCondition, searchJobOffers } = useContext(
     SearchConditionContext
   );
   const { user } = useContext(AuthContext);
-  const userFavorites = user?.favorites.map(
-    (favoriteJob) => favoriteJob.corporation_joboffer_id
-  );
+  const userFavorites = user?.favorites.map((favoriteJob) => favoriteJob.id);
 
-  useEffect(async () => {
-    const jobData = await searchJobOffers(searchCondition);
-    setJobOffers(jobData);
+  useEffect(() => {
+    const getJobData = async () => {
+      const jobData = await searchJobOffers(searchCondition);
+      setJobOffers(jobData);
+    };
+    getJobData();
   }, []);
 
   console.log("検索条件", searchCondition);
@@ -79,4 +83,6 @@ export default function Job() {
       </div>
     </div>
   );
-}
+};
+
+export default job;
