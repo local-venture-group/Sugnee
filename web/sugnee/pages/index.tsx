@@ -36,8 +36,7 @@ interface HomeProps {
 const Home: NextPage<HomeProps> = ({ omJobs, pickupArticles }) => {
   const router = useRouter();
   const { user } = useContext(AuthContext);
-
-  const userFavorites = user?.favorites.map((favoriteJob) => favoriteJob.id);
+  const userFavorites = user?.favorites.om.map((favoriteJob) => favoriteJob.id);
   const { addSearchCondition } = useContext(SearchConditionContext);
   const searchWordsInputRef = useRef<HTMLInputElement>();
 
