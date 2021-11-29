@@ -28,10 +28,7 @@ import {
 import { pickupArticle, JobOffer } from "../../../interfaces/job";
 interface pickUpArticleProps {
   article: pickupArticle;
-  jobData: {
-    // returnされるデータが変更されたら定義します
-    frikuJoboffers?: [JobOffer];
-  };
+  jobData: [JobOffer];
 }
 
 export default function pickUpArticle({
@@ -39,8 +36,7 @@ export default function pickUpArticle({
   jobData,
 }: pickUpArticleProps) {
   const { user } = useContext(AuthContext);
-  // getUserでreturnされるfavoriteJobが変更されたら定義してエラー解消します
-  const userFavorites = user?.favorites.map(
+  const userFavorites = user?.favorites.friku.map(
     (favoriteJob) => favoriteJob.corporation_joboffer_id
   );
 
@@ -187,7 +183,7 @@ export default function pickUpArticle({
       <section id="jobOffers" style={{ backgroundColor: "#E6F2F4" }}>
         <div className="container mx-auto px-8 py-28 md:px-28">
           <h2 className="text-2xl font-bold mb-16">求人情報</h2>
-          {jobData.frikuJoboffers.map((job) => (
+          {jobData.map((job) => (
             <div key={job.id} className="mb-3">
               <PickupJobCard
                 job={job}
@@ -223,7 +219,7 @@ export async function getStaticProps({ params }) {
 
   // 今は1しか存在しないので1で対応、のちにarticle.companyIdを渡すよう変更＆エラーハンドリングします
   const jobData = await axios
-    .get(`http://nginx:80/api/user/friku/1/joboffers`)
+    .get(`http://nginx:80/api/user/friku/1/joboffers/pickup`)
     .then((res) => res.data)
     .catch((err) => console.log(err));
 
