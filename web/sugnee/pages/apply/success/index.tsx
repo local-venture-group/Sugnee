@@ -5,7 +5,10 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 
-export default function applySuccess() {
+// Type
+import { NextPage } from "next";
+
+const applySuccess: NextPage = () => {
   const router = useRouter();
 
   return (
@@ -39,4 +42,6 @@ export default function applySuccess() {
       </section>
     </>
   );
-}
+};
+
+export default applySuccess;
