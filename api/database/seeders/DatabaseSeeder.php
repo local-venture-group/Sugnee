@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             AdminsTableSeeder::class,
 
             JobsSeeder::class,
-            // FavoritesSeeder::class,
+            FavoritesSeeder::class,
 
             FrikuJoboffersSeeder::class,
 
@@ -44,6 +44,7 @@ class DatabaseSeeder extends Seeder
             FeaturedArticleContentsSeeder::class,
             FrikuApplicantsSeeder::class,
             FrikuApplicantSchedulesSeeder::class,
+            FrikuFavoritesSeeder::class,
         ]);
     }
 }
