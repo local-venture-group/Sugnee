@@ -51,7 +51,7 @@ const pickUpArticle: NextPage<pickUpArticleProps> = ({ article, jobData }) => {
           <Link href="/">TOP</Link>
           <span className="ml-2">&gt;</span>
           <span className="ml-2">
-            <Link href="/pickup">ピックアップ企業</Link>
+            <Link href="/pickup/page/1">ピックアップ企業</Link>
           </span>
           <span className="ml-2">&gt;</span>
           <span className="ml-2">{article.companyName}</span>
