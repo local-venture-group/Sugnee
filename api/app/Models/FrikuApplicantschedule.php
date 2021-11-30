@@ -9,4 +9,13 @@ class FrikuApplicantschedule extends Model
 {
     use HasFactory;
     public $timestamps = false;
+
+    public function frikuJoboffer()
+    {
+        return $this->belongsTo(FrikuJoboffer::class);
+    }
+    public function frikuApplicant()
+    {
+        return $this->belongsTo(FrikuApplicant::class);
+    }
 }

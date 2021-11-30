@@ -87,5 +87,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(CorporationApplicant::class, 'user_id');
     }
+    public function frikuApplicant()
+    {
+        return $this->hasOne(FrikuApplicant::class, 'user_id');
+    }
 
 }
