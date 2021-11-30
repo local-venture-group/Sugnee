@@ -4,6 +4,7 @@ import { AuthContext } from "../../contexts/Auth/index";
 
 // Components
 import Profile from "../../components/Profile";
+import MypageJobList from "../../components/MypageJobList";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -27,7 +28,6 @@ const Mypage: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full px-4 pt-10">
-
       <div className="mt-10 w-1/2">
         <button
           type="button"
@@ -66,6 +66,9 @@ const Mypage: React.FC = () => {
       <div className="flex flex-col justify-center items-center w-10/12 bg-gray-100 p-10 rounded-lg">
         {user && currentMenu === "profile" && (
           <Profile user={user} updateProfile={updateProfile} />
+        )}
+        {user && currentMenu === "favorite" && (
+          <MypageJobList user={user} type={"favorite"} />
         )}
       </div>
     </div>
