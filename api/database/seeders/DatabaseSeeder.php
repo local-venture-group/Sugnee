@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Favorite;
 use App\Models\FeaturedCompanyArticle;
+use App\Models\FrikuApplicant;
 use App\Models\FrikuJoboffer;
 use App\Models\HiringSystem;
 use Database\Seeders\UsersTableSeeder;
@@ -41,6 +42,8 @@ class DatabaseSeeder extends Seeder
             FrikuCompaniesSeeder::class,
             FeaturedCompanyArticlesSeeder::class,
             FeaturedArticleContentsSeeder::class,
+            FrikuApplicantsSeeder::class,
+            FrikuApplicantSchedulesSeeder::class,
         ]);
     }
 }
