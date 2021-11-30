@@ -25,7 +25,7 @@ class CorporationApplicantScheduleFactory extends Factory
     public function definition()
     {
         return [
-            'job_offer_id' => 1,
+            'job_offer_id' => $this->faker->unique()->numberBetween(1, 4),
             'applicant_id' => 1,
             'temp_id' => Str::uuid(),
             'status' => $this->faker->numberBetween(1, 2),
