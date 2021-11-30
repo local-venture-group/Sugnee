@@ -1,7 +1,7 @@
 import { FavoriteJobOffer } from "./job";
 export interface User {
   id: number;
-  appliedJobs: [];
+  appliedJobs: { friku: [FavoriteJobOffer]; om: [FavoriteJobOffer] };
   applied_at: string;
   birth: string;
   created_at: string;
