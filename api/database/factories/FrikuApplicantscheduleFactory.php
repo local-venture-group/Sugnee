@@ -2,20 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\CorporationApplicant;
-use App\Models\CorporationApplicantSchedule;
-use App\Models\CorporationJoboffer;
+use App\Models\FrikuApplicantschedule;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-class CorporationApplicantScheduleFactory extends Factory
+class FrikuApplicantscheduleFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = CorporationApplicantSchedule::class;
+    protected $model = FrikuApplicantschedule::class;
 
     /**
      * Define the model's default state.
@@ -25,12 +23,11 @@ class CorporationApplicantScheduleFactory extends Factory
     public function definition()
     {
         return [
-            'job_offer_id' => $this->faker->unique()->numberBetween(1, 4),
-            'applicant_id' => 1,
+            'friku_joboffer_id' => 1,
+            'friku_applicant_id' => 1,
             'temp_id' => Str::uuid(),
             'status' => $this->faker->numberBetween(1, 2),
             'applied_at' => now(),
-
         ];
     }
 }

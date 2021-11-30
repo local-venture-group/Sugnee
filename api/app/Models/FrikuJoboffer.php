@@ -20,4 +20,8 @@ class FrikuJoboffer extends Model
     {
         return $this->belongsTo(FrikuCompany::class);
     }
+    public function frikuApplicantschedules()
+    {
+        return $this->hasMany(FrikuApplicantschedule::class);
+    }
 }

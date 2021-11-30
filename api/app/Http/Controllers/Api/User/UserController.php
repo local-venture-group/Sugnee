@@ -70,7 +70,9 @@ class UserController extends Controller
     public function getAuthUser(Request $request)
     {
         //① OM求人のお気に入りを取得
+        // $user = User::findOrFail(Auth::guard('users')->id())->first();
         $user = User::findOrFail(Auth::guard('users')->id())->first();
+        $withUser = $user->with('frikuApplicant.frikuApplicantSchedules')->first();
 
         $omfavorites = Favorite::where('user_id', $user->id)->get();
 
@@ -78,20 +80,27 @@ class UserController extends Controller
         $favoritesJobs = ['om' => $favoritesOmBaseJobs];
 
         //② OM求人の応募済みを取得
-        $appliantWithApplied = CorporationApplicantschedule::with('corporationJoboffer')
+        $applicantWithApplied = CorporationApplicantschedule::with('corporationJoboffer')
             ->where('applicant_id', $user->id)
-            ->first();
-        if(!empty($appliantWithApplied)){
-            $appliedJobs = $appliantWithApplied->corporationJoboffer;
-            if(!empty($appliedJobs)){
-                $user->appliedJobs = collect($appliedJobs);
-            }
+            ->get();
+        $applied = [];
+        if(!empty($applicantWithApplied)){
+            $applied['om'] = $applicantWithApplied->map(function ($schedule) {
+
+                return $schedule->corporationJoboffer;
+            });
         }
         //③ Fリク求人のお気に入りを取得
-        $favoritesFrikuBaseJobs = $user->frikuFavorites;
+        $favoritesFrikuBaseJobs = $withUser->frikuFavorites;
         $favoritesJobs += ['friku' => $favoritesFrikuBaseJobs];
-        //④ Fリク求人の応募済みを取得
+
         $user->favorites = $favoritesJobs;
+         //④ Fリク求人の応募済みを取得
+         $applied['friku'] = collect($withUser->frikuApplicant->frikuApplicantSchedules)->map(function ($schedule, $key) {
+            return $schedule->frikuJoboffer;
+        });
+       $user->appliedJobs = $applied;
+
         //toJsonでエンコード
         return $user->toJson(JSON_UNESCAPED_UNICODE);
     }
