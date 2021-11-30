@@ -22,9 +22,18 @@ import { JobOffer } from "../../../interfaces/job";
 const jobOffer: NextPage<{ job: JobOffer }> = ({ job }) => {
   const router = useRouter();
   const { user, addOmBookmark, deleteOmBookmark } = useContext(AuthContext);
-  const userFavorites = user?.favorites.friku.map(
+  const userFavorites: number[] = user?.favorites.friku.map(
     (favoriteJob) => favoriteJob.corporation_joboffer_id
   );
+
+  const applyJobOffer = (): void => {
+    // 人材紹介だった場合は導線分けるかも、仕様確定後修正します
+    if (user) {
+      router.push(`/apply/${job.id}`);
+      return;
+    }
+    alert("応募はログインが必要です");
+  };
 
   if (!job) return null;
   return (
@@ -88,10 +97,7 @@ const jobOffer: NextPage<{ job: JobOffer }> = ({ job }) => {
                   お気に入りに追加
                 </button>
               )}
-              <button
-                className="btn btn-primary w-3/4"
-                onClick={() => router.push(`/apply/${job.id}`)}
-              >
+              <button className="btn btn-primary w-3/4" onClick={applyJobOffer}>
                 応募する
               </button>
             </div>
