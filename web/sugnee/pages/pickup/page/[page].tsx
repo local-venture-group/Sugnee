@@ -15,20 +15,20 @@ interface ArticlesProps {
 
 const Articles: NextPage<ArticlesProps> = ({ pickupArticles, totalCount }) => {
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto px-3">
       <p className="my-10 text-xs text-gray-500">
         <Link href="/">TOP</Link>
         <span className="ml-2">&gt;</span>
         <span className="ml-2">ピックアップ企業</span>
       </p>
-      <div className="grid grid-cols-3 gap-4 my-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-10">
         {pickupArticles.map((article) => (
           <div className="w-full" key={article.id}>
             <PickupCard article={article} />
           </div>
         ))}
       </div>
-      <div className="text-center">
+      <div>
         <Pagenation totalCount={totalCount} />
       </div>
     </div>
