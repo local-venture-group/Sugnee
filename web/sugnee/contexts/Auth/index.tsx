@@ -159,8 +159,8 @@ const AuthProvider = (props: AppProviderProps) => {
       .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/logout`)
       .then((res) => {
         if (res.status === 200) {
-          alert("ログアウトしました");
           setUser(null);
+          Router.push("/");
         } else {
           console.log(res.data);
           console.log("[logout]ログアウト失敗");

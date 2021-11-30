@@ -55,7 +55,11 @@ class JobsController extends Controller
         //ユーザーの面接申込日データを作成
 
         $applicantschedule->create($scheduleArray);
-        return response()->json(['message' => 'success'], 201);
+        $schedules = CorporationApplicantschedule::with('corporationJoboffer')->where('applicant_id', $user->id)->get();
+        $joboffer = $schedules->map(function ($schedule) {
+            return $schedule->corporationJoboffer;
+        });
+        return response()->json($joboffer, 201, ['message' => 'success']);
 
 
 

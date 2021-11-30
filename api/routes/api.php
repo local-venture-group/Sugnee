@@ -43,7 +43,7 @@ Route::prefix('user')->group(function () {
     Route::post('/password/reset', [ResetPasswordController::class, 'resetPassword'])->name('password.reset');
     //Route::prefix('joboffer')内のグループにはjobofferがURIに付きます。
     Route::prefix('/joboffer')->group(function () {
-        Route::get('/conditions', [JobsController::class, 'getConditions'])->name('joboffer.conditions');
+        Route::get('/conditions', [JobSearchesController::class, 'getConditions'])->name('joboffer.conditions');
         Route::get('/search', [JobSearchesController::class, 'searchJobOffers'])->name('joboffer.search');
         Route::get('/{corporationJoboffer}', [JobsController::class, 'showJoboffer'])->name('pickup.show');
 

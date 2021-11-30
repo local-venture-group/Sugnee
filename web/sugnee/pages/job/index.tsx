@@ -9,19 +9,30 @@ import { SearchConditionContext } from "../../contexts/SearchCondition";
 import JobSearchSidebar from "../../components/JobSearchSidebar";
 import OmJobCard from "../../components/Card/OmJobCard";
 
-export default function Job() {
-  const [jobOffers, setJobOffers] = useState();
+// Types
+import { NextPage } from "next";
+import { JobOffer } from "../../interfaces/job";
+
+const job: NextPage = () => {
+  const [jobOffers, setJobOffers] = useState<[JobOffer]>();
   const { workTypes, searchCondition, searchJobOffers } = useContext(
     SearchConditionContext
   );
   const { user } = useContext(AuthContext);
-  const userFavorites = user?.favorites.map(
-    (favoriteJob) => favoriteJob.corporation_joboffer_id
+  // cardデザインが決まったら修正します
+  const userFrikuFavorites: number[] = user?.favorites.friku.map(
+    (favoriteJob) => favoriteJob.id
+  );
+  const userOmFavorites: number[] = user?.favorites.friku.map(
+    (favoriteJob) => favoriteJob.id
   );
 
-  useEffect(async () => {
-    const jobData = await searchJobOffers(searchCondition);
-    setJobOffers(jobData);
+  useEffect(() => {
+    const getJobData = async (): Promise<void> => {
+      const jobData = await searchJobOffers(searchCondition);
+      setJobOffers(jobData);
+    };
+    getJobData();
   }, []);
 
   console.log("検索条件", searchCondition);
@@ -29,7 +40,7 @@ export default function Job() {
 
   if (!jobOffers) {
     return null;
-  } else if (jobOffers.length === 0) {
+  } else if (!jobOffers.length) {
     return <p>検索条件に一致する求人はありません</p>;
   }
 
@@ -65,13 +76,14 @@ export default function Job() {
         </div>
         <div className="w-full lg:w-3/4 p-5">
           <p>検索結果一覧</p>
+          {/* デザインが決まったら修正します */}
           {jobOffers.length &&
             jobOffers.map((job) => (
               <div className="w-full mb-3" key={job.id}>
                 <OmJobCard
                   job={job}
                   user={user}
-                  userFavorites={userFavorites}
+                  userFavorites={userOmFavorites}
                 />
               </div>
             ))}
@@ -79,4 +91,6 @@ export default function Job() {
       </div>
     </div>
   );
-}
+};
+
+export default job;
