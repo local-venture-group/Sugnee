@@ -40,7 +40,7 @@ export default function pickUpArticle({
 }: pickUpArticleProps) {
   const { user } = useContext(AuthContext);
   // getUserでreturnされるfavoriteJobが変更されたら定義してエラー解消します
-  const userFavorites = user?.favorites.map(
+  const userFavorites = user?.favorites.friku.map(
     (favoriteJob) => favoriteJob.corporation_joboffer_id
   );
 

@@ -77,7 +77,7 @@ const Home: NextPage<HomeProps> = ({ omJobs, pickupArticles }) => {
           />
           <h1 className="text-3xl">ピックアップ企業</h1>
           <p className="mt-4 mb-10 text-sm hover:text-gray-400">
-            <Link href="/pickup">
+            <Link href="/pickup/page/1">
               <a>
                 すべて見る
                 <span>
