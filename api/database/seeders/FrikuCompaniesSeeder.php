@@ -59,6 +59,20 @@ class FrikuCompaniesSeeder extends Seeder
             'user_id' => 3,
             'plan' => 1
         ],
+        [
+            'username_kana' => '不動峰株式会社',
+            'first_name_kana' => 'キッペイ',
+            'last_name_kana' => 'タチバナ',
+            'company_phone' => '0120-344-221',
+            'site_url'=> 'https://www.google.com/',
+            'logo' => 'https://placehold.jp/150x150.png',
+            'address' => '福岡市早良区',
+            'is_pickup' => true,
+            'is_registered' => true,
+            'temp_id' => Str::uuid(),
+            'user_id' => 3,
+            'plan' => 1
+        ],
 
         ]);
     }
