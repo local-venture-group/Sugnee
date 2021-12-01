@@ -16,22 +16,37 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Services\ImageService;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
-    public function login(Request $request)
+    public function login(Request $request, UserService $userService)
     {
+
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
         if (auth()->guard('users')->attempt($credentials)) {
-            $request->session()->regenerate();
-            $userId = Auth::guard('users')->id();
-            $user = User::with('favorites')->where('id', $userId)->first();
 
+
+            $request->session()->regenerate();
+            $user = User::findOrFail(Auth::guard('users')->id());
+            // $withUser = $user->with('frikuApplicant.frikuApplicantSchedules')->first();
+
+            $favoritesJobs = $userService->getOmFavorited($user);
+            $favoritesJobs += $userService->getFrikuFavorited($user);
+            $applied = [];
+            $applied = $userService->getOmApplied($user);
+            $applied += $userService->getFrikuApplied($user);
+
+            // $user->favorites = $favoritesJobs;
+            // $user->appliedJobs = $applied;
+            $editedUser = User::findOrFail(Auth::guard('users')->id());
+            $editedUser->favorites = $favoritesJobs;
+            $editedUser->appliedJobs = $applied;
             return response()->json([
-                'user' =>  $user,
+                'user' =>  $editedUser,
                 'message' => "ログインに成功しました"
             ]);
         }
@@ -63,72 +78,51 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
+        $user->favorites = ['friku' => [] ,'om' => []];
+        $user->appliedJobs = ['friku' => [] , 'om' => [] ];
         Mail::to($user)->queue(new UserRegistered($user));
         return response($user, 201);
     }
-    public function getAuthUser(Request $request)
+    public function getAuthUser(Request $request, UserService $userService)
     {
-        //① OM求人のお気に入りを取得
-        // $user = User::findOrFail(Auth::guard('users')->id())->first();
-        $user = User::findOrFail(Auth::guard('users')->id())->first();
-        $withUser = $user->with('frikuApplicant.frikuApplicantSchedules')->first();
-
-        $omfavorites = Favorite::where('user_id', $user->id)->get();
-
-        $favoritesOmBaseJobs = CorporationJoboffer::whereIn('id', $omfavorites->pluck('corporation_joboffer_id'))->get();
-        $favoritesJobs = ['om' => $favoritesOmBaseJobs];
-
-        //② OM求人の応募済みを取得
-        $applicantWithApplied = CorporationApplicantschedule::with('corporationJoboffer')
-            ->where('applicant_id', $user->id)
-            ->get();
+        $user = User::with('frikuApplicant.frikuApplicantSchedules')->findOrFail(Auth::guard('users')->id());
+        $favoritesJobs = $userService->getOmFavorited($user);
+        $favoritesJobs += $userService->getFrikuFavorited($user);
         $applied = [];
-        if(!empty($applicantWithApplied)){
-            $applied['om'] = $applicantWithApplied->map(function ($schedule) {
+        $applied = $userService->getOmApplied($user);
+        $applied += $userService->getFrikuApplied($user);
+        $editedUser = User::findOrFail(Auth::guard('users')->id());
+        $editedUser->favorites = $favoritesJobs;
+        $editedUser->appliedJobs = $applied;
 
-                return $schedule->corporationJoboffer;
-            });
-        }
-        //③ Fリク求人のお気に入りを取得
-        $favoritesFrikuBaseJobs = $withUser->frikuFavorites;
-        $favoritesJobs += ['friku' => $favoritesFrikuBaseJobs];
-
-        $user->favorites = $favoritesJobs;
-         //④ Fリク求人の応募済みを取得
-         $applied['friku'] = collect($withUser->frikuApplicant->frikuApplicantSchedules)->map(function ($schedule, $key) {
-            return $schedule->frikuJoboffer;
-        });
-       $user->appliedJobs = $applied;
-
-        //toJsonでエンコード
-        return $user->toJson(JSON_UNESCAPED_UNICODE);
+        return $editedUser->toJson(JSON_UNESCAPED_UNICODE);
     }
     public function update(UserUpdateRequest $request, User $user, ImageService $imageService)
     {
 
         $filePath = $user->img_path;
         $folderName = 'users';
-        if($request->has('imageBase64')){
+        if ($request->has('imageBase64')) {
             $request->validate([
                 'image' => 'nullable|string',
             ]);
 
             $imageFile = $request->imageBase64;
 
-            if(!is_null($imageFile)){
+            if (!is_null($imageFile)) {
                 $filePath = $imageService->uploadBase64Image($imageFile, $folderName);
             }
             // $user->update(['img_path' => $filePath ]);
 
         } else {
             $imageFile = $request->image;
-            if(!is_null($imageFile) && $imageFile->isValid()){
+            if (!is_null($imageFile) && $imageFile->isValid()) {
                 $filePath = $imageService->uploadImage($imageFile, $folderName);
             }
             // $user->update(['img_path' => $filePath ]);
         }
-        if(app()->environment('local')){
+
+        if (app()->environment('local')) {
             $filePath = config('app.aws_access_bucket') . '.s3.' . config('app.aws_default_region') . '.amazonaws.com' . $filePath;
         }
         $user->fill($request->validated() +  ['img_path' => $filePath])->save();
