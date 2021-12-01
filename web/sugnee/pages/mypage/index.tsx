@@ -27,7 +27,7 @@ const Mypage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full px-4 pt-10">
+    <div className="flex flex-col justify-center items-center w-full pt-10">
       <div className="mt-10 w-full md:w-1/2">
         <button
           type="button"
@@ -63,7 +63,7 @@ const Mypage: React.FC = () => {
           応募済み求人
         </button>
       </div>
-      <div className="flex flex-col justify-center items-center w-full md:w-10/12 bg-gray-100 p-10 -mt-1 rounded-lg">
+      <div className="flex flex-col justify-center items-center w-full bg-gray-100 p-10 -mt-1 rounded-lg">
         {user && currentMenu === "profile" && (
           <Profile user={user} updateProfile={updateProfile} />
         )}

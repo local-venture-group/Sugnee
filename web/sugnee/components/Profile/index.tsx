@@ -28,7 +28,6 @@ const Profile = ({ user, updateProfile }) => {
     width: 200,
     height: 200,
   });
-  const [completedCrop, setCompletedCrop] = useState<Crop | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
   // 画像読み込み
@@ -55,8 +54,6 @@ const Profile = ({ user, updateProfile }) => {
       const scaleX = image.naturalWidth / image.width;
       const scaleY = image.naturalHeight / image.height;
       const ctx = canvas.getContext("2d");
-
-      console.log("check", image.naturalWidth, image.width);
 
       canvas.width = crop.width * pixelRatio * scaleX;
       canvas.height = crop.height * pixelRatio * scaleY;
@@ -93,9 +90,9 @@ const Profile = ({ user, updateProfile }) => {
 
   return (
     <>
-      <div className="w-full md:w-3/4 bg-white mb-6">
-        <div className="w-full md:flex px-10 py-6 md:mb-0">
-          <div className="avatar placeholder text-center">
+      <div className="w-full md:w-3/4 bg-white px-10 py-6 rounded">
+        <div className="text-center">
+          <div className="avatar placeholder my-6">
             {profileImage ? (
               <label
                 htmlFor="cropModal"
@@ -108,7 +105,10 @@ const Profile = ({ user, updateProfile }) => {
                 htmlFor="cropModal"
                 className="bg-neutral-content text-neutral-content rounded-full w-32 h-32 hover:bg-primary hover:shadow"
               >
-                <img src={user.img_path} style={{ borderRadius: "100%" }} />
+                <img
+                  src={`http://${user.img_path}`}
+                  style={{ borderRadius: "100%" }}
+                />
               </label>
             ) : (
               <label
@@ -133,21 +133,13 @@ const Profile = ({ user, updateProfile }) => {
               addProfileImage={addProfileImage}
             />
           </div>
-
-          <div className="pl-6">
-            <p className="text-3xl mb-3　">{user.name}</p>
-            <p className="text-lg text-gray-500">{user.birth}</p>
-            <p className="text-lg text-gray-500">
-              {user.gender === 1 ? "男性" : "女性"}
-            </p>
-          </div>
         </div>
-      </div>
-      <div className="w-full md:w-3/4 bg-white px-10 py-6">
+
         <form
           onSubmit={handleSubmit((data) =>
             updateProfile({ data, image: profileImage })
           )}
+          className="w-full md:w-8/12 md:mx-auto"
         >
           <div className="w-full md:mb-0">
             <label
