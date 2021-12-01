@@ -11,8 +11,8 @@ const MypageJobList: React.FC<{ user: User; type: string }> = ({
 }) => {
   const jobList =
     type === "favorite"
-      ? user.favorites.friku.concat(user.favorites.om)
-      : user.appliedJobs.friku.concat(user.appliedJobs.om);
+      ? user?.favorites.friku.concat(user.favorites.om)
+      : user?.appliedJobs.friku.concat(user.appliedJobs.om);
   const userOmFavorites = user?.favorites.om.map(
     (favoriteJob) => favoriteJob.id
   );
