@@ -25,7 +25,7 @@ const apply: NextPage<{ job: JobOffer }> = ({ job }) => {
 
     // Fリク求人応募ロジックは仕様確定後
     // OM求人応募仮ロジック
-    if (job.type_of_job === 2) {
+    if (job.type_of_job[0] === 2) {
       await applyOmJobOffer;
       return;
     }
@@ -107,13 +107,13 @@ const apply: NextPage<{ job: JobOffer }> = ({ job }) => {
               </tbody>
             </table>
           </div>
-          {job.type_of_job === 0 && (
+          {job.type_of_job[0] === 0 && (
             <p className="text-warning my-6">
               この求人はキャリアアドバイザー面談が必要です
             </p>
           )}
           {/* 一覧から外部リンクへとばすようなら分岐を削除 */}
-          {job.type_of_job === 3 ? (
+          {job.type_of_job[0] === 3 ? (
             <a
               href={job.url}
               target="_blank"
