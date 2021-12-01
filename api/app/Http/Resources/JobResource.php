@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Consts\JobConditionConsts;
+use App\Models\FrikuCompany;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class JobResource extends JsonResource
@@ -19,14 +20,10 @@ class JobResource extends JsonResource
         $this->resource->hiring_system = array_key_exists($this->resource->hiring_system, JobConditionConsts::HIRING_SYSTEMS)
         ? JobConditionConsts::HIRING_SYSTEMS[$this->resource->hiring_system]
         : "" ;
-        // $this->resource->type_of_job = $this->resource->is_crawled
-        //     ? array_keys(JobConditionConsts::TYPE_OF_JOB, 'OMクローリング求人')
-        //     : array_keys(JobConditionConsts::TYPE_OF_JOB, 'OM独自求人');
-        // $this->resource->type_of_job = array_key_exists($this->resource->type_of_job, JobConditionConsts::TYPE_OF_JOB);
+
         if($this->resource->type_of_job){
             $this->type_of_job = $this->resource->type_of_job[0];
         }
-
 
         return [
              'id' => $this->id,
