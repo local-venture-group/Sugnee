@@ -21,9 +21,9 @@ class JobResource extends JsonResource
         ? JobConditionConsts::HIRING_SYSTEMS[$this->resource->hiring_system]
         : "" ;
 
-        if($this->resource->type_of_job){
-            $this->type_of_job = $this->resource->type_of_job[0];
-        }
+        // if($this->resource->type_of_job){
+        //     $this->type_of_job = $this->resource->type_of_job[0];
+        // }
 
         return [
              'id' => $this->id,
@@ -74,7 +74,7 @@ class JobResource extends JsonResource
             "image2" => $this->resource->image2,
             "image3" => $this->resource->image3,
             "image4" => $this->resource->image4,
-            "type_of_job" => $this->type_of_job,
+            "type_of_job" => $this->resource->type_of_job,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
         ];
