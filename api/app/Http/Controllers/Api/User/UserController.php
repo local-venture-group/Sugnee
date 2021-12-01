@@ -32,18 +32,21 @@ class UserController extends Controller
 
             $request->session()->regenerate();
             $user = User::findOrFail(Auth::guard('users')->id());
-            $withUser = $user->with('frikuApplicant.frikuApplicantSchedules')->first();
+            // $withUser = $user->with('frikuApplicant.frikuApplicantSchedules')->first();
 
             $favoritesJobs = $userService->getOmFavorited($user);
-            $favoritesJobs += $userService->getFrikuFavorited($withUser);
+            $favoritesJobs += $userService->getFrikuFavorited($user);
             $applied = [];
             $applied = $userService->getOmApplied($user);
-            $applied += $userService->getFrikuApplied($withUser);
+            $applied += $userService->getFrikuApplied($user);
 
-            $user->favorites = $favoritesJobs;
-            $user->appliedJobs = $applied;
+            // $user->favorites = $favoritesJobs;
+            // $user->appliedJobs = $applied;
+            $editedUser = User::findOrFail(Auth::guard('users')->id());
+            $editedUser->favorites = $favoritesJobs;
+            $editedUser->appliedJobs = $applied;
             return response()->json([
-                'user' =>  $user,
+                'user' =>  $editedUser,
                 'message' => "ログインに成功しました"
             ]);
         }
@@ -110,7 +113,7 @@ class UserController extends Controller
         // $user->favorites = $favoritesJobs;
         //④ Fリク求人の応募済みを取得
         $applied['friku'] = [];
-        if($user->frikuApplicant){
+        if ($user->frikuApplicant) {
             $frikuApplicant = $user->frikuApplicant;
             $applied['friku'] = collect($frikuApplicant->frikuApplicantSchedules)->map(function ($schedule, $key) {
                 return $schedule->frikuJoboffer;
