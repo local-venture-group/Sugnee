@@ -17,16 +17,16 @@ const Profile = ({ user, updateProfile }) => {
   } = useForm();
 
   //画像アップロード
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string | null>(user?.img_path);
   const [src, setSrc] = useState<string | null>(null);
 
   const [crop, setCrop] = useState<Crop>({
     unit: "%",
-    x: 25,
+    x: 15,
     y: 10,
-    width: 80,
-    height: 80,
-    aspect: 4 / 4,
+    aspect: 1 / 1,
+    width: 50,
+    height: 50,
   });
   const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null);
 
