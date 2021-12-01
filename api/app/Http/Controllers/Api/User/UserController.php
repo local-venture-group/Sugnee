@@ -45,6 +45,7 @@ class UserController extends Controller
             $editedUser = User::findOrFail(Auth::guard('users')->id());
             $editedUser->favorites = $favoritesJobs;
             $editedUser->appliedJobs = $applied;
+
             return response()->json([
                 'user' =>  $editedUser,
                 'message' => "ログインに成功しました"

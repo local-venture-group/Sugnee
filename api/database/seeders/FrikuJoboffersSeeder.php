@@ -21,5 +21,8 @@ class FrikuJoboffersSeeder extends Seeder
         FrikuJoboffer::factory(3)->create([
             'company_id' => 3,
         ]);
+        FrikuJoboffer::factory(4)->create([
+            'company_id' => 4,
+        ]);
     }
 }

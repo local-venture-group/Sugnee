@@ -13,24 +13,25 @@ class FrikuJobsController extends Controller
 {
 
     //企業の求人一覧を取得
-    public function pickUpCompanyJoboffers(FrikuCompany $frikuCompany)
+    public function pickUpCompanyJoboffers($frikuCompany)
     {
-        if(!$frikuCompany->is_pickup){
+        $frikuCompany = FrikuCompany::with('frikuJoboffers')->findOrFail($frikuCompany);
+        if (!$frikuCompany->is_pickup) {
             return response()->json(['message' => 'pickUp企業の求人ではありません']);
         }
-        $pickUpCompany = $frikuCompany->with('frikuJoboffers')->first();
-        $pickUpJobs =  $pickUpCompany->frikuJoboffers;
+        $pickUpJobs =  $frikuCompany->frikuJoboffers;
+
         return JobResource::collection($pickUpJobs)->toJson();
         // return collect(new JobResource($pickUpJobs));
     }
-    public function featureCompanyJoboffers(FrikuCompany $frikuCompany)
+    public function featureCompanyJoboffers($frikuCompany)
     {
-
-        if($frikuCompany->is_pickup){
+        $frikuCompany = FrikuCompany::with('frikuJoboffers')->findOrFail($frikuCompany);
+        if ($frikuCompany->is_pickup) {
             return response()->json(['message' => '注目企業の求人ではありません']);
         }
-        $featureCompany = $frikuCompany->with('frikuJoboffers')->first();
-        $featureJobs =  $featureCompany->frikuJoboffers;
+        $featureJobs =  $frikuCompany->frikuJoboffers;
+
         return JobResource::collection($featureJobs)->toJson();
     }
 }
