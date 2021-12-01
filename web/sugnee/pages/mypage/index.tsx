@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState, MouseEventHandler } from "react";
+import { useEffect, useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../contexts/Auth/index";
 
@@ -28,11 +28,11 @@ const Mypage: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full px-4 pt-10">
-      <div className="mt-10 w-1/2">
+      <div className="mt-10 w-full md:w-1/2">
         <button
           type="button"
           id="profile"
-          className={`text-sm text-gray-400 py-4 w-1/4 rounded-t-lg ${
+          className={`text-xs md:text-sm text-gray-400 py-4 w-1/3 rounded-t-lg ${
             currentMenu === "profile" && "text-gray-900 bg-gray-100"
           }`}
           onClick={handleClickMenu}
@@ -43,7 +43,7 @@ const Mypage: React.FC = () => {
         <button
           type="button"
           id="favorite"
-          className={`text-sm text-gray-400 py-4 w-1/4 rounded-t-lg ${
+          className={`text-xs md:text-sm text-gray-400 py-4 w-1/3 rounded-t-lg ${
             currentMenu === "favorite" && "text-gray-900 bg-gray-100"
           }`}
           onClick={handleClickMenu}
@@ -54,7 +54,7 @@ const Mypage: React.FC = () => {
         <button
           type="button"
           id="apply"
-          className={`text-sm text-gray-400 py-4 w-1/4 rounded-t-lg ${
+          className={`text-xs md:text-sm text-gray-400 py-4 w-1/3 rounded-t-lg ${
             currentMenu === "apply" && "text-gray-900 bg-gray-100"
           }`}
           onClick={handleClickMenu}
@@ -63,7 +63,7 @@ const Mypage: React.FC = () => {
           応募済み求人
         </button>
       </div>
-      <div className="flex flex-col justify-center items-center w-10/12 bg-gray-100 p-10 rounded-lg">
+      <div className="flex flex-col justify-center items-center w-full md:w-10/12 bg-gray-100 p-10 -mt-1 rounded-lg">
         {user && currentMenu === "profile" && (
           <Profile user={user} updateProfile={updateProfile} />
         )}
