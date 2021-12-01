@@ -24,9 +24,30 @@ const MypageJobList: React.FC<{ user: User; type: string }> = ({
 
   return (
     <div>
-      {jobList.map((job) => (
-        <OmJobCard job={job} user={user} userFavorites={userOmFavorites} />
-      ))}
+      <h1>{type}</h1>
+      {jobList.length ? (
+        jobList.map((job) => {
+          job.type_of_job[0] === 2 || 3 ? (
+            <div className="mb-3">
+              <OmJobCard
+                job={job}
+                user={user}
+                userFavorites={userOmFavorites}
+              />
+            </div>
+          ) : (
+            <div className="mb-3">
+              <PickupJobCard
+                job={job}
+                user={user}
+                userFavorites={userFrikuFavorites}
+              />
+            </div>
+          );
+        })
+      ) : (
+        <p>{type === "favorite" ? "お気に入り" : "応募済み"}求人はありません</p>
+      )}
     </div>
   );
 };

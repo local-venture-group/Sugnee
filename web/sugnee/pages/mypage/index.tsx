@@ -70,6 +70,9 @@ const Mypage: React.FC = () => {
         {user && currentMenu === "favorite" && (
           <MypageJobList user={user} type={"favorite"} />
         )}
+        {user && currentMenu === "apply" && (
+          <MypageJobList user={user} type={"apply"} />
+        )}
       </div>
     </div>
   );
