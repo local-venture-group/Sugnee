@@ -242,6 +242,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'JobService' => App\Facades\JobService::class,
         'ApplyService' => \App\Facades\ApplyService::class,
+        'UserService' => \App\Facades\UserService::class,
     ],
 
 ];
