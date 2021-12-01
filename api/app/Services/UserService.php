@@ -39,17 +39,24 @@ class UserService
     public function getFrikuApplied(User $withUser)
     {
         $applied['friku'] = [];
-        if(empty($withUser->frikuApplicant)){
-            return $applied;
+        // if(empty($withUser->frikuApplicant)){
+        //     return $applied;
 
-            if(empty($withUser->frikuApplicant->frikuApplicantSchedules)){
-                return $applied;
-            }
+        //     if(empty($withUser->frikuApplicant->frikuApplicantSchedules)){
+        //         return $applied;
+        //     }
+        // }
+
+        // $applied['friku'] = collect($withUser->frikuApplicant->frikuApplicantSchedules)->map(function ($schedule, $key) {
+        //     return $schedule->frikuJoboffer;
+        // });
+        // return $applied;
+        if($withUser->frikuApplicant){
+            $frikuApplicant = $withUser->frikuApplicant;
+            $applied['friku'] = collect($frikuApplicant->frikuApplicantSchedules)->map(function ($schedule, $key) {
+                return $schedule->frikuJoboffer;
+            });
         }
-
-        $applied['friku'] = collect($withUser->frikuApplicant->frikuApplicantSchedules)->map(function ($schedule, $key) {
-            return $schedule->frikuJoboffer;
-        });
         return $applied;
 
 

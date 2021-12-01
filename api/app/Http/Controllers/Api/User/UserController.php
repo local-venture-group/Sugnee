@@ -33,6 +33,7 @@ class UserController extends Controller
             $request->session()->regenerate();
             $user = User::findOrFail(Auth::guard('users')->id());
             $withUser = $user->with('frikuApplicant.frikuApplicantSchedules')->first();
+
             $favoritesJobs = $userService->getOmFavorited($user);
             $favoritesJobs += $userService->getFrikuFavorited($withUser);
             $applied = [];
@@ -82,9 +83,9 @@ class UserController extends Controller
     {
         //① OM求人のお気に入りを取得
         // $user = User::findOrFail(Auth::guard('users')->id())->first();
-        $user = User::findOrFail(Auth::guard('users')->id())->first();
+        $user = User::with('frikuApplicant.frikuApplicantSchedules')->findOrFail(Auth::guard('users')->id());
 
-        $withUser = $user->with('frikuApplicant.frikuApplicantSchedules')->first();
+        // $withUser = $user->with('frikuApplicant.frikuApplicantSchedules')->first();
 
         $omfavorites = Favorite::where('user_id', $user->id)->get();
 
@@ -103,18 +104,25 @@ class UserController extends Controller
             });
         }
         //③ Fリク求人のお気に入りを取得
-        $favoritesFrikuBaseJobs = $withUser->frikuFavorites;
+        $favoritesFrikuBaseJobs = $user->frikuFavorites;
         $favoritesJobs += ['friku' => $favoritesFrikuBaseJobs];
 
-        $user->favorites = $favoritesJobs;
+        // $user->favorites = $favoritesJobs;
         //④ Fリク求人の応募済みを取得
-        $applied['friku'] = collect($withUser->frikuApplicant->frikuApplicantSchedules)->map(function ($schedule, $key) {
-            return $schedule->frikuJoboffer;
-        });
-        $user->appliedJobs = $applied;
+        $applied['friku'] = [];
+        if($user->frikuApplicant){
+            $frikuApplicant = $user->frikuApplicant;
+            $applied['friku'] = collect($frikuApplicant->frikuApplicantSchedules)->map(function ($schedule, $key) {
+                return $schedule->frikuJoboffer;
+            });
+        }
 
+        // $user->appliedJobs = $applied;
+        $editedUser = User::findOrFail(Auth::guard('users')->id());
+        $editedUser->favorites = $favoritesJobs;
+        $editedUser->appliedJobs = $applied;
         //toJsonでエンコード
-        return $user->toJson(JSON_UNESCAPED_UNICODE);
+        return $editedUser->toJson(JSON_UNESCAPED_UNICODE);
     }
     public function update(UserUpdateRequest $request, User $user, ImageService $imageService)
     {
