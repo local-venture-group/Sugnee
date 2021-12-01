@@ -78,53 +78,23 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
+        $user->favorites = ['friku' => [] ,'om' => []];
+        $user->appliedJobs = ['friku' => [] , 'om' => [] ];
         Mail::to($user)->queue(new UserRegistered($user));
         return response($user, 201);
     }
-    public function getAuthUser(Request $request)
+    public function getAuthUser(Request $request, UserService $userService)
     {
-        //① OM求人のお気に入りを取得
-        // $user = User::findOrFail(Auth::guard('users')->id())->first();
         $user = User::with('frikuApplicant.frikuApplicantSchedules')->findOrFail(Auth::guard('users')->id());
-
-        // $withUser = $user->with('frikuApplicant.frikuApplicantSchedules')->first();
-
-        $omfavorites = Favorite::where('user_id', $user->id)->get();
-
-        $favoritesOmBaseJobs = CorporationJoboffer::whereIn('id', $omfavorites->pluck('corporation_joboffer_id'))->get();
-        $favoritesJobs = ['om' => $favoritesOmBaseJobs];
-
-        //② OM求人の応募済みを取得
-        $applicantWithApplied = CorporationApplicantschedule::with('corporationJoboffer')
-            ->where('applicant_id', $user->id)
-            ->get();
+        $favoritesJobs = $userService->getOmFavorited($user);
+        $favoritesJobs += $userService->getFrikuFavorited($user);
         $applied = [];
-        if (!empty($applicantWithApplied)) {
-            $applied['om'] = $applicantWithApplied->map(function ($schedule) {
-
-                return $schedule->corporationJoboffer;
-            });
-        }
-        //③ Fリク求人のお気に入りを取得
-        $favoritesFrikuBaseJobs = $user->frikuFavorites;
-        $favoritesJobs += ['friku' => $favoritesFrikuBaseJobs];
-
-        // $user->favorites = $favoritesJobs;
-        //④ Fリク求人の応募済みを取得
-        $applied['friku'] = [];
-        if ($user->frikuApplicant) {
-            $frikuApplicant = $user->frikuApplicant;
-            $applied['friku'] = collect($frikuApplicant->frikuApplicantSchedules)->map(function ($schedule, $key) {
-                return $schedule->frikuJoboffer;
-            });
-        }
-
-        // $user->appliedJobs = $applied;
+        $applied = $userService->getOmApplied($user);
+        $applied += $userService->getFrikuApplied($user);
         $editedUser = User::findOrFail(Auth::guard('users')->id());
         $editedUser->favorites = $favoritesJobs;
         $editedUser->appliedJobs = $applied;
-        //toJsonでエンコード
+
         return $editedUser->toJson(JSON_UNESCAPED_UNICODE);
     }
     public function update(UserUpdateRequest $request, User $user, ImageService $imageService)
