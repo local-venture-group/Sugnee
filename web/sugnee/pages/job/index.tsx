@@ -8,6 +8,7 @@ import { SearchConditionContext } from "../../contexts/SearchCondition";
 // Components
 import JobSearchSidebar from "../../components/JobSearchSidebar";
 import OmJobCard from "../../components/Card/OmJobCard";
+import PickupJobCard from "../../components/Card/PickupJobCard";
 import Pagination from "../../components/Pagination/JobOffer";
 
 // Types
@@ -44,7 +45,6 @@ const job: NextPage = () => {
     SearchConditionContext
   );
   const { user } = useContext(AuthContext);
-  // cardデザインが決まったら修正します
   const userFrikuFavorites: number[] = user?.favorites.friku.map(
     (favoriteJob) => favoriteJob.id
   );
@@ -103,17 +103,26 @@ const job: NextPage = () => {
         <div className="w-full lg:w-3/4 p-5">
           <p>検索結果一覧</p>
           <p>検索結果：{totalCount}件</p>
-          {/* デザインが決まったら修正します */}
           {paginatedJobOffers.length &&
-            paginatedJobOffers.map((job) => (
-              <div className="w-full mb-3" key={job.id}>
-                <OmJobCard
-                  job={job}
-                  user={user}
-                  userFavorites={userOmFavorites}
-                />
-              </div>
-            ))}
+            paginatedJobOffers.map((job) => {
+              return job.type_of_job[0] === 2 || job.type_of_job[0] === 3 ? (
+                <div className="mb-3" key={`${job.type_of_job}-${job.id}`}>
+                  <OmJobCard
+                    job={job}
+                    user={user}
+                    userFavorites={userOmFavorites}
+                  />
+                </div>
+              ) : (
+                <div className="mb-3" key={`${job.type_of_job}-${job.id}`}>
+                  <PickupJobCard
+                    job={job}
+                    user={user}
+                    userFavorites={userFrikuFavorites}
+                  />
+                </div>
+              );
+            })}
           {totalCount && (
             <Pagination
               totalCount={totalCount}
