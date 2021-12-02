@@ -6,11 +6,16 @@ use App\Models\CorporationApplicantschedule;
 use App\Models\CorporationJoboffer;
 use App\Models\Favorite;
 use App\Models\User;
-
+use App\Services\JobService;
 class UserService
 {
+    public function __construct()
+    {
+        $this->jobService = new JobService();
+    }
     public function getOmFavorited(User $user)
     {
+
         $omfavorites = Favorite::where('user_id', $user->id)->get();
         $omfavoritesIds = $omfavorites->pluck('corporation_joboffer_id');
         $favoritesOmBaseJobs = CorporationJoboffer::whereIn('id', $omfavoritesIds )->get();
@@ -22,6 +27,8 @@ class UserService
             }
             $job->append('type_of_job');
         });
+
+        $favoritesOmBaseJobs = $this->jobService->convertStringName($favoritesOmBaseJobs);
         return  ['om' => $favoritesOmBaseJobs];
     }
     public function getFrikuFavorited(User $withUser)
@@ -31,6 +38,7 @@ class UserService
             $job->favorites_created_at = $job->pivot->created_at->toDateTimeString();
             $job->append('type_of_job');
         });
+        $favoritesFrikuBaseJobs = $this->jobService->convertStringName($favoritesFrikuBaseJobs);
         return ['friku' => $favoritesFrikuBaseJobs];
     }
     public function getOmApplied(User $user)
@@ -49,6 +57,7 @@ class UserService
                     $job->applied_at = $applicantWithApplied->where('job_offer_id', $job->id)->first()->applied_at;
                     $job->append('type_of_job');
                 });
+                $omJoboffer = $this->jobService->convertStringName($omJoboffer);
                 $applied['om'] = $omJoboffer;
             }
         return $applied;
@@ -66,6 +75,7 @@ class UserService
                 $job->applied_at = $frikuApplicant->frikuApplicantSchedules->where('friku_joboffer_id', $job->id)->first()->applied_at;
                 $job->append('type_of_job');
             });
+            $frikuJoboffer = $this->jobService->convertStringName($frikuJoboffer);
             $applied['friku'] = $frikuJoboffer;
         }
         return $applied;

@@ -114,7 +114,10 @@ class UserController extends Controller
                 $filePath = $imageService->uploadBase64Image($imageFile, $folderName);
             }
             // $user->update(['img_path' => $filePath ]);
-
+            if (app()->environment('local')) {
+                $awsLocalPath = config('app.aws_access_bucket') . '.s3.' . config('app.aws_default_region') . '.amazonaws.com';
+                $filePath =  $awsLocalPath . $filePath;
+            }
         } else {
             $imageFile = $request->image;
             if (!is_null($imageFile) && $imageFile->isValid()) {
@@ -123,9 +126,7 @@ class UserController extends Controller
             // $user->update(['img_path' => $filePath ]);
         }
 
-        if (app()->environment('local')) {
-            $filePath = config('app.aws_access_bucket') . '.s3.' . config('app.aws_default_region') . '.amazonaws.com' . $filePath;
-        }
+
         $user->fill($request->validated() +  ['img_path' => $filePath])->save();
 
         return $user;
