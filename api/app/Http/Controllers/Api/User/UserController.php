@@ -103,7 +103,7 @@ class UserController extends Controller
 
         $filePath = $user->img_path;
         $folderName = 'users';
-        if ($request->has('imageBase64')) {
+        if ($request->has('imageBasema64')) {
             $request->validate([
                 'image' => 'nullable|string',
             ]);
