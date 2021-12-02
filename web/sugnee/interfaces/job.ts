@@ -47,16 +47,7 @@ export interface JobOffer {
   image2: string;
   image3: string;
   image4: string;
-  type_of_job: number;
-  created_at: string;
-  updated_at: string;
-}
-
-// ユーザーのお気に入り追加求人情報（一時的に定義しています）
-export interface FavoriteJobOffer {
-  id: number;
-  user_id: number;
-  corporation_joboffer_id: number;
+  type_of_job: [number];
   created_at: string;
   updated_at: string;
 }

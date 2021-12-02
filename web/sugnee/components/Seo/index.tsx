@@ -18,8 +18,8 @@ const Seo: React.FC<SeoProps> = ({
   pageImgWidth,
   pageImgHeight,
 }) => {
-  const defaultTitle = "Fリク";
-  const defaultDescription = "九州であなたに合ったお仕事を探すなら、Fリク！";
+  const defaultTitle = "Sugnee";
+  const defaultDescription = "九州であなたに合ったお仕事を探すなら、Sugnee！";
   const defaultPath = "http://localhost/";
   const defaultImg = "/images/signup.png";
 

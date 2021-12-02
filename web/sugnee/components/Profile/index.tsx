@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Crop } from "react-image-crop";
 
@@ -17,23 +17,23 @@ const Profile = ({ user, updateProfile }) => {
   } = useForm();
 
   //画像アップロード
-  const [image, setImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>();
   const [src, setSrc] = useState<string | null>(null);
 
   const [crop, setCrop] = useState<Crop>({
-    unit: "%",
-    x: 25,
-    y: 10,
-    width: 80,
-    height: 80,
-    aspect: 4 / 4,
+    unit: "px",
+    aspect: 1,
+    x: 0,
+    y: 0,
+    width: 200,
+    height: 200,
   });
-  const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   // 画像読み込み
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (e.target.files !== null) {
+    if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         typeof reader.result === "string" && setSrc(reader.result);
@@ -42,21 +42,17 @@ const Profile = ({ user, updateProfile }) => {
     }
   };
 
-  const onImageLoaded = (image) => {
-    setImageRef(image);
-  };
-
-  // 画像くり抜き
-  const onCropChange = (crop) => {
-    setCrop(crop);
-  };
+  const onImageLoaded = useCallback((image) => {
+    imageRef.current = image;
+  }, []);
 
   const onCropComplete = (crop) => {
     if (imageRef && crop.width && crop.height) {
+      const image = imageRef.current;
       const canvas = document.createElement("canvas");
       const pixelRatio = window.devicePixelRatio;
-      const scaleX = imageRef.naturalWidth / imageRef.width;
-      const scaleY = imageRef.naturalHeight / imageRef.height;
+      const scaleX = image.naturalWidth / image.width;
+      const scaleY = image.naturalHeight / image.height;
       const ctx = canvas.getContext("2d");
 
       canvas.width = crop.width * pixelRatio * scaleX;
@@ -67,19 +63,20 @@ const Profile = ({ user, updateProfile }) => {
 
       if (ctx !== null) {
         ctx.drawImage(
-          imageRef,
+          image,
           crop.x * scaleX,
           crop.y * scaleY,
           crop.width * scaleX,
           crop.height * scaleY,
           0,
           0,
-          crop.width,
-          crop.height
+          crop.width * scaleX,
+          crop.height * scaleY
         );
       }
+
       const base64Image = canvas.toDataURL("img/url");
-      setImage(base64Image);
+      setProfileImage(base64Image);
     }
   };
 
@@ -93,21 +90,30 @@ const Profile = ({ user, updateProfile }) => {
 
   return (
     <>
-      <div className="w-3/4 bg-white mb-6">
-        <div className="w-full flex px-10 py-6 md:mb-0">
-          <div className="avatar placeholder">
-            {/* ユーザー情報の画像表示ができるようになったら分岐修正 */}
-            {image ? (
+      <div className="w-full md:w-3/4 bg-white px-10 py-6 rounded">
+        <div className="text-center">
+          <div className="avatar placeholder my-6">
+            {profileImage ? (
               <label
                 htmlFor="cropModal"
-                className="text-neutral-content rounded-full w-32 h-32 border"
+                className="text-neutral-content rounded-full w-32 h-32 border hover:shadow"
               >
-                <img src={image} style={{ borderRadius: "100%" }} />
+                <img src={profileImage} style={{ borderRadius: "100%" }} />
+              </label>
+            ) : user?.img_path ? (
+              <label
+                htmlFor="cropModal"
+                className="bg-neutral-content text-neutral-content rounded-full w-32 h-32 hover:bg-primary hover:shadow"
+              >
+                <img
+                  src={`http://${user.img_path}`}
+                  style={{ borderRadius: "100%" }}
+                />
               </label>
             ) : (
               <label
                 htmlFor="cropModal"
-                className="bg-neutral-focus text-neutral-content rounded-full w-32 h-32 hover:bg-primary"
+                className="bg-neutral-focus text-neutral-content rounded-full w-32 h-32 hover:bg-primary hover:shadow"
               >
                 <FontAwesomeIcon
                   icon={faUser}
@@ -123,21 +129,18 @@ const Profile = ({ user, updateProfile }) => {
               onSelectFile={onSelectFile}
               onImageLoaded={onImageLoaded}
               onCropComplete={onCropComplete}
-              onCropChange={onCropChange}
+              onCropChange={(c) => setCrop(c)}
               addProfileImage={addProfileImage}
             />
           </div>
-          <div className="pl-6">
-            <p className="text-3xl mb-3　">{user.name}</p>
-            <p className="text-lg text-gray-500">{user.birth}</p>
-            <p className="text-lg text-gray-500">
-              {user.gender === 1 ? "男性" : "女性"}
-            </p>
-          </div>
         </div>
-      </div>
-      <div className="w-3/4 bg-white px-10 py-6">
-        <form onSubmit={handleSubmit((data) => updateProfile({ data, image }))}>
+
+        <form
+          onSubmit={handleSubmit((data) =>
+            updateProfile({ data, image: profileImage })
+          )}
+          className="w-full md:w-8/12 md:mx-auto"
+        >
           <div className="w-full md:mb-0">
             <label
               className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
