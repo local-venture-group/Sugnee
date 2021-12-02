@@ -11,6 +11,7 @@ interface JobOfferPaginationProps {
   totalCount: number;
   PER_PAGE: number;
   pageNum: number;
+  lastPageNum: number;
   handlePageNum: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handlePrev: () => void;
   handleNext: () => void;
@@ -20,11 +21,11 @@ const Pagination: React.FC<JobOfferPaginationProps> = ({
   totalCount,
   PER_PAGE,
   pageNum,
+  lastPageNum,
   handlePageNum,
   handlePrev,
   handleNext,
 }) => {
-  const lastPageNum = Math.ceil(totalCount / PER_PAGE);
   const range = (start, end) =>
     [...Array(end - start + 1)].map((_, i) => start + i);
 

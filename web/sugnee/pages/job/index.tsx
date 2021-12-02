@@ -21,6 +21,7 @@ const job: NextPage = () => {
   const [pageNum, setPageNum] = useState<number>(1);
   const PER_PAGE = 12;
   const currentPageNum = pageNum * PER_PAGE - PER_PAGE;
+  const lastPageNum = Math.ceil(totalCount / PER_PAGE);
   const paginatedJobOffers =
     currentPageNum + PER_PAGE > jobOffers?.length
       ? jobOffers?.slice(currentPageNum, jobOffers?.length)
@@ -61,7 +62,6 @@ const job: NextPage = () => {
     getJobData();
   }, []);
 
-  console.log("検索条件", searchCondition);
   console.log("検索結果", jobOffers);
 
   if (!jobOffers) {
@@ -101,8 +101,12 @@ const job: NextPage = () => {
           <JobSearchSidebar />
         </div>
         <div className="w-full lg:w-3/4 p-5">
-          <p>検索結果一覧</p>
-          <p>検索結果：{totalCount}件</p>
+          <p>
+            検索結果：{totalCount}件
+            <span className="ml-3">
+              {pageNum} / {lastPageNum}ページ
+            </span>
+          </p>
           {paginatedJobOffers.length &&
             paginatedJobOffers.map((job) => {
               return job.type_of_job[0] === 2 || job.type_of_job[0] === 3 ? (
@@ -128,6 +132,7 @@ const job: NextPage = () => {
               totalCount={totalCount}
               PER_PAGE={PER_PAGE}
               pageNum={pageNum}
+              lastPageNum={lastPageNum}
               handlePageNum={handlePageNum}
               handlePrev={handlePrev}
               handleNext={handleNext}
