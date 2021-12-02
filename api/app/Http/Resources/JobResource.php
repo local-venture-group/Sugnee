@@ -54,7 +54,7 @@ class JobResource extends JsonResource
             "prefecture" => $this->resource->prefecture,
             "city" => $this->resource->city,
             "building" => $this->resource->building,
-            "salary_pattern" => $this->resource->salary_pattern,
+            "salary_pattern" => JobConditionConsts::SALARY_PATTERN[$this->resource->salary_pattern] ,
             "salary_min" => $this->resource->salary_min,
             "salary_max" => $this->resource->salary_max,
             "salary_description" => $this->resource->salary_description,

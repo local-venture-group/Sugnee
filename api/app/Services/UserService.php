@@ -6,17 +6,24 @@ use App\Models\CorporationApplicantschedule;
 use App\Models\CorporationJoboffer;
 use App\Models\Favorite;
 use App\Models\User;
-
+use App\Services\JobService;
 class UserService
 {
+    public function __construct()
+    {
+        $this->jobService = new JobService();
+    }
     public function getOmFavorited(User $user)
     {
+
         $omfavorites = Favorite::where('user_id', $user->id)->get();
 
         $favoritesOmBaseJobs = CorporationJoboffer::whereIn('id', $omfavorites->pluck('corporation_joboffer_id'))->get();
         $favoritesOmBaseJobs->each(function ($job){
             $job->append('type_of_job');
         });
+
+        $favoritesOmBaseJobs = $this->jobService->convertStringName($favoritesOmBaseJobs);
         return  ['om' => $favoritesOmBaseJobs];
     }
     public function getFrikuFavorited(User $withUser)
@@ -25,6 +32,7 @@ class UserService
         $favoritesFrikuBaseJobs->each(function ($job){
             $job->append('type_of_job');
         });
+        $favoritesFrikuBaseJobs = $this->jobService->convertStringName($favoritesFrikuBaseJobs);
         return ['friku' => $favoritesFrikuBaseJobs];
     }
     public function getOmApplied(User $user)
@@ -42,6 +50,7 @@ class UserService
                 $omJoboffer->each(function ($job){
                     $job->append('type_of_job');
                 });
+                $omJoboffer = $this->jobService->convertStringName($omJoboffer);
                 $applied['om'] = $omJoboffer;
             }
         return $applied;
@@ -58,6 +67,7 @@ class UserService
             $frikuJoboffer->each(function ($job){
                 $job->append('type_of_job');
             });
+            $frikuJoboffer = $this->jobService->convertStringName($frikuJoboffer);
             $applied['friku'] = $frikuJoboffer;
         }
         return $applied;
