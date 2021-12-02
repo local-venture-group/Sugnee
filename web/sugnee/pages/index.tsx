@@ -10,7 +10,6 @@ import { AuthContext } from "../contexts/Auth";
 import { SearchConditionContext } from "../contexts/SearchCondition";
 
 // Components
-import Seo from "../components/Seo";
 import OmJobCard from "../components/Card/OmJobCard";
 import PickupCard from "../components/Card/PickupCard";
 import SearchTypeCard from "../components/Card/SearchTypeCard";
@@ -65,7 +64,6 @@ const Home: NextPage<HomeProps> = ({ omJobs, pickupArticles }) => {
 
   return (
     <>
-      <Seo />
       <div>
         <section className="w-full h-96 bg-gradient-to-b from-primary to-secondary"></section>
 

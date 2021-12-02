@@ -1,13 +1,13 @@
-import { FavoriteJobOffer } from "./job";
+import { JobOffer } from "./job";
 export interface User {
   id: number;
-  appliedJobs: [];
+  appliedJobs: { friku: [JobOffer]; om: [JobOffer] };
   applied_at: string;
   birth: string;
   created_at: string;
   email: string;
   email_verified_at: string;
-  favorites: { friku: [FavoriteJobOffer]; om: [FavoriteJobOffer] };
+  favorites: { friku: [JobOffer]; om: [JobOffer] };
   first_name: string;
   first_name_kana: string;
   gender: number;

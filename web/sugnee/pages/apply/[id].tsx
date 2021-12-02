@@ -13,7 +13,7 @@ import { User } from "../../interfaces/user";
 
 const apply: NextPage<{ job: JobOffer }> = ({ job }) => {
   const router = useRouter();
-  const { user } = useContext(AuthContext);
+  const { user, applyOmJobOffer } = useContext(AuthContext);
 
   const applyJobOffer: (
     e: React.MouseEvent,
@@ -23,23 +23,10 @@ const apply: NextPage<{ job: JobOffer }> = ({ job }) => {
     e.preventDefault();
     if (!user) alert("応募はログインが必要です");
 
+    // Fリク求人応募ロジックは仕様確定後
     // OM求人応募仮ロジック
-    if (job.type_of_job === 2) {
-      await axios
-        .post(`/api/user/joboffer/om/apply/${job.id}`)
-        .then((res) => {
-          if (res.status === 201) {
-            console.log("[applyOmJoboffer]応募成功", res);
-            router.push("/apply/success");
-          } else {
-            console.log("[applyOmJoboffer]応募失敗", res.data);
-          }
-        })
-        .catch((err) => {
-          console.log("[applyOmJoboffer]応募失敗", err.response);
-          // 仮でアラート、応募済み求人をユーザー情報に保持するようになればボタンを非活性にする
-          if (err.response.status === 400) alert(err.response.data.message);
-        });
+    if (job.type_of_job[0] === 2) {
+      await applyOmJobOffer;
       return;
     }
   };
@@ -120,13 +107,13 @@ const apply: NextPage<{ job: JobOffer }> = ({ job }) => {
               </tbody>
             </table>
           </div>
-          {job.type_of_job === 0 && (
+          {job.type_of_job[0] === 0 && (
             <p className="text-warning my-6">
               この求人はキャリアアドバイザー面談が必要です
             </p>
           )}
           {/* 一覧から外部リンクへとばすようなら分岐を削除 */}
-          {job.type_of_job === 3 ? (
+          {job.type_of_job[0] === 3 ? (
             <a
               href={job.url}
               target="_blank"
@@ -143,14 +130,14 @@ const apply: NextPage<{ job: JobOffer }> = ({ job }) => {
               応募する
             </button>
           )}
-          <div className="lg:hidden bottom-0 fixed w-full flex justify-center bg-white bg-opacity-90 px-3 pt-8 pb-2">
-            <button
-              onClick={(e) => applyJobOffer(e, user, job)}
-              className="btn btn-accent"
-            >
-              応募する
-            </button>
-          </div>
+        </div>
+        <div className="lg:hidden bottom-0 fixed w-full flex justify-center bg-white bg-opacity-90 px-3 pt-8 pb-2">
+          <button
+            onClick={(e) => applyJobOffer(e, user, job)}
+            className="btn btn-accent w-10/12"
+          >
+            応募する
+          </button>
         </div>
       </section>
     </>
