@@ -12,7 +12,7 @@ class JobService {
         });
         return $city;
     }
-    public static function changeIntToStringType($jobs)
+    public  function convertStringName($jobs)
     {
 
         $job = collect($jobs)->each(function ($job) {
