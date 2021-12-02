@@ -22,8 +22,8 @@ import { JobOffer } from "../../../interfaces/job";
 const jobOffer: NextPage<{ job: JobOffer }> = ({ job }) => {
   const router = useRouter();
   const { user, addOmBookmark, deleteOmBookmark } = useContext(AuthContext);
-  const userFavorites: number[] = user?.favorites.friku.map(
-    (favoriteJob) => favoriteJob.corporation_joboffer_id
+  const userFavorites: number[] = user?.favorites.om.map(
+    (favoriteJob) => favoriteJob.id
   );
 
   const applyJobOffer = (): void => {

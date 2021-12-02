@@ -68,7 +68,8 @@ const OmJobCard: React.FC<OmJobCardProps> = ({ job, user, userFavorites }) => {
               <FontAwesomeIcon icon={faYenSign} />
               <span className="text-gray-500 text-sm ml-3">
                 {job.salary_pattern}
-                {job.salary_min}円〜{job.salary_max}円
+                {parseInt(job.salary_min).toLocaleString()}円〜
+                {parseInt(job.salary_max).toLocaleString()}円
               </span>
             </li>
           </ul>
