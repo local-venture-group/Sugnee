@@ -54,22 +54,23 @@ const job: NextPage = () => {
   );
 
   useEffect(() => {
+    let isMounted = true;
     const getJobData = async (): Promise<void> => {
-      const jobData = await searchJobOffers(searchCondition);
+      const jobData = searchCondition
+        ? await searchJobOffers(searchCondition)
+        : null;
       setJobOffers(jobData);
-      setTotalCount(jobData.length);
+      setTotalCount(jobData?.length);
     };
     getJobData();
-  }, []);
-
-  console.log("検索結果", jobOffers);
+    return () => {
+      isMounted = false;
+    };
+  }, [searchCondition]);
 
   if (!jobOffers) {
     return null;
-  } else if (!jobOffers.length) {
-    return <p>検索条件に一致する求人はありません</p>;
   }
-
   return (
     <div className="container mx-auto">
       <p className="my-10 text-xs text-gray-500">
@@ -79,7 +80,10 @@ const job: NextPage = () => {
           勤務地：
           {searchCondition.cities.length
             ? searchCondition.cities.map((city, index) => (
-                <span key={index}>{city}</span>
+                <span key={index}>
+                  {city}
+                  {index !== searchCondition.cities.length - 1 && ","}
+                </span>
               ))
             : "なし"}
         </span>
@@ -87,27 +91,42 @@ const job: NextPage = () => {
           職種：
           {searchCondition.workTypes.length
             ? searchCondition.workTypes.map((type, index) => (
-                <span key={index}>{workTypes[type]}</span>
+                <span key={index}>
+                  {workTypes[type]}{" "}
+                  {index !== searchCondition.workTypes.length - 1 && ","}
+                </span>
               ))
             : "なし"}
         </span>
         <span className="ml-2">
           キーワード：
-          {searchCondition.keyWords ? searchCondition.keyWords : "なし"}
+          {searchCondition.keyWords.length
+            ? searchCondition.keyWords.map((word, index) => (
+                <span key={index}>
+                  {word}
+                  {index !== searchCondition.keyWords.length - 1 && ","}
+                </span>
+              ))
+            : "なし"}
         </span>
       </p>
       <div className="flex justify-center">
         <div className="w-full hidden lg:block lg:w-1/4">
-          <JobSearchSidebar />
+          <JobSearchSidebar
+            setJobOffers={searchJobOffers}
+            setTotalCount={setTotalCount}
+          />
         </div>
         <div className="w-full lg:w-3/4 p-5">
           <p>
-            検索結果：{totalCount}件
-            <span className="ml-3">
-              {pageNum} / {lastPageNum}ページ
-            </span>
+            検索結果：{totalCount}件 　
+            {!!totalCount && (
+              <span className="ml-3">
+                {pageNum} / {lastPageNum}ページ
+              </span>
+            )}
           </p>
-          {paginatedJobOffers.length &&
+          {jobOffers.length ? (
             paginatedJobOffers.map((job) => {
               return job.type_of_job[0] === 2 || job.type_of_job[0] === 3 ? (
                 <div className="mb-3" key={`${job.type_of_job}-${job.id}`}>
@@ -126,8 +145,11 @@ const job: NextPage = () => {
                   />
                 </div>
               );
-            })}
-          {totalCount && (
+            })
+          ) : (
+            <p className="mt-10">検索条件に一致する求人はありません</p>
+          )}
+          {!!totalCount && (
             <Pagination
               totalCount={totalCount}
               PER_PAGE={PER_PAGE}

@@ -17,8 +17,10 @@ import {
   faPencilAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
-export default function JobSearchSidebar() {
-  const { addSearchCondition } = useContext(SearchConditionContext);
+const JobSearchSidebar = ({ setJobOffers, setTotalCount }) => {
+  const { searchCondition, addSearchCondition, searchJobOffers } = useContext(
+    SearchConditionContext
+  );
   const {
     register,
     formState: { errors },
@@ -28,13 +30,14 @@ export default function JobSearchSidebar() {
   const onSubmit = async (data) => {
     await addSearchCondition({
       cities: data.locations ? data.locations : [],
-      keywords: data.keywords
+      keyWords: data.keywords
         ? data.keywords.replaceAll(/　/g, " ").split(" ")
         : [],
       workTypes: data.workType
         ? data.workType.map((type) => parseInt(type))
         : [],
     });
+    window.scroll({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -48,7 +51,7 @@ export default function JobSearchSidebar() {
           />
           <h6 className="mb-1 font-semibold text-2xl text-gray-600">勤務地</h6>
           <p className="text-gray-600 font-semibold text-sm mb-6">からさがす</p>
-          <WorkLocationTab register={register} />
+          <WorkLocationTab register={register} modalSize={"sm"} />
         </div>
         <div className="flex flex-col justify-center items-center">
           <FontAwesomeIcon
@@ -58,7 +61,7 @@ export default function JobSearchSidebar() {
           />
           <h6 className="mb-1 font-semibold text-2xl text-gray-600">業種</h6>
           <p className="text-gray-600 font-semibold text-sm mb-6">からさがす</p>
-          <WorkTypeTab register={register} />
+          <WorkTypeTab register={register} modalSize={"sm"} />
         </div>
         <div className="flex flex-col justify-center items-center">
           <FontAwesomeIcon
@@ -78,4 +81,6 @@ export default function JobSearchSidebar() {
       </form>
     </div>
   );
-}
+};
+
+export default JobSearchSidebar;
