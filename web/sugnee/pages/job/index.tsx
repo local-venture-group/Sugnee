@@ -20,12 +20,12 @@ const job: NextPage = () => {
   const [totalCount, setTotalCount] = useState<number>();
   const [pageNum, setPageNum] = useState<number>(1);
   const PER_PAGE = 12;
-  const currentPageNum = pageNum * PER_PAGE - PER_PAGE;
+  const currentJobOfferIndex = pageNum * PER_PAGE - PER_PAGE;
   const lastPageNum = Math.ceil(totalCount / PER_PAGE);
   const paginatedJobOffers =
-    currentPageNum + PER_PAGE > jobOffers?.length
-      ? jobOffers?.slice(currentPageNum, jobOffers?.length)
-      : jobOffers?.slice(currentPageNum, PER_PAGE);
+    currentJobOfferIndex + PER_PAGE > jobOffers?.length
+      ? jobOffers?.slice(currentJobOfferIndex, jobOffers?.length)
+      : jobOffers?.slice(currentJobOfferIndex, PER_PAGE);
 
   const handlePageNum = (e: React.MouseEvent<HTMLButtonElement>) => {
     const buttonText = (e.target as HTMLButtonElement).value;
