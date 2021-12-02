@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 
 // Contexts
@@ -8,6 +8,7 @@ import { SearchConditionContext } from "../../contexts/SearchCondition";
 // Components
 import JobSearchSidebar from "../../components/JobSearchSidebar";
 import OmJobCard from "../../components/Card/OmJobCard";
+import Pagination from "../../components/Pagination/JobOffer";
 
 // Types
 import { NextPage } from "next";
@@ -15,6 +16,30 @@ import { JobOffer } from "../../interfaces/job";
 
 const job: NextPage = () => {
   const [jobOffers, setJobOffers] = useState<[JobOffer]>();
+  const [totalCount, setTotalCount] = useState<number>();
+  const [pageNum, setPageNum] = useState<number>(1);
+  const PER_PAGE = 12;
+  const currentPageNum = pageNum * PER_PAGE - PER_PAGE;
+  const paginatedJobOffers =
+    currentPageNum + PER_PAGE > jobOffers?.length
+      ? jobOffers?.slice(currentPageNum, jobOffers?.length)
+      : jobOffers?.slice(currentPageNum, PER_PAGE);
+
+  const handlePageNum = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const buttonText = (e.target as HTMLButtonElement).value;
+    setPageNum(Number(buttonText));
+    window.scroll({ top: 0, behavior: "smooth" });
+  };
+  const handlePrev = () => {
+    if (pageNum === 1) return;
+    setPageNum(pageNum - 1);
+    window.scroll({ top: 0, behavior: "smooth" });
+  };
+  const handleNext = () => {
+    setPageNum(pageNum + 1);
+    window.scroll({ top: 0, behavior: "smooth" });
+  };
+
   const { workTypes, searchCondition, searchJobOffers } = useContext(
     SearchConditionContext
   );
@@ -31,6 +56,7 @@ const job: NextPage = () => {
     const getJobData = async (): Promise<void> => {
       const jobData = await searchJobOffers(searchCondition);
       setJobOffers(jobData);
+      setTotalCount(jobData.length);
     };
     getJobData();
   }, []);
@@ -76,9 +102,10 @@ const job: NextPage = () => {
         </div>
         <div className="w-full lg:w-3/4 p-5">
           <p>検索結果一覧</p>
+          <p>検索結果：{totalCount}件</p>
           {/* デザインが決まったら修正します */}
-          {jobOffers.length &&
-            jobOffers.map((job) => (
+          {paginatedJobOffers.length &&
+            paginatedJobOffers.map((job) => (
               <div className="w-full mb-3" key={job.id}>
                 <OmJobCard
                   job={job}
@@ -87,6 +114,16 @@ const job: NextPage = () => {
                 />
               </div>
             ))}
+          {totalCount && (
+            <Pagination
+              totalCount={totalCount}
+              PER_PAGE={PER_PAGE}
+              pageNum={pageNum}
+              handlePageNum={handlePageNum}
+              handlePrev={handlePrev}
+              handleNext={handleNext}
+            />
+          )}
         </div>
       </div>
     </div>
