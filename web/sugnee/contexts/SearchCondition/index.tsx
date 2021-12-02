@@ -1,19 +1,36 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 
-const SearchConditionContext = createContext(null);
+// Types
+import { JobOffer } from "../../interfaces/job";
+
+interface WorkLocations {
+  area: string;
+  city: string[];
+}
+
+interface SearchCondition {
+  cities?: string[];
+  keyWords?: string[];
+  workTypes?: number[];
+}
+
+interface SearchConditionContextType {
+  workTypes: string[];
+  workLocations: WorkLocations[];
+  searchCondition: SearchCondition;
+  addSearchCondition: (props: SearchCondition) => Promise<void>;
+  searchJobOffers: (props: SearchCondition) => Promise<[JobOffer]>;
+}
+
+const SearchConditionContext = createContext<SearchConditionContextType>(null);
 
 const SearchConditionProvider = ({ children }) => {
-  const [workTypes, setWorkTypes] = useState();
-  const [workLocations, setWorkLocations] = useState();
-  const [searchCondition, setSearchCondition] = useState({
-    cities: [],
-    keyWords: [],
-    workTypes: [],
-  });
+  const [workTypes, setWorkTypes] = useState<[string] | null>(null);
+  const [workLocations, setWorkLocations] = useState<WorkLocations[]>(null);
+  const [searchCondition, setSearchCondition] = useState<SearchCondition>(null);
 
   useEffect(() => {
-    console.log("検索条件コンテキスト", searchCondition);
     getConditions();
     setSearchCondition(JSON.parse(localStorage.getItem("searchCondition")));
   }, []);
@@ -22,13 +39,18 @@ const SearchConditionProvider = ({ children }) => {
     axios
       .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/joboffer/conditions`)
       .then((res) => {
-        setWorkLocations(
-          Object.entries(res.data.city).map(([area, city]) => ({ area, city }))
-        );
-        setWorkTypes(res.data.work_type);
+        if (res.status === 200) {
+          const locationArr: [string, string[]][] = Object.entries(
+            res.data.city
+          );
+          setWorkLocations(locationArr.map(([area, city]) => ({ area, city })));
+          setWorkTypes(res.data.work_type);
+        } else {
+          console.log("[getCondition]検索条件取得失敗", res.data);
+        }
       })
       .catch((err) => {
-        console.log("[getConditions]取得失敗", err);
+        console.log("[getConditions]検索条件取得失敗", err.response);
       });
   };
 
