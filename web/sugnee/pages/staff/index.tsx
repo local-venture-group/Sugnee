@@ -16,8 +16,6 @@ const staff: NextPage = () => {
   const { staff, staffLogout } = useContext(StaffContext);
   const { user } = useContext(AuthContext);
 
-  console.log(staff);
-
   if (user) {
     router.push("/");
   } else if (!staff) return null;

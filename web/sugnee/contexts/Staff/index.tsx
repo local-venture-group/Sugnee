@@ -80,13 +80,11 @@ const StaffProvider = ({ children }) => {
           password,
         })
         .then((res) => {
-          if (res.data) {
-            // もしかしたらstaffに修正になるかも？
-            setStaff(res.data.admin);
+          if (res.status === 200) {
+            setStaff(res.data.staff);
             Router.push("/staff");
           } else {
-            console.log(res.data);
-            console.log("[staffLogin]ログイン失敗");
+            console.log("[staffLogin]ログイン失敗", res.data);
           }
         })
         .catch((err) => {
