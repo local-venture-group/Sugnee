@@ -74,9 +74,7 @@ Route::prefix('staff')->group(function () {
 
     Route::post('/register', [StaffController::class, 'register']);
     Route::group(['middleware' => ['auth:staffs']], function () {
-        Route::get('/', function (Request $request) {
-            return $request->user();
-        });
+        Route::get('/', [StaffController::class, 'getAuthUser']);
         Route::get('/user/search', [UserSearchController::class, 'search']);
         Route::get('/user/offer', [SendOfferController::class, 'sendOffer']);
     });
