@@ -10,17 +10,24 @@ import { StaffContext } from "../../contexts/Staff";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
-const staffLogin = () => {
+// Types
+import { NextPage } from "next";
+interface FormValues {
+  email: string;
+  password: string;
+}
+
+const staffLogin: NextPage = () => {
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormValues>();
   const { staff, staffLogin } = useContext(StaffContext);
-  const [isRevealPassword, setIsRevealPassword] = useState(false);
+  const [isRevealPassword, setIsRevealPassword] = useState<Boolean>(false);
 
   const togglePassword = () => {
     setIsRevealPassword((prevState) => !prevState);
   };
 
-  if (staff) router.push("/");
+  if (staff) router.push("/staff");
   return (
     <div className="h-screen bg-gradient-to-b from-primary to-secondary">
       <div className="container mx-auto">
