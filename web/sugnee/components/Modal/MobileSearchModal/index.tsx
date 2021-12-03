@@ -48,7 +48,7 @@ const MobileSearchModal = (props: MobileJobSearchModalProps) => {
   const onSubmit = async (data) => {
     await addSearchCondition({
       cities: data.locations ? data.locations : [],
-      keywords: data.keywords
+      keyWords: data.keywords
         ? data.keywords.replaceAll(/　/g, " ").split(" ")
         : [],
       workTypes: data.workType
@@ -56,7 +56,7 @@ const MobileSearchModal = (props: MobileJobSearchModalProps) => {
         : [],
     });
     const modalCheck = document.querySelector(
-      "#jobSearchModal"
+      "#mobileSearchModal"
     ) as HTMLInputElement;
     modalCheck.checked = false;
     router.push("/job");
