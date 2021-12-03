@@ -1,18 +1,30 @@
 import axios from "axios";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useMemo } from "react";
 import Router from "next/router";
+import { Admin } from "../../interfaces/admin";
 
-const AdminContext = createContext(null);
+interface LoginProps {
+  email: string;
+  password: string;
+}
+
+interface AdminContextType {
+  admin: Admin;
+  adminLogin: (props: LoginProps) => void;
+  adminLogout: () => void;
+}
+
+const AdminContext = createContext<AdminContextType>(null);
 
 const AdminProvider = ({ children }) => {
-  const [admin, setAdmin] = useState(null);
+  const [admin, setAdmin] = useState<Admin | null>(null);
 
   useEffect(() => {
     getAdmin();
   }, []);
 
-  const getAdmin = () => {
-    axios
+  const getAdmin = async () => {
+    await axios
       .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin`)
       .then((res) => {
         console.log("[getadmin]ログイン済み");
@@ -23,7 +35,7 @@ const AdminProvider = ({ children }) => {
       });
   };
 
-  const adminLogin = (data) => {
+  const adminLogin = (data: LoginProps) => {
     const { email, password } = data;
     axios.get(process.env.NEXT_PUBLIC_API_AUTH_URL).then((response) => {
       axios
@@ -32,8 +44,8 @@ const AdminProvider = ({ children }) => {
           password,
         })
         .then((res) => {
-          if (res.data) {
-            setAdmin(res.data);
+          if (res.data.admin) {
+            setAdmin(res.data.admin);
             Router.push("/admin");
           } else {
             console.log(res.data);
@@ -53,7 +65,6 @@ const AdminProvider = ({ children }) => {
       .then((res) => {
         if (res.status === 200) {
           setAdmin(null);
-          alert("ログアウトしました");
           Router.push("/");
         } else {
           console.log(res.data);

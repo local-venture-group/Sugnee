@@ -10,9 +10,13 @@ import StaffSignupConfirmation from "../../components/SignupConfirmation/staff";
 // Contexts
 import { StaffContext } from "../../contexts/Staff";
 
-const signUp = () => {
-  const [formData, setFormData] = useState();
-  const [isConfirmed, setIsConfirmed] = useState(false);
+// Types
+import { NextPage } from "next";
+import { SignupFormData } from "../../interfaces/staff";
+
+const signUp: NextPage = () => {
+  const [formData, setFormData] = useState<SignupFormData>();
+  const [isConfirmed, setIsConfirmed] = useState<Boolean>(false);
   const { staff, staffSignup } = useContext(StaffContext);
   const router = useRouter();
   const {
@@ -20,7 +24,7 @@ const signUp = () => {
     formState: { errors },
     handleSubmit,
     watch,
-  } = useForm();
+  } = useForm<SignupFormData>();
 
   const onSubmit = (data) => {
     setFormData(data);
@@ -31,9 +35,10 @@ const signUp = () => {
     setIsConfirmed(false);
   };
 
+  console.log("どう", staff);
+
   // userやadminだった場合も追加予定
   if (staff) router.push("/staff");
-
   return (
     <div className="bg-gradient-to-b from-primary to-secondary">
       <div className="container mx-auto">
@@ -55,9 +60,9 @@ const signUp = () => {
               <p className="mt-2 text-sm text-gray-500">
                 必要項目入力の上、入力内容確認へ進んでください。
               </p>
-              <Link href="/login">
+              <Link href="/staffLogin">
                 <a className="mt-2 text-sm text-indigo-500 hover:text-gray-500">
-                  すでに登録済みの方はこちらからログイン
+                  すでに登録済みのご担当者様はこちらからログイン
                 </a>
               </Link>
             </div>

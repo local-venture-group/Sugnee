@@ -26,7 +26,7 @@ class StaffController extends Controller
 
 
             return response()->json([
-                'admin' =>  auth()->guard('staffs')->user(),
+                'staff' =>  auth()->guard('staffs')->user(),
                 'message' => "スタッフログインに成功しました"
              ]);
 
@@ -37,7 +37,11 @@ class StaffController extends Controller
 
 
     }
-
+    public function getAuthStaff()
+    {
+        $staff = Staff::findOrFail(Auth::guard('staffs')->id());
+        return [$staff, 200];
+    }
     public function logout(Request $request)
     {
         Auth::logout();

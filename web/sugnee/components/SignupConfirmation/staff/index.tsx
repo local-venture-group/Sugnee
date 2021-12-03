@@ -1,4 +1,12 @@
-export default function StaffSignupConfirmation(props) {
+import { SignupFormData } from "../../../interfaces/staff";
+
+interface ConfirmationProps {
+  formData: SignupFormData;
+  onClickBack: () => void;
+  staffSignup: (props: SignupFormData) => void;
+}
+
+const StaffSignupConfirmation: React.FC<ConfirmationProps> = (props) => {
   const { formData, onClickBack, staffSignup } = props;
 
   return (
@@ -18,6 +26,16 @@ export default function StaffSignupConfirmation(props) {
             企業名
           </label>
           {formData.companyName}
+        </div>
+        <div className="w-full px-3 my-6 md:mb-0">
+          <label
+            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+            htmlFor="name"
+          >
+            担当者氏名
+          </label>
+          {formData.lastName}
+          {formData.firstName}
         </div>
         <div className="w-full px-3 my-6 md:mb-0">
           <label
@@ -47,4 +65,6 @@ export default function StaffSignupConfirmation(props) {
       </div>
     </div>
   );
-}
+};
+
+export default StaffSignupConfirmation;

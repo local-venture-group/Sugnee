@@ -1,18 +1,39 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import Router from "next/router";
+import { Staff } from "../../interfaces/staff";
 
-const StaffContext = createContext(null);
+interface SignupProps {
+  companyName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
+interface LoginProps {
+  email: string;
+  password: string;
+}
+
+interface StaffContextType {
+  staff: Staff | null;
+  staffSignup: (props: SignupProps) => void;
+  staffLogin: (props: LoginProps) => void;
+  staffLogout: () => void;
+}
+
+const StaffContext = createContext<StaffContextType>(null);
 
 const StaffProvider = ({ children }) => {
-  const [staff, setStaff] = useState(null);
+  const [staff, setStaff] = useState<Staff | null>(null);
 
   useEffect(() => {
     getStaff();
   }, []);
 
-  const getStaff = () => {
-    axios
+  const getStaff = async () => {
+    await axios
       .get("/api/staff")
       .then((res) => {
         console.log("[getStaff]ログイン済み");
@@ -28,20 +49,29 @@ const StaffProvider = ({ children }) => {
     axios
       .post("/api/staff/register", {
         username: data.companyName,
+        last_name: data.lastName,
+        first_name: data.firstName,
         email: data.email,
         password: data.password,
       })
       .then((res) => {
-        console.log(res);
+        if (res.status === 201) {
+          console.log(res);
+          // 空の配列がreturnされている？？
+          // setStaff(res.data.staff);
+          // Router.push("/staff");
+        } else {
+          console.log(res.data);
+          alert("[staff]登録失敗");
+        }
       })
       .catch((err) => {
         console.log(err.response);
-        console.log("[staffSignup]会員登録失敗");
-        alert("会員登録失敗しました");
+        console.log("[staff]登録失敗");
       });
   };
 
-  const staffLogin = (data) => {
+  const staffLogin = (data: LoginProps) => {
     const { email, password } = data;
     axios.get("/sanctum/csrf-cookie").then((response) => {
       axios
@@ -50,12 +80,11 @@ const StaffProvider = ({ children }) => {
           password,
         })
         .then((res) => {
-          if (res.data) {
-            setStaff(res.data);
+          if (res.status === 200) {
+            setStaff(res.data.staff);
             Router.push("/staff");
           } else {
-            console.log(res.data);
-            console.log("[staffLogin]ログイン失敗");
+            console.log("[staffLogin]ログイン失敗", res.data);
           }
         })
         .catch((err) => {
@@ -71,16 +100,15 @@ const StaffProvider = ({ children }) => {
       .then((res) => {
         if (res.status === 200) {
           setStaff(null);
-          alert("ログアウトしました");
           Router.push("/");
         } else {
           console.log(res.data);
-          alert("[staffLogout]ログアウト失敗");
+          console.log("[logout]ログアウト失敗");
         }
       })
       .catch((err) => {
-        console.log(err);
-        alert("[staffLogout]ログアウト失敗");
+        console.log(err.response);
+        console.log("[logout]ログアウト失敗");
       });
   };
 
