@@ -35,7 +35,7 @@ const AdminProvider = ({ children }) => {
       });
   };
 
-  const adminLogin = (data) => {
+  const adminLogin = (data: LoginProps) => {
     const { email, password } = data;
     axios.get(process.env.NEXT_PUBLIC_API_AUTH_URL).then((response) => {
       axios

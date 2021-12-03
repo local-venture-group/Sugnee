@@ -12,13 +12,17 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 // Types
 import { NextPage } from "next";
+interface FormValues {
+  email: string;
+  password: string;
+}
 
 const adminLogin: NextPage = () => {
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<FormValues>();
   const { user } = useContext(AuthContext);
   const { adminLogin } = useContext(AdminContext);
-  const [isRevealPassword, setIsRevealPassword] = useState(false);
+  const [isRevealPassword, setIsRevealPassword] = useState<Boolean>(false);
 
   const togglePassword = () => {
     setIsRevealPassword((prevState) => !prevState);
