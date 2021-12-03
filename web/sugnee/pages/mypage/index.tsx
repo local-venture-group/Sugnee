@@ -12,7 +12,7 @@ import { faUser, faHeart, faFileAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Mypage: React.FC = () => {
   const [currentMenu, setCurrentMenu] = useState("profile");
-  const { user, updateProfile } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const router = useRouter();
 
   useEffect(() => {
@@ -64,9 +64,7 @@ const Mypage: React.FC = () => {
         </button>
       </div>
       <div className="flex flex-col justify-center items-center w-full bg-gray-100 p-10 -mt-1 rounded-lg">
-        {user && currentMenu === "profile" && (
-          <Profile user={user} updateProfile={updateProfile} />
-        )}
+        {user && currentMenu === "profile" && <Profile user={user} />}
         {user && currentMenu === "favorite" && (
           <MypageJobList user={user} type={"favorite"} />
         )}
