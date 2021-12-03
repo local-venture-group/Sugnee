@@ -10,7 +10,10 @@ import { AdminContext } from "../../contexts/Admin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
-const adminLogin = () => {
+// Types
+import { NextPage } from "next";
+
+const adminLogin: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit } = useForm();
   const { user } = useContext(AuthContext);

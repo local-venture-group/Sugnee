@@ -1,18 +1,30 @@
 import axios from "axios";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useMemo } from "react";
 import Router from "next/router";
+import { Admin } from "../../interfaces/admin";
 
-const AdminContext = createContext(null);
+interface LoginProps {
+  email: string;
+  password: string;
+}
+
+interface AdminContextType {
+  admin: Admin;
+  adminLogin: (props: LoginProps) => void;
+  adminLogout: () => void;
+}
+
+const AdminContext = createContext<AdminContextType>(null);
 
 const AdminProvider = ({ children }) => {
-  const [admin, setAdmin] = useState(null);
+  const [admin, setAdmin] = useState<Admin | null>(null);
 
   useEffect(() => {
     getAdmin();
   }, []);
 
-  const getAdmin = () => {
-    axios
+  const getAdmin = async () => {
+    await axios
       .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin`)
       .then((res) => {
         console.log("[getadmin]ログイン済み");
