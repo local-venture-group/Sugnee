@@ -4,7 +4,6 @@ import Router from "next/router";
 
 // Types
 import { User } from "../../interfaces/user";
-import { JobOffer } from "../../interfaces/job";
 
 interface AppProviderProps {
   children: ReactNode;

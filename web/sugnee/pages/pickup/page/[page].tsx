@@ -2,7 +2,7 @@ import Link from "next/link";
 import { client } from "../../../libs/client";
 
 // Components
-import Pagenation from "../../../components/Pagination";
+import Pagenation from "../../../components/Pagination/Article";
 import PickupCard from "../../../components/Card/PickupCard";
 
 // Types
