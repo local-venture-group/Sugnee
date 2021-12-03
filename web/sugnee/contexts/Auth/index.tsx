@@ -168,7 +168,7 @@ const AuthProvider = (props: AppProviderProps) => {
       })
       .catch((err) => {
         console.log(err.response);
-        console.log("[login]ログイン失敗");
+        console.log("[logout]ログアウト失敗");
       });
   };
 
