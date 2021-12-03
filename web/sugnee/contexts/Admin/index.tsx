@@ -44,8 +44,8 @@ const AdminProvider = ({ children }) => {
           password,
         })
         .then((res) => {
-          if (res.data) {
-            setAdmin(res.data);
+          if (res.data.admin) {
+            setAdmin(res.data.admin);
             Router.push("/admin");
           } else {
             console.log(res.data);
@@ -65,7 +65,6 @@ const AdminProvider = ({ children }) => {
       .then((res) => {
         if (res.status === 200) {
           setAdmin(null);
-          alert("ログアウトしました");
           Router.push("/");
         } else {
           console.log(res.data);
