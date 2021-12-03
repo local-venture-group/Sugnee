@@ -17,10 +17,8 @@ import {
   faPencilAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
-const JobSearchSidebar = ({ setJobOffers, setTotalCount }) => {
-  const { searchCondition, addSearchCondition, searchJobOffers } = useContext(
-    SearchConditionContext
-  );
+const JobSearchSidebar: React.FC = () => {
+  const { addSearchCondition } = useContext(SearchConditionContext);
   const {
     register,
     formState: { errors },

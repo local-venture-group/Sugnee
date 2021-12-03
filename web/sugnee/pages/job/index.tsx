@@ -62,7 +62,7 @@ const job: NextPage = () => {
       setJobOffers(jobData);
       setTotalCount(jobData?.length);
     };
-    getJobData();
+    if (isMounted) getJobData();
     return () => {
       isMounted = false;
     };
@@ -112,10 +112,7 @@ const job: NextPage = () => {
       </p>
       <div className="flex justify-center">
         <div className="w-full hidden lg:block lg:w-1/4">
-          <JobSearchSidebar
-            setJobOffers={searchJobOffers}
-            setTotalCount={setTotalCount}
-          />
+          <JobSearchSidebar />
         </div>
         <div className="w-full lg:w-3/4 p-5">
           <p>
