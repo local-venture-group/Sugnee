@@ -17,9 +17,14 @@ class UserService
     {
 
         $omfavorites = Favorite::where('user_id', $user->id)->get();
-
-        $favoritesOmBaseJobs = CorporationJoboffer::whereIn('id', $omfavorites->pluck('corporation_joboffer_id'))->get();
-        $favoritesOmBaseJobs->each(function ($job){
+        $omfavoritesIds = $omfavorites->pluck('corporation_joboffer_id');
+        $favoritesOmBaseJobs = CorporationJoboffer::whereIn('id', $omfavoritesIds )->get();
+        $favoritesOmBaseJobs->each(function ($job) use ($omfavoritesIds, $omfavorites) {
+            foreach($omfavoritesIds as $omfavoritesId) {
+                if ($job->id === $omfavoritesId) {
+                    $job->favorites_created_at = $omfavorites->where('corporation_joboffer_id', $omfavoritesId)->first()->created_at->toDateTimeString();
+                }
+            }
             $job->append('type_of_job');
         });
 
@@ -30,6 +35,7 @@ class UserService
     {
         $favoritesFrikuBaseJobs = $withUser->frikuFavorites;
         $favoritesFrikuBaseJobs->each(function ($job){
+            $job->favorites_created_at = $job->pivot->created_at->toDateTimeString();
             $job->append('type_of_job');
         });
         $favoritesFrikuBaseJobs = $this->jobService->convertStringName($favoritesFrikuBaseJobs);
@@ -47,7 +53,8 @@ class UserService
 
                     return $schedule->corporationJoboffer;
                 });
-                $omJoboffer->each(function ($job){
+                $omJoboffer->each(function ($job) use ($applicantWithApplied){
+                    $job->applied_at = $applicantWithApplied->where('job_offer_id', $job->id)->first()->applied_at;
                     $job->append('type_of_job');
                 });
                 $omJoboffer = $this->jobService->convertStringName($omJoboffer);
@@ -64,7 +71,8 @@ class UserService
             $frikuJoboffer = collect($frikuApplicant->frikuApplicantSchedules)->map(function ($schedule, $key) {
                 return $schedule->frikuJoboffer;
             });
-            $frikuJoboffer->each(function ($job){
+            $frikuJoboffer->each(function ($job) use ($frikuApplicant){
+                $job->applied_at = $frikuApplicant->frikuApplicantSchedules->where('friku_joboffer_id', $job->id)->first()->applied_at;
                 $job->append('type_of_job');
             });
             $frikuJoboffer = $this->jobService->convertStringName($frikuJoboffer);

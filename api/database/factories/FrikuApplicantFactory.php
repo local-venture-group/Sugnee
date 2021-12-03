@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\FrikuApplicant;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -22,6 +23,7 @@ class FrikuApplicantFactory extends Factory
      */
     public function definition()
     {
+        $carbon = new Carbon();
         return [
             'temp_id' => Str::uuid(),
             'is_registered' => $this->faker->boolean(50),
@@ -33,7 +35,7 @@ class FrikuApplicantFactory extends Factory
             'phone' => $this->faker->phoneNumber,
             'email' => $this->faker->unique()->safeEmail,
             'applicant_gender' => $this->faker->numberBetween(1,2),
-            'applied_at' => now(),
+            'applied_at' => $carbon->subDays(random_int(1, 10)),
             'user_id' => 1,
         ];
     }
