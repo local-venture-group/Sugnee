@@ -3,7 +3,7 @@ import { createContext, useEffect, useState, ReactNode } from "react";
 import Router from "next/router";
 
 // Types
-import { User } from "../../interfaces/user";
+import { User, UpdateProfileFormData } from "../../interfaces/user";
 
 interface AppProviderProps {
   children: ReactNode;
@@ -27,16 +27,16 @@ interface LoginProps {
   password: string;
 }
 
-interface UpdateProfileProps {
-  data: {
-    firstName: string;
-    lastName: string;
-    firstNameKana: string;
-    lastNameKana: string;
-    email: string;
-  };
-  image?: string;
-}
+// interface UpdateProfileProps {
+//   data: {
+//     firstName: string;
+//     lastName: string;
+//     firstNameKana: string;
+//     lastNameKana: string;
+//     email: string;
+//   };
+//   image?: string;
+// }
 
 interface BookmarkProps {
   e: React.MouseEvent<HTMLElement>;
@@ -49,7 +49,7 @@ interface AuthContextType {
   signup: (props: SignupProps) => void;
   login: (props: LoginProps) => void;
   logout: () => void;
-  updateProfile: (props: UpdateProfileProps) => Promise<void>;
+  updateProfile: (props: UpdateProfileFormData) => Promise<void>;
   applyFrikuJobOffer: ({ job: JobOffer }) => Promise<void>;
   applyOmJobOffer: ({ job: JobOffer }) => Promise<void>;
   addFrikuBookmark: (props: BookmarkProps) => Promise<void>;
@@ -172,7 +172,7 @@ const AuthProvider = (props: AppProviderProps) => {
       });
   };
 
-  const updateProfile = async (props: UpdateProfileProps) => {
+  const updateProfile = async (props: UpdateProfileFormData) => {
     const {
       data: { lastName, firstName, lastNameKana, firstNameKana, email },
       image,

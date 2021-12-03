@@ -32,3 +32,14 @@ export interface SignupFormData {
   password: string;
   passwordConfirm: string;
 }
+
+export interface UpdateProfileFormData {
+  data: {
+    firstName: string;
+    lastName: string;
+    firstNameKana: string;
+    lastNameKana: string;
+    email: string;
+  };
+  image?: string;
+}
