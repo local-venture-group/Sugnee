@@ -37,8 +37,7 @@ class ApplyOmJobofferTest extends TestCase
 
         $applicant = CorporationApplicant::orderBy('id', 'desc')->first();
         $schedule = CorporationApplicantschedule::orderBy('id', 'desc')->first();
-        $response->assertStatus(201)
-            ->assertJson(['message' => 'success']);
+        $response->assertStatus(201);
         $this->assertSame($this->user->id, $applicant->user_id);
         $this->assertSame($this->joboffer->id, $schedule->job_offer_id);
     }
