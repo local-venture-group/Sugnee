@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\CorporationJoboffer;
 use App\Models\MessageRoom;
 use App\Notifications\PasswordResetNotification;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -57,7 +58,7 @@ class User extends Authenticatable
     {
         $this->notify(new PasswordResetNotification($token));
     }
-    //複数DBの使用だと、BelongsToManyが使えないので, HasManyに変更。
+    //複数DBの使用をまたぐと、BelongsToManyが使えないので, HasManyに変更。
     public function favorites()
     {
         return $this->hasMany(Favorite::class, 'user_id');
@@ -81,11 +82,20 @@ class User extends Authenticatable
     }
     public function frikuFavorites()
     {
-        return $this->belongsToMany(FrikuJoboffer::class, 'friku_favorites');
+        return $this
+            ->belongsToMany(FrikuJoboffer::class, 'friku_favorites')
+            ->withPivot(['created_at', 'updated_at', 'id']);
     }
     public function corporationApplicant()
     {
         return $this->hasOne(CorporationApplicant::class, 'user_id');
     }
+    public function frikuApplicant()
+    {
+        return $this->hasOne(FrikuApplicant::class, 'user_id');
+
+    }
+
+
 
 }

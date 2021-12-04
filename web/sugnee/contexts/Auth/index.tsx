@@ -3,13 +3,11 @@ import { createContext, useEffect, useState, ReactNode } from "react";
 import Router from "next/router";
 
 // Types
-import { User } from "../../interfaces/user";
+import { User, UpdateProfileFormData } from "../../interfaces/user";
 
 interface AppProviderProps {
   children: ReactNode;
 }
-
-// 求人の型はあとでつける
 
 interface SignupProps {
   firstName: string;
@@ -29,16 +27,16 @@ interface LoginProps {
   password: string;
 }
 
-interface UpdateProfileProps {
-  data: {
-    firstName: string;
-    lastName: string;
-    firstNameKana: string;
-    lastNameKana: string;
-    email: string;
-  };
-  image?: string;
-}
+// interface UpdateProfileProps {
+//   data: {
+//     firstName: string;
+//     lastName: string;
+//     firstNameKana: string;
+//     lastNameKana: string;
+//     email: string;
+//   };
+//   image?: string;
+// }
 
 interface BookmarkProps {
   e: React.MouseEvent<HTMLElement>;
@@ -51,7 +49,9 @@ interface AuthContextType {
   signup: (props: SignupProps) => void;
   login: (props: LoginProps) => void;
   logout: () => void;
-  updateProfile: (props: UpdateProfileProps) => Promise<void>;
+  updateProfile: (props: UpdateProfileFormData) => Promise<void>;
+  applyFrikuJobOffer: ({ job: JobOffer }) => Promise<void>;
+  applyOmJobOffer: ({ job: JobOffer }) => Promise<void>;
   addFrikuBookmark: (props: BookmarkProps) => Promise<void>;
   deleteFrikuBookmark: (props: BookmarkProps) => Promise<void>;
   addOmBookmark: (props: BookmarkProps) => Promise<void>;
@@ -159,8 +159,8 @@ const AuthProvider = (props: AppProviderProps) => {
       .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/logout`)
       .then((res) => {
         if (res.status === 200) {
-          alert("ログアウトしました");
           setUser(null);
+          Router.push("/");
         } else {
           console.log(res.data);
           console.log("[logout]ログアウト失敗");
@@ -168,11 +168,11 @@ const AuthProvider = (props: AppProviderProps) => {
       })
       .catch((err) => {
         console.log(err.response);
-        console.log("[login]ログイン失敗");
+        console.log("[logout]ログアウト失敗");
       });
   };
 
-  const updateProfile = async (props: UpdateProfileProps) => {
+  const updateProfile = async (props: UpdateProfileFormData) => {
     const {
       data: { lastName, firstName, lastNameKana, firstNameKana, email },
       image,
@@ -198,6 +198,48 @@ const AuthProvider = (props: AppProviderProps) => {
       .catch((err) => console.log("更新失敗", err));
   };
 
+  // 独自求人とOM求人のロジックを仮で分けています。まとめられるようだったらリファクタリングします。
+  const applyFrikuJobOffer = async ({ job }) => {
+    await axios
+      .post(`/api/user/joboffer/om/apply/${job.id}`)
+      .then((res) => {
+        if (res.status === 201) {
+          setUser({
+            ...user,
+            appliedJobs: { ...user.appliedJobs, friku: res.data },
+          });
+          Router.push("/apply/success");
+        } else {
+          console.log("[applyOmJoboffer]応募失敗", res.data);
+        }
+      })
+      .catch((err) => {
+        console.log("[applyOmJoboffer]応募失敗", err.response);
+        if (err.response.status === 400) alert(err.response.data.message);
+      });
+  };
+
+  const applyOmJobOffer = async ({ job }) => {
+    await axios
+      .post(`/api/user/joboffer/om/apply/${job.id}`)
+      .then((res) => {
+        if (res.status === 201) {
+          setUser({
+            ...user,
+            appliedJobs: { ...user.appliedJobs, om: res.data },
+          });
+          Router.push("/apply/success");
+        } else {
+          console.log("[applyOmJoboffer]応募失敗", res.data);
+        }
+      })
+      .catch((err) => {
+        console.log("[applyOmJoboffer]応募失敗", err.response);
+        // 仮でアラート、応募済み求人をユーザー情報に保持するようになればボタンを非活性にする
+        if (err.response.status === 400) alert(err.response.data.message);
+      });
+  };
+
   const addFrikuBookmark = async (props: BookmarkProps) => {
     const { e, user, jobId } = props;
     e.preventDefault();
@@ -216,7 +258,10 @@ const AuthProvider = (props: AppProviderProps) => {
         .then((res) => {
           if (res.status === 201) {
             console.log("[addFavorite]追加成功", res);
-            setUser({ ...user, favorites: res.data });
+            setUser({
+              ...user,
+              favorites: { ...user.favorites, om: res.data },
+            });
           } else {
             console.log("[addFavorite]お気に入り追加失敗", res.data);
           }
@@ -244,7 +289,10 @@ const AuthProvider = (props: AppProviderProps) => {
         .then((res) => {
           if (res.status === 200) {
             console.log("[deleteFavorite]削除成功", res);
-            setUser({ ...user, favorites: res.data });
+            setUser({
+              ...user,
+              favorites: { ...user.favorites, om: res.data },
+            });
           } else {
             console.log("[deleteFavorite]お気に入り削除失敗", res.data);
           }
@@ -275,7 +323,10 @@ const AuthProvider = (props: AppProviderProps) => {
         )
         .then((res) => {
           if (res.status === 201) {
-            setUser({ ...user, favorites: res.data });
+            setUser({
+              ...user,
+              favorites: { ...user.favorites, om: res.data },
+            });
           } else {
             console.log("[addFavorite]お気に入り追加失敗", res.data);
           }
@@ -303,7 +354,10 @@ const AuthProvider = (props: AppProviderProps) => {
         )
         .then((res) => {
           if (res.status === 200) {
-            setUser({ ...user, favorites: res.data });
+            setUser({
+              ...user,
+              favorites: { ...user.favorites, om: res.data },
+            });
           } else {
             console.log("[deleteFavorite]お気に入り削除失敗", res.data);
           }
@@ -323,6 +377,8 @@ const AuthProvider = (props: AppProviderProps) => {
         login,
         logout,
         updateProfile,
+        applyFrikuJobOffer,
+        applyOmJobOffer,
         addFrikuBookmark,
         deleteFrikuBookmark,
         addOmBookmark,

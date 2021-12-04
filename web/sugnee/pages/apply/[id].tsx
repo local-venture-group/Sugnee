@@ -6,34 +6,27 @@ import axios from "axios";
 // Contexts
 import { AuthContext } from "../../contexts/Auth";
 
-export default function apply({ job }) {
-  const router = useRouter();
-  const { user } = useContext(AuthContext);
-  const userFavorites = user?.favorites.map(
-    (favoriteJob) => favoriteJob.corporation_joboffer_id
-  );
+// Type
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { JobOffer } from "../../interfaces/job";
+import { User } from "../../interfaces/user";
 
-  const applyJobOffer = async (e, user, job) => {
+const apply: NextPage<{ job: JobOffer }> = ({ job }) => {
+  const router = useRouter();
+  const { user, applyOmJobOffer } = useContext(AuthContext);
+
+  const applyJobOffer: (
+    e: React.MouseEvent,
+    user: User,
+    job: JobOffer
+  ) => Promise<void> = async (e, user, job) => {
     e.preventDefault();
     if (!user) alert("応募はログインが必要です");
 
+    // Fリク求人応募ロジックは仕様確定後
     // OM求人応募仮ロジック
-    if (job.type_of_job === 2) {
-      await axios
-        .post(`/api/user/joboffer/om/apply/${job.id}`)
-        .then((res) => {
-          if (res.status === 201) {
-            console.log("[applyOmJoboffer]応募成功", res);
-            router.push("/apply/success");
-          } else {
-            console.log("[applyOmJoboffer]応募失敗", res.data);
-          }
-        })
-        .catch((err) => {
-          console.log("[applyOmJoboffer]応募失敗", err.response);
-          // 仮でアラート、応募済み求人をユーザー情報に保持するようになればボタンを非活性にする
-          if (err.response.status === 400) alert(err.response.data.message);
-        });
+    if (job.type_of_job[0] === 2) {
+      await applyOmJobOffer;
       return;
     }
   };
@@ -54,7 +47,7 @@ export default function apply({ job }) {
         <div className="hero h-96 bg-gradient-to-b from-primary to-secondary"></div>
       </section>
       <section id="body">
-        <div className="container mx-auto">
+        <div className="container mx-auto mt-10 px-8 md:px-28">
           <p className="bg-primary text-white px-2 py-3 w-full mt-10">応募先</p>
           <div className="border mt-8 p-8">
             <table className="table-fixed w-full mt-8 break-all">
@@ -114,13 +107,13 @@ export default function apply({ job }) {
               </tbody>
             </table>
           </div>
-          {job.type_of_job === 0 && (
+          {job.type_of_job[0] === 0 && (
             <p className="text-warning my-6">
               この求人はキャリアアドバイザー面談が必要です
             </p>
           )}
           {/* 一覧から外部リンクへとばすようなら分岐を削除 */}
-          {job.type_of_job === 3 ? (
+          {job.type_of_job[0] === 3 ? (
             <a
               href={job.url}
               target="_blank"
@@ -137,21 +130,23 @@ export default function apply({ job }) {
               応募する
             </button>
           )}
-          <div className="lg:hidden bottom-0 fixed w-full flex justify-center bg-white bg-opacity-90 px-3 pt-8 pb-2">
-            <button
-              onClick={(e) => applyJobOffer(e, user, job)}
-              className="btn btn-accent"
-            >
-              応募する
-            </button>
-          </div>
+        </div>
+        <div className="lg:hidden bottom-0 fixed w-full flex justify-center bg-white bg-opacity-90 px-3 pt-8 pb-2">
+          <button
+            onClick={(e) => applyJobOffer(e, user, job)}
+            className="btn btn-accent w-10/12"
+          >
+            応募する
+          </button>
         </div>
       </section>
     </>
   );
-}
+};
 
-export async function getStaticPaths() {
+export default apply;
+
+export const getStaticPaths: GetStaticPaths = async () => {
   const allPickupJobs = await axios
     .get("http://nginx:80/api/user/pickup")
     .then((res) => res.data)
@@ -161,9 +156,9 @@ export async function getStaticPaths() {
     paths: allPickupJobs?.map(({ id }) => `/apply/${id}`) ?? [],
     fallback: true,
   };
-}
+};
 
-export async function getStaticProps({ params }) {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const job = await axios
     .get(`http://nginx:80/api/user/joboffer/${params.id}`)
     .then((res) => res.data)
@@ -172,4 +167,4 @@ export async function getStaticProps({ params }) {
   return {
     props: { job: job ? job : null },
   };
-}
+};

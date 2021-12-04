@@ -58,6 +58,7 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
             'schema' => 'public',
+            'timezone' => 'Asia/Tokyo',
         ],
         'ats' => [
             'driver' => 'pgsql',
@@ -71,7 +72,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-
+            'timezone' => 'Asia/Tokyo',
             'sslmode' => 'prefer',
             'schema' => 'public',
 

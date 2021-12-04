@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useRef, useCallback, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Crop } from "react-image-crop";
+
+// Contexts
+import { AuthContext } from "../../contexts/Auth";
 
 // Components
 import CropModal from "../Modal/CropModal";
@@ -9,31 +12,42 @@ import CropModal from "../Modal/CropModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
-const Profile = ({ user, updateProfile }) => {
+// Types
+import { User } from "../../interfaces/user";
+interface UpdateProfileData {
+  firstName: string;
+  lastName: string;
+  firstNameKana: string;
+  lastNameKana: string;
+  email: string;
+}
+
+const Profile: React.FC<{ user: User }> = ({ user }) => {
+  const { updateProfile } = useContext(AuthContext);
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm<UpdateProfileData>();
 
   //画像アップロード
-  const [image, setImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>();
   const [src, setSrc] = useState<string | null>(null);
 
   const [crop, setCrop] = useState<Crop>({
-    unit: "%",
-    x: 25,
-    y: 10,
-    width: 80,
-    height: 80,
-    aspect: 4 / 4,
+    unit: "px",
+    aspect: 1,
+    x: 0,
+    y: 0,
+    width: 200,
+    height: 200,
   });
-  const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   // 画像読み込み
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (e.target.files !== null) {
+    if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         typeof reader.result === "string" && setSrc(reader.result);
@@ -42,21 +56,17 @@ const Profile = ({ user, updateProfile }) => {
     }
   };
 
-  const onImageLoaded = (image) => {
-    setImageRef(image);
-  };
-
-  // 画像くり抜き
-  const onCropChange = (crop) => {
-    setCrop(crop);
-  };
+  const onImageLoaded = useCallback((image) => {
+    imageRef.current = image;
+  }, []);
 
   const onCropComplete = (crop) => {
     if (imageRef && crop.width && crop.height) {
+      const image = imageRef.current;
       const canvas = document.createElement("canvas");
       const pixelRatio = window.devicePixelRatio;
-      const scaleX = imageRef.naturalWidth / imageRef.width;
-      const scaleY = imageRef.naturalHeight / imageRef.height;
+      const scaleX = image.naturalWidth / image.width;
+      const scaleY = image.naturalHeight / image.height;
       const ctx = canvas.getContext("2d");
 
       canvas.width = crop.width * pixelRatio * scaleX;
@@ -67,19 +77,20 @@ const Profile = ({ user, updateProfile }) => {
 
       if (ctx !== null) {
         ctx.drawImage(
-          imageRef,
+          image,
           crop.x * scaleX,
           crop.y * scaleY,
           crop.width * scaleX,
           crop.height * scaleY,
           0,
           0,
-          crop.width,
-          crop.height
+          crop.width * scaleX,
+          crop.height * scaleY
         );
       }
+
       const base64Image = canvas.toDataURL("img/url");
-      setImage(base64Image);
+      setProfileImage(base64Image);
     }
   };
 
@@ -93,26 +104,35 @@ const Profile = ({ user, updateProfile }) => {
 
   return (
     <>
-      <div className="w-3/4 bg-white mb-6">
-        <div className="w-full flex px-10 py-6 md:mb-0">
-          <div className="avatar placeholder">
-            {/* ユーザー情報の画像表示ができるようになったら分岐修正 */}
-            {image ? (
+      <div className="w-full md:w-3/4 bg-white px-10 py-6 rounded">
+        <div className="text-center">
+          <div className="avatar placeholder my-6">
+            {profileImage ? (
               <label
                 htmlFor="cropModal"
-                className="text-neutral-content rounded-full w-32 h-32 border"
+                className="text-neutral-content rounded-full w-32 h-32 border hover:shadow"
               >
-                <img src={image} style={{ borderRadius: "100%" }} />
+                <img src={profileImage} style={{ borderRadius: "100%" }} />
+              </label>
+            ) : user?.img_path ? (
+              <label
+                htmlFor="cropModal"
+                className="bg-neutral-content text-neutral-content rounded-full w-32 h-32 hover:shadow"
+              >
+                <img
+                  src={`http://${user.img_path}`}
+                  style={{ borderRadius: "100%" }}
+                />
               </label>
             ) : (
               <label
                 htmlFor="cropModal"
-                className="bg-neutral-focus text-neutral-content rounded-full w-32 h-32 hover:bg-primary"
+                className="bg-gray-500 text-neutral-content rounded-full w-32 h-32 hover:bg-gray-300 hover:shadow"
               >
                 <FontAwesomeIcon
                   icon={faUser}
-                  size="lg"
-                  className="ml-14 mt-14"
+                  size="2x"
+                  className="ml-1 mt-12"
                 />
               </label>
             )}
@@ -123,66 +143,113 @@ const Profile = ({ user, updateProfile }) => {
               onSelectFile={onSelectFile}
               onImageLoaded={onImageLoaded}
               onCropComplete={onCropComplete}
-              onCropChange={onCropChange}
+              onCropChange={(c) => setCrop(c)}
               addProfileImage={addProfileImage}
             />
           </div>
-          <div className="pl-6">
-            <p className="text-3xl mb-3　">{user.name}</p>
-            <p className="text-lg text-gray-500">{user.birth}</p>
-            <p className="text-lg text-gray-500">
-              {user.gender === 1 ? "男性" : "女性"}
-            </p>
-          </div>
         </div>
-      </div>
-      <div className="w-3/4 bg-white px-10 py-6">
-        <form onSubmit={handleSubmit((data) => updateProfile({ data, image }))}>
-          <div className="w-full md:mb-0">
+        <div className="w-full md:w-1/2 md:mx-auto my-6 py-1 bg-gray-500 text-center">
+          <h1 className="text-white text-sm">基本情報</h1>
+        </div>
+        <form
+          onSubmit={handleSubmit((data) =>
+            updateProfile({ data, image: profileImage })
+          )}
+          className="w-full md:w-1/2 md:mx-auto"
+        >
+          <div className="w-full px-3 mb-3">
             <label
               className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="name"
             >
               氏名
             </label>
-            <input
-              id="lastName"
-              type="text"
-              defaultValue={user.last_name}
-              className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-1/2"
-              {...register("lastName", { required: true })}
-            />
-            <input
-              id="firstName"
-              type="text"
-              defaultValue={user.first_name}
-              className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-1/2"
-              {...register("firstName", { required: true })}
-            />
+            <div className="flex">
+              <div className="w-1/2">
+                <input
+                  id="lastName"
+                  type="text"
+                  defaultValue={user.last_name}
+                  className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-full"
+                  {...register("lastName", { required: true })}
+                />
+                {errors.lastName?.type === "required" && (
+                  <p className="text-red-500 text-xs italic">姓は必須です</p>
+                )}
+                {errors.lastName?.type === "pattern" && (
+                  <p className="text-red-500 text-xs italic">
+                    数字は入力できません
+                  </p>
+                )}
+              </div>
+              <div className="w-1/2">
+                <input
+                  id="firstName"
+                  type="text"
+                  defaultValue={user.first_name}
+                  className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-full"
+                  {...register("firstName", { required: true })}
+                />
+                {errors.firstName?.type === "required" && (
+                  <p className="text-red-500 text-xs italic">名は必須です</p>
+                )}
+                {errors.firstName?.type === "pattern" && (
+                  <p className="text-red-500 text-xs italic">
+                    数字は入力できません
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
-          <div className="w-full md:mb-0">
+          <div className="w-full px-3 mb-3">
             <label
               className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="nameKana"
             >
               氏名（フリガナ）
             </label>
-            <input
-              id="lastNameKana"
-              type="text"
-              defaultValue={user.last_name_kana}
-              className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-1/2"
-              {...register("lastNameKana", { required: true })}
-            />
-            <input
-              id="firstNameKana"
-              type="text"
-              defaultValue={user.first_name_kana}
-              className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-1/2"
-              {...register("firstNameKana", { required: true })}
-            />
+            <div className="flex">
+              <div className="w-1/2">
+                <input
+                  id="lastNameKana"
+                  type="text"
+                  defaultValue={user.last_name_kana}
+                  className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-full"
+                  {...register("lastNameKana", { required: true })}
+                />
+                {errors.lastNameKana?.type === "required" && (
+                  <p className="text-red-500 text-xs italic">
+                    姓（カナ）は必須です
+                  </p>
+                )}
+                {errors.lastNameKana?.type === "pattern" && (
+                  <p className="text-red-500 text-xs italic">
+                    数字は入力できません
+                  </p>
+                )}
+              </div>
+              <div className="w-1/2">
+                <input
+                  id="firstNameKana"
+                  type="text"
+                  defaultValue={user.first_name_kana}
+                  className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-full"
+                  {...register("firstNameKana", { required: true })}
+                />
+                {errors.firstNameKana?.type === "required" && (
+                  <p className="text-red-500 text-xs italic">
+                    名（カナ）は必須です
+                  </p>
+                )}
+                {errors.firstNameKana?.type === "pattern" && (
+                  <p className="text-red-500 text-xs italic">
+                    数字は入力できません
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
-          <div className="w-full md:mb-0">
+          <div className="w-full px-3 mb-3">
             <label
               className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="email"
@@ -196,8 +263,13 @@ const Profile = ({ user, updateProfile }) => {
               className="hover:bg-gray-100 focus:bg-gray-100 focus:outline-none rounded py-3 px-4 mb-3 w-full"
               {...register("email", { required: true })}
             />
+            {errors.email?.type === "required" && (
+              <p className="text-red-500 text-xs italic">
+                メールアドレスは必須です
+              </p>
+            )}
           </div>
-          <div className="w-full md:mb-0">
+          <div className="w-full px-3 mb-3">
             <label
               className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="birth"
@@ -212,7 +284,7 @@ const Profile = ({ user, updateProfile }) => {
               className="bg-white rounded py-3 px-4 mb-3 w-full"
             />
           </div>
-          <div className="w-full md:mb-0">
+          <div className="w-full px-3 mb-3">
             <label
               className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="gender"
@@ -227,7 +299,7 @@ const Profile = ({ user, updateProfile }) => {
               className="bg-white rounded py-3 px-4 mb-3 w-full"
             />
           </div>
-          <button type="submit" className="w-full btn">
+          <button type="submit" className="w-full btn my-8">
             変更する
           </button>
         </form>

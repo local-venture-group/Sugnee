@@ -26,22 +26,16 @@ import {
 
 // Type
 import { pickupArticle, JobOffer } from "../../../interfaces/job";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 interface pickUpArticleProps {
   article: pickupArticle;
-  jobData: {
-    // returnされるデータが変更されたら定義します
-    frikuJoboffers?: [JobOffer];
-  };
+  jobData?: [JobOffer];
 }
 
-export default function pickUpArticle({
-  article,
-  jobData,
-}: pickUpArticleProps) {
+const pickUpArticle: NextPage<pickUpArticleProps> = ({ article, jobData }) => {
   const { user } = useContext(AuthContext);
-  // getUserでreturnされるfavoriteJobが変更されたら定義してエラー解消します
-  const userFavorites = user?.favorites.map(
-    (favoriteJob) => favoriteJob.corporation_joboffer_id
+  const userFavorites = user?.favorites.friku.map(
+    (favoriteJob) => favoriteJob.id
   );
 
   return (
@@ -57,7 +51,7 @@ export default function pickUpArticle({
           <Link href="/">TOP</Link>
           <span className="ml-2">&gt;</span>
           <span className="ml-2">
-            <Link href="/pickup">ピックアップ企業</Link>
+            <Link href="/pickup/page/1">ピックアップ企業</Link>
           </span>
           <span className="ml-2">&gt;</span>
           <span className="ml-2">{article.companyName}</span>
@@ -187,22 +181,28 @@ export default function pickUpArticle({
       <section id="jobOffers" style={{ backgroundColor: "#E6F2F4" }}>
         <div className="container mx-auto px-8 py-28 md:px-28">
           <h2 className="text-2xl font-bold mb-16">求人情報</h2>
-          {jobData.frikuJoboffers.map((job) => (
-            <div key={job.id} className="mb-3">
-              <PickupJobCard
-                job={job}
-                user={user}
-                userFavorites={userFavorites}
-              />
-            </div>
-          ))}
+          {jobData ? (
+            jobData.map((job) => (
+              <div key={job.id} className="mb-3">
+                <PickupJobCard
+                  job={job}
+                  user={user}
+                  userFavorites={userFavorites}
+                />
+              </div>
+            ))
+          ) : (
+            <p>求人情報はありません</p>
+          )}
         </div>
       </section>
     </>
   );
-}
+};
 
-export async function getStaticPaths() {
+export default pickUpArticle;
+
+export const getStaticPaths: GetStaticPaths = async () => {
   // デフォルトでlimit10が設定されているので一覧表示件数定まったらlimitパラメータつける
   const pickupArticleData = await client.get({
     endpoint: "articles",
@@ -214,18 +214,20 @@ export async function getStaticPaths() {
       [],
     fallback: true,
   };
-}
+};
 
-export async function getStaticProps({ params }) {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const article = await client.get({
     endpoint: `articles/${params.id}`,
   });
 
-  // 今は1しか存在しないので1で対応、のちにarticle.companyIdを渡すよう変更＆エラーハンドリングします
   const jobData = await axios
-    .get(`http://nginx:80/api/user/friku/1/joboffers`)
-    .then((res) => res.data)
-    .catch((err) => console.log(err));
+    .get(`http://nginx:80/api/user/friku/1/joboffers/pickup`)
+    .then((res) => {
+      if (res.data.message) return;
+      return res.data;
+    })
+    .catch((err) => console.log(err.response));
 
   return {
     props: {
@@ -233,4 +235,4 @@ export async function getStaticProps({ params }) {
       jobData: jobData ? jobData : null,
     },
   };
-}
+};

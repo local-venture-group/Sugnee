@@ -48,7 +48,7 @@ const JobSearchModal = (props: JobSearchModalProps) => {
   const onSubmit = async (data) => {
     await addSearchCondition({
       cities: data.locations ? data.locations : [],
-      keywords: data.keywords
+      keyWords: data.keywords
         ? data.keywords.replaceAll(/　/g, " ").split(" ")
         : [],
       workTypes: data.workType

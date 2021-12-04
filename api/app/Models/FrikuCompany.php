@@ -20,4 +20,8 @@ class FrikuCompany extends Model
     {
         return $this->hasMany(FrikuJoboffer::class, 'company_id');
     }
+    public function featuredCompanyArticle()
+    {
+        return $this->hasOne(FeaturedCompanyArticle::class);
+    }
 }

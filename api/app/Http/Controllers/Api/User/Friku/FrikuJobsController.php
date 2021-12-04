@@ -11,11 +11,27 @@ use Illuminate\Http\Request;
 
 class FrikuJobsController extends Controller
 {
-    //企業の求人一覧を取得
-    public function pickUpCompanyJoboffers(FrikuCompany $frikuCompany)
-    {
 
-        $pickUpCompany = $frikuCompany->with('frikuJoboffers')->first();
-        return collect(new FrikuCompanyResource($pickUpCompany));
+    //企業の求人一覧を取得
+    public function pickUpCompanyJoboffers($frikuCompany)
+    {
+        $frikuCompany = FrikuCompany::with('frikuJoboffers')->findOrFail($frikuCompany);
+        if (!$frikuCompany->is_pickup) {
+            return response()->json(['message' => 'pickUp企業の求人ではありません']);
+        }
+        $pickUpJobs =  $frikuCompany->frikuJoboffers;
+
+        return JobResource::collection($pickUpJobs)->toJson();
+        // return collect(new JobResource($pickUpJobs));
+    }
+    public function featureCompanyJoboffers($frikuCompany)
+    {
+        $frikuCompany = FrikuCompany::with('frikuJoboffers')->findOrFail($frikuCompany);
+        if ($frikuCompany->is_pickup) {
+            return response()->json(['message' => '注目企業の求人ではありません']);
+        }
+        $featureJobs =  $frikuCompany->frikuJoboffers;
+
+        return JobResource::collection($featureJobs)->toJson();
     }
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { client } from "../../libs/client";
 
 // Components
+import Pagenation from "../../components/Pagination/Article";
 import PickupCard from "../../components/Card/PickupCard";
 
 // Types
@@ -26,6 +27,9 @@ const Articles: NextPage<ArticlesProps> = ({ pickupArticles }) => {
           </div>
         ))}
       </div>
+      <div>
+        <Pagenation totalCount={pickupArticles.length} />
+      </div>
     </div>
   );
 };
@@ -33,9 +37,12 @@ const Articles: NextPage<ArticlesProps> = ({ pickupArticles }) => {
 export default Articles;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const pickupArticleData = await client.get({
-    endpoint: "articles",
-  });
+  const pickupArticleData = await client
+    .get({
+      endpoint: "articles",
+    })
+    .then((res) => res.data)
+    .catch((err) => console.log(err.response));
 
   return {
     props: { pickupArticles: pickupArticleData.contents },

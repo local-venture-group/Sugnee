@@ -15,12 +15,25 @@ import {
   faClock,
 } from "@fortawesome/free-solid-svg-icons";
 
-export default function job({ job }) {
+// Types
+import { GetStaticProps, GetStaticPaths, NextPage } from "next";
+import { JobOffer } from "../../../interfaces/job";
+
+const jobOffer: NextPage<{ job: JobOffer }> = ({ job }) => {
   const router = useRouter();
   const { user, addOmBookmark, deleteOmBookmark } = useContext(AuthContext);
-  const userFavorites = user?.favorites.map(
-    (favoriteJob) => favoriteJob.corporation_joboffer_id
+  const userFavorites: number[] = user?.favorites.om.map(
+    (favoriteJob) => favoriteJob.id
   );
+
+  const applyJobOffer = (): void => {
+    // 人材紹介だった場合は導線分けるかも、仕様確定後修正します
+    if (user) {
+      router.push(`/apply/${job.id}`);
+      return;
+    }
+    alert("応募はログインが必要です");
+  };
 
   if (!job) return null;
   return (
@@ -52,7 +65,8 @@ export default function job({ job }) {
                 <li>
                   <FontAwesomeIcon icon={faYenSign} className="text-gray-500" />
                   <span className="text-gray-500 ml-3">
-                    {job.salary_min}円〜{job.salary_max}円
+                    {parseInt(job.salary_min).toLocaleString()}〜
+                    {parseInt(job.salary_max).toLocaleString()}円
                   </span>
                 </li>
               </ul>
@@ -71,22 +85,19 @@ export default function job({ job }) {
               {user && userFavorites && isFavorite(userFavorites, job.id) ? (
                 <button
                   className="btn btn-outline btn-primary w-3/4 mb-4"
-                  onClick={(e) => deleteOmBookmark(e, user, job.id)}
+                  onClick={(e) => deleteOmBookmark({ e, user, jobId: job.id })}
                 >
                   お気に入りから削除
                 </button>
               ) : (
                 <button
                   className="btn btn-outline btn-primary w-3/4 mb-4"
-                  onClick={(e) => addOmBookmark(e, user, job.id)}
+                  onClick={(e) => addOmBookmark({ e, user, jobId: job.id })}
                 >
                   お気に入りに追加
                 </button>
               )}
-              <button
-                className="btn btn-primary w-3/4"
-                onClick={() => router.push(`/apply/${job.id}`)}
-              >
+              <button className="btn btn-primary w-3/4" onClick={applyJobOffer}>
                 応募する
               </button>
             </div>
@@ -114,7 +125,8 @@ export default function job({ job }) {
                   <th className="w-1/4 text-left pl-4">給与</th>
                   <td className="w-3/4 p-8">
                     {job.salary_pattern}
-                    {job.salary_min}円〜{job.salary_max}円
+                    {parseInt(job.salary_min).toLocaleString()}〜
+                    {parseInt(job.salary_max).toLocaleString()}円
                   </td>
                 </tr>
                 <tr className="border-b border-gray-300">
@@ -158,14 +170,14 @@ export default function job({ job }) {
           {user && userFavorites && isFavorite(userFavorites, job.id) ? (
             <button
               className="btn btn-outline btn-primary w-2/5 mr-3"
-              onClick={(e) => deleteOmBookmark(e, user, job.id)}
+              onClick={(e) => deleteOmBookmark({ e, user, jobId: job.id })}
             >
               お気に入りから削除
             </button>
           ) : (
             <button
               className="btn btn-outline btn-primary w-2/5 mr-3"
-              onClick={(e) => addOmBookmark(e, user, job.id)}
+              onClick={(e) => addOmBookmark({ e, user, jobId: job.id })}
             >
               お気に入りに追加
             </button>
@@ -180,9 +192,11 @@ export default function job({ job }) {
       </section>
     </>
   );
-}
+};
 
-export async function getStaticPaths() {
+export default jobOffer;
+
+export const getStaticPaths: GetStaticPaths = async () => {
   const allPickupJobs = await axios
     .get("http://nginx:80/api/user/pickup")
     .then((res) => res.data)
@@ -192,9 +206,9 @@ export async function getStaticPaths() {
     paths: allPickupJobs?.map(({ id }) => `/jobOffer/job/${id}`) ?? [],
     fallback: true,
   };
-}
+};
 
-export async function getStaticProps({ params }) {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const job = await axios
     .get(`http://nginx:80/api/user/joboffer/${params.id}`)
     .then((res) => res.data)
@@ -203,4 +217,4 @@ export async function getStaticProps({ params }) {
   return {
     props: { job: job ? job : null },
   };
-}
+};

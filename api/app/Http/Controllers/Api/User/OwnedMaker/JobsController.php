@@ -31,35 +31,6 @@ class JobsController extends Controller
         //ここで、応募済かどうかを取得する。
         return collect(new JobResource($corporationJoboffer));
     }
-    public function searchJobOffers(Request $request)
-    {
-        $this->limit = 10;
-        //ダイエット
-        if (!(empty($request->query() || empty(Auth::guard('users'))))) {
-            //ここにユーザーの検索条件を保存する処理を書く(メソッドを作り呼び出す)
-        }
-
-        //OM求人(独自)取得
-        $useCase = new SearchJoboffersOmOriginalUseCase();
-        $omOriginalJoboffers = $useCase->handle($request, $this->limit);
-
-        //OM求人(ハロワ、indeed)取得
-        $useCase = new SearchJoboffersCrawledUseCase();
-        $omCrawledJoboffers = $useCase->handle($request, $this->limit);
-
-
-        $mergeOmJoboffers = $omOriginalJoboffers->merge($omCrawledJoboffers);
-
-        return JobResource::collection($mergeOmJoboffers)->toJson();
-    }
-    public function getConditions(JobService $jobService)
-    {
-        return [
-            'city' => $jobService->getJobConditions(),
-            'work_type' => JobConditionConsts::WORK_TYPES,
-        ];
-    }
-
     //OMオリジナル求人に応募するときのアクション
     public function applyOmOriginalJoboffer(
         Request $request,
@@ -84,7 +55,11 @@ class JobsController extends Controller
         //ユーザーの面接申込日データを作成
 
         $applicantschedule->create($scheduleArray);
-        return response()->json(['message' => 'success'], 201);
+        $schedules = CorporationApplicantschedule::with('corporationJoboffer')->where('applicant_id', $user->id)->get();
+        $joboffer = $schedules->map(function ($schedule) {
+            return $schedule->corporationJoboffer;
+        });
+        return response()->json($joboffer, 201, ['message' => 'success']);
 
 
 

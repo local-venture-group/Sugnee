@@ -17,7 +17,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faClock } from "@fortawesome/free-regular-svg-icons";
 
-export default function OmJobCard({ job, user, userFavorites }) {
+// Types
+import { JobOffer } from "../../../interfaces/job";
+import { User } from "../../../interfaces/user";
+interface OmJobCardProps {
+  job: JobOffer;
+  user: User;
+  userFavorites: number[];
+}
+
+const OmJobCard: React.FC<OmJobCardProps> = ({ job, user, userFavorites }) => {
   const { addOmBookmark, deleteOmBookmark } = useContext(AuthContext);
 
   return (
@@ -36,14 +45,15 @@ export default function OmJobCard({ job, user, userFavorites }) {
             </p>
             {user && userFavorites && isFavorite(userFavorites, job.id) ? (
               <BookmarkButton
-                text={<FontAwesomeIcon icon={faBookmarked} />}
                 color={"pink"}
-                event={(e) => deleteOmBookmark(e, user, job.id)}
+                text={<FontAwesomeIcon icon={faBookmarked} />}
+                event={(e) => deleteOmBookmark({ e, user, jobId: job.id })}
               />
             ) : (
               <BookmarkButton
+                color={"gray"}
                 text={<FontAwesomeIcon icon={faBookmark} />}
-                event={(e) => addOmBookmark(e, user, job.id)}
+                event={(e) => addOmBookmark({ e, user, jobId: job.id })}
               />
             )}
           </div>
@@ -58,7 +68,8 @@ export default function OmJobCard({ job, user, userFavorites }) {
               <FontAwesomeIcon icon={faYenSign} />
               <span className="text-gray-500 text-sm ml-3">
                 {job.salary_pattern}
-                {job.salary_min}円〜{job.salary_max}円
+                {parseInt(job.salary_min).toLocaleString()}円〜
+                {parseInt(job.salary_max).toLocaleString()}円
               </span>
             </li>
           </ul>
@@ -95,4 +106,6 @@ export default function OmJobCard({ job, user, userFavorites }) {
       </div>
     </Link>
   );
-}
+};
+
+export default OmJobCard;

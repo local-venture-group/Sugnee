@@ -10,7 +10,6 @@ import { AuthContext } from "../contexts/Auth";
 import { SearchConditionContext } from "../contexts/SearchCondition";
 
 // Components
-import Seo from "../components/Seo";
 import OmJobCard from "../components/Card/OmJobCard";
 import PickupCard from "../components/Card/PickupCard";
 import SearchTypeCard from "../components/Card/SearchTypeCard";
@@ -36,10 +35,7 @@ interface HomeProps {
 const Home: NextPage<HomeProps> = ({ omJobs, pickupArticles }) => {
   const router = useRouter();
   const { user } = useContext(AuthContext);
-
-  const userFavorites = user?.favorites.map(
-    (favoriteJob) => favoriteJob.corporation_joboffer_id
-  );
+  const userFavorites = user?.favorites.om.map((favoriteJob) => favoriteJob.id);
   const { addSearchCondition } = useContext(SearchConditionContext);
   const searchWordsInputRef = useRef<HTMLInputElement>();
 
@@ -68,7 +64,6 @@ const Home: NextPage<HomeProps> = ({ omJobs, pickupArticles }) => {
 
   return (
     <>
-      <Seo />
       <div>
         <section className="w-full h-96 bg-gradient-to-b from-primary to-secondary"></section>
 
@@ -80,7 +75,7 @@ const Home: NextPage<HomeProps> = ({ omJobs, pickupArticles }) => {
           />
           <h1 className="text-3xl">ピックアップ企業</h1>
           <p className="mt-4 mb-10 text-sm hover:text-gray-400">
-            <Link href="/pickup">
+            <Link href="/pickup/page/1">
               <a>
                 すべて見る
                 <span>

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,42 +16,16 @@ class FavoritesSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('favorites')->insert([
-            [
-                'id' => 1,
+        $carbon = new Carbon;
+        for($i = 1; $i <= 3; $i++) {
+            DB::table('favorites')->insert([
+                'id' => $i,
                 'user_id' => 1,
-                'corporation_joboffer_id' => 1,
-            ],
-            [
-                'id' => 2,
-                'user_id' => 1,
-                'corporation_joboffer_id' => 2,
-            ],
-            [
-                'id' => 3,
-                'user_id' => 1,
-                'corporation_joboffer_id' => 3,
-            ],
-            [
-                'id' => 4,
-                'user_id' => 2,
-                'corporation_joboffer_id' => 1,
-            ],
-            [
-                'id' => 5,
-                'user_id' => 2,
-                'corporation_joboffer_id' => 2,
-            ],
-            [
-                'id' => 6,
-                'user_id' => 2,
-                'corporation_joboffer_id' => 3,
-            ],
-            [
-                'id' => 7,
-                'user_id' => 3,
-                'corporation_joboffer_id' => 1,
-            ],
-        ]);
+                'corporation_joboffer_id' => $i,
+                'created_at' => $carbon->subDays(rand(1, 10)),
+                'updated_at' => now()
+            ]);
+        }
+
     }
 }

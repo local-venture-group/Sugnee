@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
       <div>
         <Link href="/">
           <a className="text-2xl font-bold text-gray-800 dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300">
-            FUK REC
+            Sugnee
           </a>
         </Link>
         <div className="grid grid-flow-col gap-4">

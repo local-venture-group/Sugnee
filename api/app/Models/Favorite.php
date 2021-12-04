@@ -14,6 +14,9 @@ class Favorite extends Model
     protected $connection = 'fukuriku';
     protected $fillable = ['user_id', 'corporation_joboffer_id'];
 
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
     public function users() : belongsTo
     {
         return $this->belongsTo(User::class);

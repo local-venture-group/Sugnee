@@ -1,26 +1,34 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { useContext, useState } from "react";
 
 // Contexts
-import { StaffContext } from "../../contexts/Staff";
+import { AuthContext } from "../../contexts/Auth";
+import { AdminContext } from "../../contexts/Admin";
 
 // Icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
-const staffLogin = () => {
+// Types
+import { NextPage } from "next";
+interface FormValues {
+  email: string;
+  password: string;
+}
+
+const adminLogin: NextPage = () => {
   const router = useRouter();
-  const { register, handleSubmit } = useForm();
-  const { staff, staffLogin } = useContext(StaffContext);
-  const [isRevealPassword, setIsRevealPassword] = useState(false);
+  const { register, handleSubmit } = useForm<FormValues>();
+  const { user } = useContext(AuthContext);
+  const { adminLogin } = useContext(AdminContext);
+  const [isRevealPassword, setIsRevealPassword] = useState<Boolean>(false);
 
   const togglePassword = () => {
     setIsRevealPassword((prevState) => !prevState);
   };
 
-  if (staff) router.push("/");
+  if (user) router.push("/");
   return (
     <div className="h-screen bg-gradient-to-b from-primary to-secondary">
       <div className="container mx-auto">
@@ -37,11 +45,10 @@ const staffLogin = () => {
           <div className="w-full lg:w-1/2 bg-white p-5 rounded-lg lg:rounded-l-none">
             <div className="text-center mb-12">
               <h1 className="mt-6 text-5xl font-bold text-gray-900">
-                COMPANY LOG IN
+                ADMIN LOGIN
               </h1>
-
               <form
-                onSubmit={handleSubmit((data) => staffLogin(data))}
+                onSubmit={handleSubmit((data) => adminLogin(data))}
                 className="mt-12 pl-8"
               >
                 <div className="w-full px-3">
@@ -95,30 +102,13 @@ const staffLogin = () => {
                     </div>
                   </div>
                 </div>
-                <div className="w-full px-3 my-12 smd:mb-0">
-                  <button
-                    className="btn btn-primary border-0 hover:shadow px-8 rounded-xl w-full"
-                    type="submit"
-                  >
-                    ログイン
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary border-0 hover:shadow px-8 rounded-xl w-full"
+                >
+                  ログイン
+                </button>
               </form>
-              <p>
-                <Link href="/staffSignup">
-                  <a className="mt-2 text-sm text-primary hover:text-gray-500">
-                    会員登録がまだの方はこちらから新規登録
-                  </a>
-                </Link>
-              </p>
-              {/* 後に設定予定 */}
-              {/* <p>
-                <Link href="/login/forget">
-                  <a className="mt-2 text-sm text-primary hover:text-gray-500">
-                    パスワードを忘れた方はこちら
-                  </a>
-                </Link>
-              </p> */}
             </div>
           </div>
         </div>
@@ -127,4 +117,4 @@ const staffLogin = () => {
   );
 };
 
-export default staffLogin;
+export default adminLogin;
