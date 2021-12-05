@@ -9,30 +9,24 @@ import { SignupFormData } from "../../../interfaces/staff";
 import {
   UseFormHandleSubmit,
   UseFormRegister,
-  FieldValues,
-  FieldError,
+  FieldErrors,
 } from "react-hook-form";
 interface FormProps {
   handleSubmit: UseFormHandleSubmit<SignupFormData>;
   onSubmit: (props: SignupFormData) => void;
-  register: UseFormRegister<FieldValues>;
-  errors: {
-    companyName?: FieldError;
-    lastName?: FieldError;
-    firstName?: FieldError;
-    email?: FieldError;
-    password?: FieldError;
-    passwordConfirm?: FieldError;
-    terms?: FieldError;
-  };
-  watch: (props: string) => void;
+  register: UseFormRegister<SignupFormData>;
+  errors: FieldErrors<SignupFormData>;
+  watch: (props: string) => string;
 }
 
 const StaffSignupForm: React.FC<FormProps> = (props) => {
   const { handleSubmit, onSubmit, register, errors, watch } = props;
   const watchPassword = watch("password");
-  const [isRevealPassword, setIsRevealPassword] = useState(false);
-  const [isRevealPasswordConfirm, setIsRevealPasswordConfirm] = useState(false);
+  const [isRevealPassword, setIsRevealPassword] = useState<Boolean>(false);
+  const [
+    isRevealPasswordConfirm,
+    setIsRevealPasswordConfirm,
+  ] = useState<Boolean>(false);
 
   const togglePassword = () => {
     setIsRevealPassword((prevState) => !prevState);
