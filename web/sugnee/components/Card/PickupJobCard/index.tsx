@@ -34,10 +34,9 @@ export const PickupJobCard: React.FC<PickupJobCardProps> = ({
   const { addFrikuBookmark, deleteFrikuBookmark } = useContext(AuthContext);
 
   return (
-    <Link href={`/job/${job.id}`}>
+    <Link href={`/job/pickup/${job.id}`}>
       <div className="card shadow-lg lg:card-side w-full bg-white hover:shadow cursor-pointer">
         <figure>
-          {/* 仮です、thumbnailがあると嬉しい */}
           <img src={job.image1} />
         </figure>
         <div className="card-body">
@@ -86,14 +85,6 @@ export const PickupJobCard: React.FC<PickupJobCardProps> = ({
               {job.job_description.substring(0, 45) + "・・・"}
             </p>
           )}
-
-          {/* <div className="justify-end card-actions">
-            {userFavorites && isFavorite(userFavorites, job.id) ? (
-              <BookmarkButton text={<FontAwesomeIcon icon={faBookmarked} />} />
-            ) : (
-              <BookmarkButton text={<FontAwesomeIcon icon={faBookmark} />} />
-            )}
-          </div> */}
           {job.is_crawled ? (
             <div className="justify-end card-actions text-xs text-gray-400">
               <p>
