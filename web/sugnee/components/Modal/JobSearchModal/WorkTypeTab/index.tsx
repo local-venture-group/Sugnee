@@ -5,8 +5,9 @@ import { UseFormRegister, FieldValues } from "react-hook-form";
 import { SearchConditionContext } from "../../../../contexts/SearchCondition";
 
 // Type
+import { JobSearchFormData } from "../../../../interfaces/job";
 interface TabProps {
-  register: UseFormRegister<FieldValues>;
+  register: UseFormRegister<JobSearchFormData>;
   modalSize: string;
 }
 

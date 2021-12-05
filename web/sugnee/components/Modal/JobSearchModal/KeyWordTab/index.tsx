@@ -5,8 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey } from "@fortawesome/free-solid-svg-icons";
 
 // Type
+import { JobSearchFormData } from "../../../../interfaces/job";
 interface TabProps {
-  register: UseFormRegister<FieldValues>;
+  register: UseFormRegister<JobSearchFormData>;
 }
 
 export const KeyWordTab = (props: TabProps) => {
@@ -17,7 +18,7 @@ export const KeyWordTab = (props: TabProps) => {
         type="text"
         className="w-full rounded-full shadow h-16 p-6 focus:border-0 focus:bg-gray-100"
         placeholder="フリーワードで検索"
-        {...register("keywords")}
+        {...register("keyWords")}
       />
 
       <div className="container mt-8">
