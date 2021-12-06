@@ -211,7 +211,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const job = await axios
     // pickup求人の1件のみ取得ルートができたら修正
-    .get(`http://nginx:80/api/friku/${params.id}/joboffers/pickup`)
+    .get(`http://nginx:80/api/user/friku/joboffer/show/${params.id}`)
     .then((res) => res.data)
     .catch((err) => console.log(err));
 
