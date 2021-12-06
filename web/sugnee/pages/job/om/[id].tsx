@@ -197,14 +197,13 @@ const jobOffer: NextPage<{ job: JobOffer }> = ({ job }) => {
 export default jobOffer;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const allPickupJobs = await axios
-    // 要修正、全OM求人取得API
-    .get("http://nginx:80/api/user/top")
+  const allPickupJobsId = await axios
+    .get("http://nginx:80/api/user/joboffers/om")
     .then((res) => res.data)
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err.response));
 
   return {
-    paths: allPickupJobs?.map(({ id }) => `/job/om/${id}`) ?? [],
+    paths: allPickupJobsId?.map((id) => `/job/om/${id}`) ?? [],
     fallback: false,
   };
 };

@@ -197,21 +197,21 @@ const jobOffer: NextPage<{ job: JobOffer }> = ({ job }) => {
 export default jobOffer;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const allPickupJobs = await axios
-    // 要修正、ピックアップ全求人取得API
-    .get("http://nginx:80/api/user/top")
+  const allPickupJobsId = await axios
+    .get("http://nginx:80/api/user/joboffer/pickupJoboffer")
     .then((res) => res.data)
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err.response));
 
   return {
-    paths: allPickupJobs?.map(({ id }) => `/job/pickup/${id}`) ?? [],
+    paths: allPickupJobsId?.map((id) => `/job/pickup/${id}`) ?? [],
     fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const job = await axios
-    .get(`http://nginx:80/api/user/joboffer/${params.id}`)
+    // pickup求人の1件のみ取得ルートができたら修正
+    .get(`http://nginx:80/api/friku/${params.id}/joboffers/pickup`)
     .then((res) => res.data)
     .catch((err) => console.log(err));
 
