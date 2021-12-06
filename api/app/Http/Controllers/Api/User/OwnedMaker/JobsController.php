@@ -26,6 +26,12 @@ class JobsController extends Controller
 {
     private $limit;
 
+    public function omJobAll()
+    {
+        $joboffers = CorporationJoboffer::all();
+
+        return $joboffers->pluck('id');;
+    }
     public function showJoboffer(CorporationJoboffer $corporationJoboffer)
     {
         //ここで、応募済かどうかを取得する。
