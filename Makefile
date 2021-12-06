@@ -81,3 +81,7 @@ ide-helper:
 	docker-scompose exec back php artisan ide-helper:generate
 	docker-scompose exec back php artisan ide-helper:meta
 	docker-scompose exec back php artisan ide-helper:models --nowrite
+
+cache:
+	docker-compose exec back php artisan cache:clear
+	docker-compose exec back php artisan route:clear
