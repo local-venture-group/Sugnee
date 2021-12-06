@@ -20,6 +20,12 @@ class FrikuJobsController extends Controller
         })->get();
         return $pickUpJobs->pluck('id');
     }
+    public function show(FrikuJoboffer $frikuJoboffer)
+    {
+
+        return collect(new JobResource($frikuJoboffer));
+    }
+
     //企業の求人一覧を取得
     public function pickUpCompanyJoboffers($frikuCompany)
     {
