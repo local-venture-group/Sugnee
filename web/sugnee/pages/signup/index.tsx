@@ -24,6 +24,7 @@ const signUp: NextPage = () => {
     formState: { errors },
     handleSubmit,
     watch,
+    getValues,
   } = useForm<SignupFormData>();
 
   const signupSubmit = async (data) => {

@@ -30,7 +30,7 @@ const OmJobCard: React.FC<OmJobCardProps> = ({ job, user, userFavorites }) => {
   const { addOmBookmark, deleteOmBookmark } = useContext(AuthContext);
 
   return (
-    <Link href={`/job/${job.id}`}>
+    <Link href={`/job/om/${job.id}`}>
       <div className="card shadow-lg lg:card-side w-full bg-white hover:shadow cursor-pointer">
         <div className="card-body">
           <div className="card-title flex justify-between">
@@ -78,14 +78,6 @@ const OmJobCard: React.FC<OmJobCardProps> = ({ job, user, userFavorites }) => {
               {job.job_description.substring(0, 45) + "・・・"}
             </p>
           )}
-
-          {/* <div className="justify-end card-actions">
-            {userFavorites && isFavorite(userFavorites, job.id) ? (
-              <BookmarkButton text={<FontAwesomeIcon icon={faBookmarked} />} />
-            ) : (
-              <BookmarkButton text={<FontAwesomeIcon icon={faBookmark} />} />
-            )}
-          </div> */}
           {job.is_crawled ? (
             <div className="justify-end card-actions text-xs text-gray-400">
               <p>

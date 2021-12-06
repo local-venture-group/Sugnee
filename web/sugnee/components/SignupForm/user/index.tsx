@@ -9,32 +9,25 @@ import { SignupFormData } from "../../../interfaces/user";
 import {
   UseFormHandleSubmit,
   UseFormRegister,
-  FieldValues,
-  FieldError,
+  FieldErrors,
 } from "react-hook-form";
+
 interface formProps {
   handleSubmit: UseFormHandleSubmit<SignupFormData>;
   signupSubmit: (props: SignupFormData) => void;
-  register: UseFormRegister<FieldValues>;
-  errors: {
-    password?: FieldError;
-    lastName?: FieldError;
-    firstName?: FieldError;
-    lastNameKana?: FieldError;
-    firstNameKana?: FieldError;
-    email?: FieldError;
-    gender?: FieldError;
-    passwordConfirm?: FieldError;
-    terms?: FieldError;
-  };
-  watch: (props: string) => void;
+  register: UseFormRegister<SignupFormData>;
+  errors: FieldErrors<SignupFormData>;
+  watch: (props: string) => string;
 }
 
 const SignupForm: React.FC<formProps> = (props) => {
   const { handleSubmit, signupSubmit, register, errors, watch } = props;
   const watchPassword = watch("password");
-  const [isRevealPassword, setIsRevealPassword] = useState(false);
-  const [isRevealPasswordConfirm, setIsRevealPasswordConfirm] = useState(false);
+  const [isRevealPassword, setIsRevealPassword] = useState<Boolean>(false);
+  const [
+    isRevealPasswordConfirm,
+    setIsRevealPasswordConfirm,
+  ] = useState<Boolean>(false);
 
   const setYear = () => {
     const years = [];
@@ -572,7 +565,7 @@ const SignupForm: React.FC<formProps> = (props) => {
             <span className="ml-3 text-gray-700 font-bold">
               利用規約に同意する
             </span>
-            {errors.terms?.type === "required" && (
+            {errors.terms && (
               <p className="text-red-500 text-xs italic">
                 利用規約への同意は必須です
               </p>

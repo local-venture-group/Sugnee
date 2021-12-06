@@ -203,16 +203,16 @@ const pickUpArticle: NextPage<pickUpArticleProps> = ({ article, jobData }) => {
 export default pickUpArticle;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  // デフォルトでlimit10が設定されているので一覧表示件数定まったらlimitパラメータつける
   const pickupArticleData = await client.get({
     endpoint: "articles",
+    queries: { limit: 100 },
   });
 
   return {
     paths:
       pickupArticleData?.contents.map((article) => `/pickup/${article.id}`) ??
       [],
-    fallback: true,
+    fallback: false,
   };
 };
 

@@ -40,6 +40,7 @@ export default Articles;
 export const getStaticPaths: GetStaticPaths = async () => {
   const articles = await client.get({
     endpoint: "articles",
+    queries: { limit: 100 },
   });
   const PER_PAGE = 12;
   const range = (start, end) =>

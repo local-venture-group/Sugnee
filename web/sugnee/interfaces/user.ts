@@ -31,6 +31,7 @@ export interface SignupFormData {
   gender: number;
   password: string;
   passwordConfirm: string;
+  terms: Boolean;
 }
 
 export interface UpdateProfileFormData {

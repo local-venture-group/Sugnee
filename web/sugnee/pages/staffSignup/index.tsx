@@ -35,8 +35,6 @@ const signUp: NextPage = () => {
     setIsConfirmed(false);
   };
 
-  console.log("どう", staff);
-
   // userやadminだった場合も追加予定
   if (staff) router.push("/staff");
   return (

@@ -52,6 +52,12 @@ export interface JobOffer {
   updated_at: string;
 }
 
+export interface JobSearchFormData {
+  locations?: [string];
+  keyWords?: [string];
+  workType?: [string];
+}
+
 // ピックアップ企業
 export interface pickupArticle {
   id: string;

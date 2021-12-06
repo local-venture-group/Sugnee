@@ -198,13 +198,14 @@ export default jobOffer;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const allPickupJobs = await axios
-    .get("http://nginx:80/api/user/pickup")
+    // 要修正、全OM求人取得API
+    .get("http://nginx:80/api/user/top")
     .then((res) => res.data)
     .catch((err) => console.log(err));
 
   return {
-    paths: allPickupJobs?.map(({ id }) => `/jobOffer/job/${id}`) ?? [],
-    fallback: true,
+    paths: allPickupJobs?.map(({ id }) => `/job/om/${id}`) ?? [],
+    fallback: false,
   };
 };
 

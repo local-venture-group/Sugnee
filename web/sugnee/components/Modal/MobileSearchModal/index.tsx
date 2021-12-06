@@ -19,14 +19,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 // Types
+import { JobSearchFormData } from "../../../interfaces/job";
 interface MobileJobSearchModalProps {
   current: string;
-}
-
-interface FormValue {
-  locations: [string] | null;
-  keywords: [string] | null;
-  workType: [string] | null;
 }
 
 const MobileSearchModal = (props: MobileJobSearchModalProps) => {
@@ -37,7 +32,7 @@ const MobileSearchModal = (props: MobileJobSearchModalProps) => {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<FormValue>();
+  } = useForm<JobSearchFormData>();
   const { addSearchCondition } = useContext(SearchConditionContext);
 
   const handleClickTab = (e) => {

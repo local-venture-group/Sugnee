@@ -68,6 +68,8 @@ const job: NextPage = () => {
     };
   }, [searchCondition]);
 
+  console.log(jobOffers);
+
   if (!jobOffers) {
     return null;
   }
