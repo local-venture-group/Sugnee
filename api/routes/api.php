@@ -34,8 +34,6 @@ Route::prefix('user')->group(function () {
     Route::post('/register', [UserController::class, 'register']);
     //ユーザー編集 今は画像のみの編集なので、patchかなーと思うけど、最終的にはputで飛ばすことになるかなという予想。
     Route::match(['put', 'patch'], '/{user}/edit', [UserController::class, 'update'])->name('user.edit');
-
-    Route::get('/pickup', [PagesController::class, 'allPickUpJobs']);
     Route::get('/top', [PagesController::class, 'top'])->name('pages.top');
 
     //パスワードリセット
@@ -45,7 +43,9 @@ Route::prefix('user')->group(function () {
     Route::prefix('/joboffer')->group(function () {
         Route::get('/conditions', [JobSearchesController::class, 'getConditions'])->name('joboffer.conditions');
         Route::get('/search', [JobSearchesController::class, 'searchJobOffers'])->name('joboffer.search');
+        Route::get('/pickupJoboffer',[FrikuJobsController::class, 'pickupJobAll'])->name('pickupJoboffers.all');
         Route::get('/{corporationJoboffer}', [JobsController::class, 'showJoboffer'])->name('pickup.show');
+
 
     });
     Route::prefix('/friku')->group(function () {
@@ -53,6 +53,8 @@ Route::prefix('user')->group(function () {
         Route::get('/{frikuCompany}/joboffers/feature',[FrikuJobsController::class, 'featureCompanyJoboffers'])->name('friku.company.featureJoboffers');
 
     });
+
+    Route::get('/joboffers/om',[JobsController::class, 'omJobAll'])->name('omJoboffers.all');
 
     Route::group(['middleware' => ['auth:users']], function () {
         Route::get('/', [UserController::class, 'getAuthUser']);

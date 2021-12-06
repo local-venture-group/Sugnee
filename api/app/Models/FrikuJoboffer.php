@@ -28,7 +28,7 @@ class FrikuJoboffer extends Model
     }
     public function frikuCompany()
     {
-        return $this->belongsTo(FrikuCompany::class);
+        return $this->belongsTo(FrikuCompany::class, 'company_id');
     }
     public function frikuApplicantschedules()
     {
