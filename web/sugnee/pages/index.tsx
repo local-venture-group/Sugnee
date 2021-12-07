@@ -182,7 +182,7 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async () => {
   const omJobs = await axios
-    .get("http://nginx:80/api/user/top")
+    .get(`${process.env.API_BASE_URL}/api/user/top`)
     .then((res) => res.data)
     .catch((err) => console.log(err));
 
@@ -191,6 +191,10 @@ export const getStaticProps: GetStaticProps = async () => {
   });
 
   return {
-    props: { omJobs, pickupArticles: pickupArticleData.contents },
+    props: {
+      // omJobs: omJobs ? omJobs : null,
+      omJobs: null,
+      pickupArticles: pickupArticleData.contents,
+    },
   };
 };

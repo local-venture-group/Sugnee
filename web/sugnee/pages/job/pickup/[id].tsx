@@ -198,7 +198,7 @@ export default jobOffer;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const allPickupJobsId = await axios
-    .get("http://nginx:80/api/user/joboffer/pickupJoboffer")
+    .get(`${process.env.BASE_API_URL}/api/user/joboffer/pickupJoboffer`)
     .then((res) => res.data)
     .catch((err) => console.log(err.response));
 
@@ -210,8 +210,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const job = await axios
-    // pickup求人の1件のみ取得ルートができたら修正
-    .get(`http://nginx:80/api/user/friku/joboffer/show/${params.id}`)
+    .get(
+      `${process.env.BASE_API_URL}/api/user/friku/joboffer/show/${params.id}`
+    )
     .then((res) => res.data)
     .catch((err) => console.log(err));
 
