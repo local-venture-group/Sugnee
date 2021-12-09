@@ -3,8 +3,8 @@ services:
   nginx:
     container_name: nginx
     build:
-      context: ./.docker/nginx
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./.docker/nginx/Dockerfile
     ports:
       - 80:80
     tty: true
@@ -36,18 +36,9 @@ services:
   back:
     container_name: back
     build:
-      context: ./.docker/api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./.docker/api/Dockerfile
     environment:
-      # LANG: 'ja_JP.UTF-8'
-      # TZ: 'Asia/Tokyo'
-      # LOG_CHANNEL: 'stderr'
-      # DB_CONNECTION: 'fukuriku'
-      # DB_HOST: 'db'
-      # DB_PORT: '5432'
-      # DB_DATABASE: 'fukuriku'
-      # DB_USERNAME: 'fukuriku'
-      # DB_PASSWORD: 'password'
       SESSION_DOMAIN: "localhost"
       SANCTUM_STATEFUL_DOMAINS: "localhost"
     volumes:
@@ -67,9 +58,6 @@ services:
       - POSTGRES_DB=fukuriku
       - POSTGRES_USER=fukuriku
       - POSTGRES_PASSWORD=password
-    #   - PGDATA=/var/lib/postgresql/data/pgdata
-    # volumes:
-    #   - db:/var/lib/postgresql/data
     ports:
       - 5433:5432
   db2:
