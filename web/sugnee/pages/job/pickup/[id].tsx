@@ -19,7 +19,7 @@ import {
 import { GetStaticProps, GetStaticPaths, NextPage } from "next";
 import { JobOffer } from "../../../interfaces/job";
 
-const jobOffer: NextPage<{ job: JobOffer }> = ({ job }) => {
+const pickupJobOffer: NextPage<{ job: JobOffer }> = ({ job }) => {
   const router = useRouter();
   const { user, addOmBookmark, deleteOmBookmark } = useContext(AuthContext);
   const userFavorites: number[] = user?.favorites.om.map(
@@ -194,11 +194,11 @@ const jobOffer: NextPage<{ job: JobOffer }> = ({ job }) => {
   );
 };
 
-export default jobOffer;
+export default pickupJobOffer;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const allPickupJobsId = await axios
-    .get(`${process.env.BASE_API_URL}/api/user/joboffer/pickupJoboffer`)
+    .get(`${process.env.API_BASE_URL}/api/user/joboffer/pickupJoboffer`)
     .then((res) => res.data)
     .catch((err) => console.log(err.response));
 
@@ -211,10 +211,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const job = await axios
     .get(
-      `${process.env.BASE_API_URL}/api/user/friku/joboffer/show/${params.id}`
+      `${process.env.API_BASE_URL}/api/user/friku/joboffer/show/${params.id}`
     )
     .then((res) => res.data)
     .catch((err) => console.log(err));
+
+  console.log("ここまできてる？", job);
 
   return {
     props: { job: job ? job : null },

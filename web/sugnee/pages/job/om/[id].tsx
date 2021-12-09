@@ -19,7 +19,7 @@ import {
 import { GetStaticProps, GetStaticPaths, NextPage } from "next";
 import { JobOffer } from "../../../interfaces/job";
 
-const jobOffer: NextPage<{ job: JobOffer }> = ({ job }) => {
+const omJobOffer: NextPage<{ job: JobOffer }> = ({ job }) => {
   const router = useRouter();
   const { user, addOmBookmark, deleteOmBookmark } = useContext(AuthContext);
   const userFavorites: number[] = user?.favorites.om.map(
@@ -194,11 +194,11 @@ const jobOffer: NextPage<{ job: JobOffer }> = ({ job }) => {
   );
 };
 
-export default jobOffer;
+export default omJobOffer;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const allPickupJobsId = await axios
-    .get("http://nginx:80/api/user/joboffers/om")
+    .get(`${process.env.API_BASE_URL}/api/user/joboffers/om`)
     .then((res) => res.data)
     .catch((err) => console.log(err.response));
 
@@ -210,7 +210,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const job = await axios
-    .get(`http://nginx:80/api/user/joboffer/${params.id}`)
+    .get(`${process.env.API_BASE_URL}/api/user/joboffer/${params.id}`)
     .then((res) => res.data)
     .catch((err) => console.log(err));
 
