@@ -26,7 +26,7 @@ services:
       - 3000
     volumes:
       - ./web:/web
-    # command: sh -c "npm run dev"
+      - /web/sugnee/node_modules
     stdin_open: true
     tty: true
     restart: always

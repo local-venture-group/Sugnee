@@ -112,15 +112,16 @@ const Home: NextPage<HomeProps> = ({ omJobs, pickupArticles }) => {
           <h1 className="text-3xl">新着求人</h1>
 
           <div className="w-full my-10 p-4 space-x-4 carousel carousel-center rounded-box">
-            {omJobs.map((job) => (
-              <div className="carousel-item md:w-1/3 w-full" key={job.id}>
-                <OmJobCard
-                  job={job}
-                  user={user}
-                  userFavorites={userFavorites}
-                />
-              </div>
-            ))}
+            {omJobs &&
+              omJobs.map((job) => (
+                <div className="carousel-item md:w-1/3 w-full" key={job.id}>
+                  <OmJobCard
+                    job={job}
+                    user={user}
+                    userFavorites={userFavorites}
+                  />
+                </div>
+              ))}
           </div>
         </section>
         <section className="flex flex-col justify-center items-center w-full px-4 pt-10 bg-gradient-to-b from-primary to-secondary">
@@ -192,8 +193,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      // omJobs: omJobs ? omJobs : null,
-      omJobs: null,
+      omJobs: omJobs ? omJobs : null,
       pickupArticles: pickupArticleData.contents,
     },
   };
