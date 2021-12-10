@@ -42,7 +42,7 @@ services:
       SESSION_DOMAIN: "localhost"
       SANCTUM_STATEFUL_DOMAINS: "localhost"
     volumes:
-      - ./api:/app
+      - ./api:/api
     expose:
       - 9000
     tty: true
