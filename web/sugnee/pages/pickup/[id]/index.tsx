@@ -222,7 +222,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   });
 
   const jobData = await axios
-    .get(`http://nginx:80/api/user/friku/1/joboffers/pickup`)
+    .get(
+      `${process.env.API_BASE_URL}/api/user/friku/${article.companyId}/joboffers/pickup`
+    )
     .then((res) => {
       if (res.data.message) return;
       return res.data;

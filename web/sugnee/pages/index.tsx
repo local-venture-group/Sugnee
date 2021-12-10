@@ -112,15 +112,16 @@ const Home: NextPage<HomeProps> = ({ omJobs, pickupArticles }) => {
           <h1 className="text-3xl">新着求人</h1>
 
           <div className="w-full my-10 p-4 space-x-4 carousel carousel-center rounded-box">
-            {omJobs.map((job) => (
-              <div className="carousel-item md:w-1/3 w-full" key={job.id}>
-                <OmJobCard
-                  job={job}
-                  user={user}
-                  userFavorites={userFavorites}
-                />
-              </div>
-            ))}
+            {omJobs &&
+              omJobs.map((job) => (
+                <div className="carousel-item md:w-1/3 w-full" key={job.id}>
+                  <OmJobCard
+                    job={job}
+                    user={user}
+                    userFavorites={userFavorites}
+                  />
+                </div>
+              ))}
           </div>
         </section>
         <section className="flex flex-col justify-center items-center w-full px-4 pt-10 bg-gradient-to-b from-primary to-secondary">
@@ -182,7 +183,7 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async () => {
   const omJobs = await axios
-    .get("http://nginx:80/api/user/top")
+    .get(`${process.env.API_BASE_URL}/api/user/top`)
     .then((res) => res.data)
     .catch((err) => console.log(err));
 
@@ -191,6 +192,9 @@ export const getStaticProps: GetStaticProps = async () => {
   });
 
   return {
-    props: { omJobs, pickupArticles: pickupArticleData.contents },
+    props: {
+      omJobs: omJobs ? omJobs : null,
+      pickupArticles: pickupArticleData.contents,
+    },
   };
 };

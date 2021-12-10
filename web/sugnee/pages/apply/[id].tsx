@@ -148,7 +148,7 @@ export default apply;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const allPickupJobs = await axios
-    .get("http://nginx:80/api/user/pickup")
+    .get(`${process.env.API_BASE_URL}/api/user/pickup`)
     .then((res) => res.data)
     .catch((err) => console.log(err));
 
@@ -160,7 +160,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const job = await axios
-    .get(`http://nginx:80/api/user/joboffer/${params.id}`)
+    .get(`${process.env.API_BASE_URL}/api/user/joboffer/${params.id}`)
     .then((res) => res.data)
     .catch((err) => console.log(err));
 
