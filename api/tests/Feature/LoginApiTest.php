@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use Tests\Concerns\RefreshDatabaseLite;
 
@@ -17,7 +18,8 @@ class LoginApiTest extends TestCase
      * @return void
      */
     // use RefreshDatabase;
-    use RefreshDatabaseLite;
+    use DatabaseTransactions;
+    protected $connectionsToTransact = ['fukuriku', 'ats'];
 
     public function setUp(): void
     {

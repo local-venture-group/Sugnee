@@ -59,9 +59,9 @@ Route::prefix('user')->group(function () {
     Route::group(['middleware' => ['auth:users']], function () {
         Route::get('/', [UserController::class, 'getAuthUser']);
         Route::put('/joboffer/favorites', [FavoritesController::class, 'omFavorites'])
-            ->name('/joboffer.favorites.attach');
+            ->name('joboffer.favorites.attach');
         Route::delete('/joboffer/favorites', [FavoritesController::class, 'omUnfavorites'])
-            ->name('/joboffer.favorites.detach');
+            ->name('joboffer.favorites.detach');
 
         Route::put('/frikuJoboffer/{frikuJoboffer}/favorites/', [FrikuFavoritesController::class, 'frikuFavorites'])
             ->name('friku_joboffer.favorites.attach');

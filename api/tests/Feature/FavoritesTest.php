@@ -6,6 +6,7 @@ use App\Models\CorporationJoboffer;
 use App\Models\Favorite;
 use App\Models\FrikuJoboffer;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\Concerns\RefreshDatabaseLite;
@@ -18,12 +19,13 @@ class FavoritesTest extends TestCase
      *
      * @return void
      */
-    use RefreshDatabaseLite;
+    use DatabaseTransactions;
+    protected $connectionsToTransact = ['fukuriku', 'ats'];
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->artisan('migrate:refresh');
+        // $this->artisan('migrate:refresh');
         $this->user = User::factory()->create();
     }
     //OM求人お気に入り追加
